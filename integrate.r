@@ -3,8 +3,17 @@
 ##    Objective:  Comtrade is the UN source of trade data. I've verified it against
 ##                StatsNZ's trade and it matches up.
 ##
-##                This project will access the UN data, and pull down teh fisheries related
+##                This project will access the UN data, and pull down the fisheries related
 ##                trade data
+##
+##                I'm hoping to use this information to start making both throughput measures, and estimates of "world demand".
+##                The theory goes that the value of fish trade depends on its world price. Not just Pacific Island Countries 
+##                and Territories (PICTs) feed into world volumes. Understanding world price dynamics with respect to traded 
+##                volumes would help understand PICT fisheries economics.
+##
+##                Update:
+##                I've altered this programme to also pull in FFA data
+##
 ##
 ##    Plan of  :  You need an api to access the data, which can be a little bit confusing to 
 ##    Attack   :  get. Follow this document: https://uncomtrade.org/docs/api-subscription-keys/

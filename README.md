@@ -12,6 +12,10 @@ I'm hoping to use this information to start making both throughput measures, and
 The theory goes that the value of fish trade depends on its world price. Not just Pacific Island Countries and Territories (PICTs) feed into world volumes. Understanding world price dynamics with respect to traded volumes would help understand PICT fisheries economics.
 
 
+The "in" into my code is through the integrate.r script in the base directory.
+
+
+
 James Hogan, FAME - SPC, 25 July 2024
 
 
