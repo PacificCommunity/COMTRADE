@@ -1,0 +1,241 @@
+---
+title: Computational General Equilibrium
+subtitle: Bio-fuels modelling
+author: Sense Partners
+date: "`r format(Sys.time(), '%d %B %Y')`"
+fontsize: 11pt
+urlcolor: blue
+classoption: a4paper
+geometry: margin = 1in
+fig_caption: true
+output: 
+   bookdown::word_document2:
+      reference_docx: "C:\\Sense\\CGE_visualisation\\Product_Output\\Sense_Partners_Template.docx"
+      toc: false  
+      figure:
+        style: Table
+        layout: autofit
+        width: 1.0
+        caption:
+          style: Table Caption
+          pre: 'Table '
+          sep: ': '
+          topcaption: true
+      
+   bibliography: bibliography.json
+header-includes:
+   - \usepackage[percent]{overpic}   
+   - \usepackage{tikz}
+   - \usetikzlibrary{calc}
+   - \usepackage{graphicx}
+   - \usepackage{placeins}
+   - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \fancyhf{}
+   - \addtolength{\headwidth}{\marginparsep}
+   - \addtolength{\headwidth}{\marginparwidth}   
+   - \usepackage{floatrow}
+   - \floatsetup[figure]{capposition=top}
+
+---
+\newpage
+
+
+```{r setup, cache=FALSE, include=FALSE}
+
+##
+##    Core libraries
+##
+library(ggplot2)
+library(plyr)
+library(stringr)
+library(reshape2)
+library(lubridate)
+library(calibrate)
+library(Hmisc)
+library(RColorBrewer)
+library(stringi)
+library(sqldf)
+library(extrafont)
+library(scales)
+##
+##    Project-specific libraries
+##
+library(RDCOMClient)
+library(RODBC)
+library(tictoc)
+library(rjson) 
+library(rgtap)
+library(parallel)   
+library(lobstr)
+library(pryr)
+
+library(knitr)
+library(htmlTable)
+library(png)
+library(bookdown)
+library(kableExtra)
+library(pander)
+library(officer)
+
+
+options(xtable.comment = FALSE)
+
+BaseDir <- "C:\\Sense\\CGE_visualisation\\Graphical_Output\\"
+   
+##
+## https://davidgohel.github.io/officedown/index.html
+##   
+   
+   
+```
+
+   
+
+<!-- 
+##
+##       This bit below is the commentary written in R Markup
+--> 
+
+# Introduction to Spatial
+
+```{r ChangeinCIGXMPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = 'Change in CIGXM'}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_CIGXM_PC.png"))
+
+```
+
+\FloatBarrier
+
+Some text in here. Now Figure \@ref(fig:ChangeinCIGXMPC) and some more text here.
+
+\newpage
+
+
+
+```{r ChangeinEmissionsLevels, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Change in emission levels"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Emissions_Levels - question for John.png"))
+
+```
+
+\FloatBarrier
+
+\newpage
+
+```{r ChangeinEmissionsPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in emissions"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Emissions_PC.png"))
+
+```
+
+\FloatBarrier
+
+\newpage
+
+```{r ChangeinFTEEmploymentLevels, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Change in full-time equivalent employment levels"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_FTE_Employment_Levels.png"))
+
+```
+
+\FloatBarrier
+
+\newpage
+
+```{r ChangeinFTEEmploymentPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in full-time equivalent employment"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_FTE_Employment_PC.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinIndustryEmploymentLevels, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Change in industry employment Levels"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Industry_Employment_Levels.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinIndustryEmploymentPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in industry employment"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Industry_Employment_PC.png"))
+
+```
+\FloatBarrier
+
+```{r ChangeinIndustryValAddLevels, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Change in industry value-added"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Industry_ValAdd_Levels.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinIndustryValAddPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in industry value-added"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Industry_ValAdd_PC.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinRealCapitalPricesPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in real capital prices"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_Capital_Prices_PC.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinRealGDPLevels, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Change in real GDP"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_GDP_Levels.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinRealGDPPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in real GDP"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_GDP_PC.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinRealLandPricesPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in real land prices"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_Land_Prices_PC.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinRealNNILevel, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Change in real net national income"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_NNI_Level.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinRealNNIPC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in real net national income"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_NNI_PC.png"))
+
+```
+
+\FloatBarrier
+
+```{r ChangeinRealWagePC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in real wages"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_Wage_PC.png"))
+
+```
+\FloatBarrier
+
+
+\newpage

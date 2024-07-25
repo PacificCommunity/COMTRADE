@@ -1,0 +1,6 @@
+This is your root directory. There's only one thing in here: your integrate script.
+
+The integrate script is used to initialise all of the libraries that are used across your project and specify the sequence of how programmes execute in order to create the final thing which you are creating.
+
+Don't save anything else in this directory.
+

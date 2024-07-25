@@ -1,0 +1,4 @@
+Used to store source spatial data, either raw or processed.
+
+Spatial data is one of those "structural" forms of data which don't tend to change frequently. They're also very bulky data sets. Stash them here.
+

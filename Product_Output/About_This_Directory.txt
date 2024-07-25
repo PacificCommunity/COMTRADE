@@ -1,0 +1,1 @@
+This is the place to store non-data final output: things like pdfs, excel spreadsheets (as output) or whatever.

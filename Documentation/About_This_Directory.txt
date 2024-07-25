@@ -1,0 +1,3 @@
+This is the place to store all of your documentation about the thing you've developed. Sometimes you'd like to put things like academic papers, if this is a research project, which outlines the development of your thinking, or some other forms of literature that has influenced the project, like classifications descriptions or something.
+
+Stash it here.

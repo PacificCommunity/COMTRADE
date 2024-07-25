@@ -1,0 +1,7 @@
+Used to store source data in its raw form.
+
+Modual programming has two central ideas: 
+(A) Everything in code
+(B) Everything "modual"
+
+This directory is designed to store the raw data IN EXACTLY the same form as it is received. If the source data is excel spreadsheets, then this directory holds excel spreadsheets which are read into R, turned into R dataframes which will be saved into the Data_Intermediate directory.

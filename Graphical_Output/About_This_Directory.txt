@@ -1,0 +1,8 @@
+As your projects become more sophisticated, and you start to create reports in RMarkDown, or something, you'll want to separate out the graphical output from the text document. This is a directory to store all your pictures and graphics that will be used later for reports.
+
+Or your code stick your ad hoc pictures in here too.
+
+
+
+
+

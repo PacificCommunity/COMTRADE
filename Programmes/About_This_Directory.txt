@@ -1,0 +1,5 @@
+Modual programming requires everything to be in code and everything to be replicable. Its acheived through writing stand alone programmes and saving them in this directory. Those stand alone programes are then "called" from the integrate script in the project's base directory, in the order specific in the integrate script.
+
+Normally, as projects start and develop, you'll write programmes which are either rabbit-holes and lead on to know where, or are programmes which go through different versions before you feel you've gotten it write. Same all those programmes in this directory, and use the integrate script to maintain control over which programmes are the correct programmes to run in the correct order, and which versions are relevant compared to previous versions. For all intense purposes, this directory becomes your "working and thinking" directory. At the end of the project, if you've maintained the modular programming discipline, you should be able to clear out the programmes that are not in your integrate script and be confident that you haven't just deleted something important.
+
+

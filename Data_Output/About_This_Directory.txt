@@ -1,0 +1,7 @@
+Used to store final R dataframes generated from the system. 
+
+At the end of the running all code, two things happen: 
+(A) some "final" output is made, and not used for further processing within this system (although it may be read into other systems by other system code), and 
+(B) some "final" output product is made, for example, a shiny website, a word document, a pdf or a whatever.
+
+This is the place to save the final output.

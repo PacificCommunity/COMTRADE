@@ -1,0 +1,3 @@
+Used to store R dataframes read in from the Data_Raw directory and used in the processing of the system, but which are not final output.
+
+During the operation of the code, modular programming requires each separate programme to save data at its end, and for that data to be subsequently read into R from another programme. The Data_Intermediate directory is where all these "intermediate" datasets are saved.
