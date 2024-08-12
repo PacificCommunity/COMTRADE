@@ -5,6 +5,8 @@ This project accesses Comtrade and FFA data.
 Comtrade is a United Nations trade database(https://comtradeplus.un.org/), which needs an API to access. Currently, I've got mine hardcoded, but all that will change. 
 The FFA data is derived from https://www.ffa.int/publications-and-statistics/statistics/
 
+This project used RDCOMClient to read the FFA data.
+
 
 Objective:
 I'm hoping to use this information to start making both throughput measures, and estimates of "world demand".

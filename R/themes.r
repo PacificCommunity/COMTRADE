@@ -1,8 +1,8 @@
 ##    Programme:  themes.r
 ##
-##    Objective:  Graphical themes for JamesHogan Ltd
+##    Objective:  Graphical themes 
 ##
-##      Author:   James Hogan, Sense Parters, 7 August 2021
+##      Author:   James Hogan, 7 August 2021
 ##
 
 #------------------Sense Partners Colour Palette-------------------------

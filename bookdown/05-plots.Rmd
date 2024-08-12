@@ -1,0 +1,29 @@
+# Graphics {#graphics}
+
+
+```{r fig.cap="Sunspot plot", fig.id = "ts-plot", fig.cap.style="Image Caption"}
+plot(sunspot.year)
+```
+
+\newpage
+
+Math latex in captions is supported:
+
+```{r fig.cap="$\\sum_{i=1}^n X_i$", fig.id = "lynx"}
+plot(lynx)
+```
+
+
+$\begin{equation} 
+ {\lable:somelabel}
+ f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}
+\end{equation} $
+
+The equation \ref{eq:somelabel} is a typical formula.
+
+$$
+\begin{equation*} 
+\frac{d}{dx}\left( \int_{a}^{x} f(u)\,du\right)=f(x)
+\end{equation*} 
+$$
+

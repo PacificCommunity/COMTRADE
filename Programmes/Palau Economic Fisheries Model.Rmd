@@ -1,0 +1,150 @@
+---
+title: "Modelling Palau Fishery Economics"
+author: "James Hogan, SPC - FAME"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  officedown::rdocx_document:
+    reference_docx: "C:/Work_Related_Projects/COMTRADE/Product_Output/Word_Template.docx"
+header-includes:
+   - \usepackage[percent]{overpic}   
+   - \usepackage{tikz}
+   - \usetikzlibrary{calc}
+   - \usepackage{graphicx}
+   - \usepackage{placeins}
+   - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \fancyhf{}
+   - \addtolength{\headwidth}{\marginparsep}
+   - \addtolength{\headwidth}{\marginparwidth}   
+ 
+references:
+- id: EconText
+  title: Environmental and Natural Resource Economics, 11th Edition
+  author:
+   - family: Tietenberg 
+     given: T
+   - family: Lewis
+     given: L
+  publisher: Routledge
+  issued:
+    year: 2018
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(officedown)
+library(officer)
+library(knitr)
+library(htmlTable)
+library(png)
+library(kableExtra)
+library(pander)
+options(xtable.comment = FALSE)
+
+```
+\newpage
+
+The basic model, outlined in @EconText:
+
+## The biological component
+
+<caption>
+   `r run_autonum(seq_id = 'eq', bkm = 'BioMassGrowth',pre_label = "Equation ", post_label = ":", bkm_all = TRUE)` 
+   Fisheries Biomass Growth Equation
+   $$
+   \begin{equation} 
+     g = rS\left(1-\frac{S}{k}\right)
+   \end{equation} 
+   $$ 
+</caption>
+where: 
+
+g = the growth rate of the biomass,
+
+r = the intrinsic growth rate for this species,
+
+S = the size of the biomass, and
+
+k = the carrying capacity of the habitat.
+
+## Fishing Economic "Production"
+
+The _sustainable harvest_ removes only the growth in the biomass from the fisheries stock:
+   $$
+   \begin{equation} 
+     h_{s} = rS\left(1-\frac{S}{k}\right)
+   \end{equation} 
+   $$ 
+
+Fishing activity is modelled through a "harvest" function, which is similar in concept to a production function in production theory. The harvest function relates the biomass extracted to the quantum of fisher effort, and the relative size of the biomass stock:
+
+<caption>
+   `r run_autonum(seq_id = 'eq', bkm = 'HarvestFunction',pre_label = "Equation ", post_label = ":", bkm_all = TRUE)` 
+   Fisher Harvest Equation
+   $$
+   \begin{equation} 
+     h = qES
+   \end{equation} 
+   $$ 
+</caption>
+where: 
+
+q = a constant (known as the "catchability coefficient") and
+
+E = the level of effort.
+
+S = the biomass stock size.
+
+Connecting `r run_reference(id = "BioMassGrowth")` and `r run_reference(id = "HarvestFunction")` becomes:
+
+$$
+\begin{equation} 
+   qES = rS\left(1-\frac{S}{k}\right)
+\end{equation} 
+$$ 
+
+and 
+
+<caption>
+   `r run_autonum(seq_id = 'eq', bkm = 'StockEffort',pre_label = "Equation ", post_label = ":", bkm_all = TRUE)` 
+   Stock Size Effected by Effort
+   $$
+   \begin{equation} 
+      S = k\left(1-\frac{qE}{r}\right)
+   \end{equation} 
+   $$ 
+<caption>
+
+## Maximum Sustainable Harvest
+
+Inverting the harvest function, `r run_reference(id = "HarvestFunction")`, to express biomass stock as a function of volume harvested, and substituting into `r run_reference(id = "StockEffort")` produces the following relationship between fishing effort and the sustainable volume harvested:
+
+<caption>
+   `r run_autonum(seq_id = 'eq', bkm = 'SustainableEffort',pre_label = "Equation ", post_label = ":", bkm_all = TRUE)` 
+   Sustainable Harvest, as a function of Effort
+   $$
+   \begin{equation} 
+      h_{s} = qEk - \frac{q^{2}kE^{2}}{r}
+   \end{equation} 
+   $$ 
+<caption>
+
+
+## The Fisher Profit Maximising Decision
+
+
+
+
+
+
+This is a reference to `r run_reference(id = "BioMassGrowth")`.
+
+
+\newpage
+
+
+
+\newpage
+
+# References

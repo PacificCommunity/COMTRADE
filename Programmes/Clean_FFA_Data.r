@@ -39,7 +39,7 @@
                                                 rm(list=c(as.character(str_replace_all(DataSet$DataFrames[File], "\\.rda", "") )))
                                                 
                                                 names(X) <- c("Measure", X[4,2:length(X)])
-                                                X$Data_Row <- ifelse(str_detect(toupper(X$Measure), "CATCH"), toupper(X$Measure), "")
+                                                X$Data_Row <- ifelse(str_detect(toupper(X$Measure), "CATCH"), toupper(str_trim(X$Measure)), "")
                                                 for(i in 2:nrow(X))
                                                 {
                                                    X$Data_Row[i] <- ifelse(((X$Data_Row[i] == "") & (X$Data_Row[(i-1)] != "")), X$Data_Row[(i-1)], X$Data_Row[i])
@@ -54,6 +54,7 @@
                                                 X <- X[!str_detect(toupper(X$Measure), "TOTAL"),]
                                                 X$Measure <- str_trim(X$Measure)
                                                 X <- X[order(X$Data_Row, X$Measure, X$Year),]
+                                                X$Year <- as.numeric(as.character(X$Year))
                                                 
                                                 X$Spreadsheet <- unique(DataSet$Spreadsheet[File])
                                                 X$Tab         <- unique(DataSet$Tab[File])

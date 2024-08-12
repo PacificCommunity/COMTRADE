@@ -1,0 +1,80 @@
+---
+date: "2020-15-36"
+author: "Your Name"
+title: "officedown template"
+output: 
+  officedown::rdocx_document:
+    reference_docx: "C:/Work_Related_Projects/COMTRADE/Product_Output/Word_Template.docx"
+header-includes:
+   - \usepackage[percent]{overpic}   
+   - \usepackage{tikz}
+   - \usetikzlibrary{calc}
+   - \usepackage{graphicx}
+   - \usepackage{placeins}
+   - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \fancyhf{}
+   - \addtolength{\headwidth}{\marginparsep}
+   - \addtolength{\headwidth}{\marginparwidth}   
+ 
+references:
+- id: OECDRoadMap
+  title: A Roadmap Toward A Common Framework For Measuring The Digital Economy
+  author:
+  - family: OECD
+  URL: 'https://www.oecd.org/digital/ieconomy/roadmap-toward-a-common-framework-for-measuring-the-digital-economy.pdf'
+  publisher: OECD Publishing
+  issued:
+    year: 2020
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(officedown)
+library(officer)
+library(knitr)
+library(htmlTable)
+library(png)
+library(kableExtra)
+library(pander)
+options(xtable.comment = FALSE)
+
+```
+\newpage
+
+<caption>
+   `r run_autonum(seq_id = 'eq', bkm = 'DemandEq',pre_label = "Equation ", post_label = ":", bkm_all = TRUE)` 
+   Demand function
+   $$
+   \begin{equation} 
+     f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}
+   \end{equation} 
+   $$ 
+</caption>
+
+
+Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah[^OECD_Def] blah blah blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+blah blah blah blah.
+
+This is a reference to `r run_reference(id = "DemandEq")`.
+
+[^OECD_Def]:See @OECDRoadMap on page 34
+
+\newpage
+
+
+## Supply and use balancing
+In the New Zealand System of National Accounts (NZSNA), we estimate the items making up GDP and expenditure on GDP independently from diverse data sources. The combination of survey and other measurement and timing errors in the various components result in a difference between the estimates, known as the statistical discrepancy. Supply and use balancing is the process of reconciling the statistical discrepancy between the differing GDP measures using the structure on the economy and the commodities from the input-output supply and use tables. 
+
+The accounts are balanced when, for all industries, total inputs equal total outputs; and, for products, total supply equals total demand. As a result, the statistical discrepancy between the measures of GDP is zero in the years for which we carry out balancing.
+
+
+\newpage
+
+# References
