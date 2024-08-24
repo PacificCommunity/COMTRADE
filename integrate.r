@@ -15,6 +15,14 @@
 ##                I've altered this programme to also pull in FFA Value of WCPFC-CA Tuna Fisheries data from
 ##                here: https://www.ffa.int/download/wcpfc-area-catch-value-estimates/
 ##
+##                Other sources of information: https://zenodo.org/records/11410529
+##                with codeset described here: https://www.fao.org/fishery/en/collection/asfis/en
+##
+##                The FAO data was accessed on the 23 August and is the file: Data_Raw/global_nominal_catch_firms_level0_harmonized.csv 
+##
+##
+##
+##
 ##
 ##    Plan of  :  You need an api to access the data, which can be a little bit confusing to 
 ##    Attack   :  get. Follow this document: https://uncomtrade.org/docs/api-subscription-keys/
@@ -63,7 +71,7 @@
    ##
    ##    Set working directory
    ##
-      setwd("c:\\Work_Related_Projects\\COMTRADE")
+      setwd("C:/Users/jamesh/GIT/COMTRADE")
 
       Sys.setenv('COMTRADE_PRIMARY' = '9cd0ec8d460147f5956f306cbdea1cf6')
       
