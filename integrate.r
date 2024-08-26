@@ -67,17 +67,30 @@
       library(XML)   
       library(RJSONIO)   
       library(data.table)
-   
+
+      library(strucchange)
+      library(lmtest)
+      library(dynlm)
+      library(systemfit)
+      library(tseries)
+      library(cluster)
+      library(nlme)
+      library(plm)
+      library(splines)
+      library(systemfit)
+      library(forecast)   
    ##
    ##    Set working directory
    ##
-      setwd("C:/Users/jamesh/GIT/COMTRADE")
+      setwd(here::here())
 
       Sys.setenv('COMTRADE_PRIMARY' = '9cd0ec8d460147f5956f306cbdea1cf6')
       
    ##
-   ##    
+   ##    Read the raw data in
    ##
+         source("Programmes/Read_CSVs.r")
+         source("Programmes/Read_Spreadsheets.r")
       ##
       ##    Get the comtrade fish data
       ##
@@ -88,7 +101,6 @@
       ##    Get the FFA data
       ##
          #source("Programmes/Get_FFA_Data.r")     # Uses curl to get FFA data, but doesn't work. Needs Rseleniumed. In the meantime, manually pull them down and save in data_raw
-         source("Programmes/Read_Spreadsheets.r") # Read the FFA Data into R
          source("Programmes/Clean_FFA_Data.r")    # Clean the FFA Data 
          source("Programmes/FFA_Revisions.r")     # Look into the revisions
 
@@ -97,13 +109,12 @@
       ##
       ##    STEP 2: Do some fish analytics
       ##
-         source("Programmes/Fish_Explore.r") # Looks into the comtrade data - not finished yet
-
+         ##source("Programmes/Fish_Explore.r") # Looks into the comtrade data - not finished yet
+         source("Programmes/FAO_Analysis.r") # Looks at the FAO data - Post Peter Ellis conversation
 
       ##
       ##    Off to the side - look at some of the Data Hub Data
       ##
-         source("Programmes/Read_CSVs.r") # Looks into the comtrade data - not finished yet
 
       ##
       ##    Off to the side - Thinking about Palau 
