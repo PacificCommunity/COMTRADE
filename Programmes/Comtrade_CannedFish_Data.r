@@ -1,22 +1,26 @@
 ##
-##    Programme:  Comtrade_Fish_Data.rv
+##    Programme:  Comtrade_CannedFish_Data.rv
 ##
-##    Objective:  There's some fish hooks in the data.
-##                1. Comtrade will let you pull out monthly data, however the API limits each "monthly" query to a single year
-##                   so we've got to cycle through the years separately.
+##    Objective:  So, it turns out that it looks like the opening of the pacific in the late 1970s flooded the tinned 
+##                fish market and could have depressed prices which made the Atlantic unprofitable.
+##                Lets test this theory pulling canned tuna volumes.
 ##
-##                2. The value of trade is expressed in US dollars, and deflated by a currency conversation factor
-##                   which needs to be captured at the same time (https://uncomtrade.org/docs/conversion-factors-and-current-constant-value/).
-##                   I'm still trying to figure out how to isolate this information. The help documentation below is not very helpful..
-##                   https://comtradedeveloper.un.org/api-details#api=comtrade-v1&operation=getmetadata
+##                I'm exploiting the work of Taro Kawamoto in his paper, "A challenge to estimate global canned tuna 
+##                demand and its impact on future tuna resource management using the gamma model"
+##                https://doi.org/10.1016/j.marpol.2022.105016
 ##
-##                3. The free API limits the volume of data to 500 calls/day, up to 100,000 records per call, when registered and using an API key.
-##                   The code therefore will not get all of the data in a day. I've built it so it doesn't try to download everything in a day,
-##                   and will happily bring down the data over a period of a number of days.
-##
-##                   There's 122 codes in All_Codes below. And 14 years between 2010 and 2024, making 1708 separate calls. Divided by 500 means
-##                   getting this data off COMTRADE will take 3 and a half days.
-##
+##                FAO ISSCFC* code	Description
+##                037.1.1.5.6.910	- Tunas prepared or preserved, not minced, in oil
+##                037.1.1.5.6.101	- Bonito (Sarda spp.), prepared or preserved, not minced, in oil
+##                037.1.1.5.6.109	- Bonito (Sarda spp.), not minced, prepared, or preserved, nei
+##                037.1.1.5.6.201	- Skipjack, prepared or preserved, whole or in pieces, not minced, in oil
+##                037.1.1.5.6.209	- Skipjack prepared or preserved, not minced, nei
+##                037.1.1.5.6.401	- Albacore (=Longfin tuna), prepared or preserved, not minced, in oil
+##                037.1.1.5.6.409	- Albacore (=Longfin tuna), prep. or pres., not minced, nei
+##                037.1.1.5.6.911	- Tunas prepared or preserved, not minced, nei
+##                037.1.1.5.6.903	- Tunas prepared or preserved, not minced, in airtight containers
+##                037.1.1.5.6.905	- Tunas prepared or preserved, not minced, not in airtight containers
+##                037.1.1.5.6.909	- Tunas, flakes and grated, prepared or preserved##
 ##
 ##    Author:     James Hogan, FAME - The Pacific Community (SPC), 17 July 2024
 ##
@@ -32,13 +36,11 @@
       load('Data_Output/New_Metadata_Monthly.rda')
                      
    ##
-   ## Step 1: Grab the fish codes
+   ## Step 1: Grab the tinned tuna codes
    ##
    
-      All_Codes <- data.table(Description = ct_commodity_lookup(c("0302","0303"),return_char = TRUE))
+      All_Codes <- data.table(Description = ct_commodity_lookup(c("160414"),return_char = TRUE))
       All_Codes$Code <- str_split_fixed(All_Codes$Description ," ", 2)[,1]
-      All_Codes <- All_Codes[((as.numeric(All_Codes$Code) > 10000) & 
-                              (as.numeric(All_Codes$Code) < 90000)),]
       
  
    ##
