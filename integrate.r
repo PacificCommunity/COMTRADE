@@ -94,8 +94,9 @@
       ##
       ##    Get the comtrade fish data
       ##
-         source("Programmes/Comtrade_MetaData.r")  # This goes into Comtrade and pulls out the import and export conversation factors
-         source("Programmes/Comtrade_Fish_Data.r") # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
+         source("Programmes/Comtrade_MetaData.r")        # This goes into Comtrade and pulls out the import and export conversation factors
+         source("Programmes/Comtrade_CannedFish_Data.r") # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
+         source("Programmes/Comtrade_Fish_Data.r")       # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
 
       ##
       ##    Get the FFA data
