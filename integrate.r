@@ -20,7 +20,7 @@
 ##
 ##                The FAO data was accessed on the 23 August and is the file: Data_Raw/global_nominal_catch_firms_level0_harmonized.csv 
 ##
-##
+##                https://www.fao.org/markets-and-trade/commodities/meat/fao-meat-price-index/en/
 ##
 ##
 ##
@@ -82,7 +82,7 @@
    ##
    ##    Set working directory
    ##
-      setwd(here::here())
+      setwd("C:/Work_Related_Projects/COMTRADE")
 
       Sys.setenv('COMTRADE_PRIMARY' = '9cd0ec8d460147f5956f306cbdea1cf6')
       
