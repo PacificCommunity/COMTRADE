@@ -76,7 +76,7 @@
    ##
    ## Step 2: Calculate Core Tuna, and estimate a long term growth model
    ##
-      Core_Tuna <- FAO[English_name %in% c("Albacore", "Black skipjack", "Skipjack tuna", "Bigeye tuna", "Yellowfin tuna")]
+      Core_Tuna <- FAO[English_name %in% c("Albacore", "Black skipjack", "Skipjack tuna", "Bigeye tuna", "Yellowfin tuna", "Pacific bluefin tuna")]
       Core_Tuna <- Core_Tuna[,
                           list(measurement_value = sum(measurement_value,na.rm = TRUE)),
                           by = .(measurement_unit, 
@@ -198,23 +198,11 @@
       Volume$`1960-1992` <- ifelse(((Volume$Year > 1959) & (Volume$Year <= 1992)), 1, 0)
       Volume$`1992-2006` <- ifelse(((Volume$Year > 1992) & (Volume$Year <= 2006)), 1, 0)
       Volume$`2006-Current` <- ifelse(Volume$Year > 2006, 1, 0)
+      Volume$Constrained_Logistic <- ifelse(Volume$Year > 1977, 1,0)
       
       Short_Run <- lm(log(WCPFC) ~ `1960-1992`*Year + `1992-2006`*Year + `2006-Current`*Year,
                       data = Volume)
       summary(Short_Run)
-
-##
-##    And we're done
-##
-
-
-   ##
-   ##    Baseline OLS . not the worst starter for 10 I've seen
-   ##
-      OLS <- lm(log(value) ~ log(Estimated_Population) + log(Land_Area) + log(Stock),
-                data = Regression_Data)
-      summary(OLS)
-      plot(OLS)
          
      ##
      ##  Test for Autocorrelation:  Extract the residuals and check out their autocorrelation function
@@ -226,20 +214,27 @@
          pacf(OLS$residuals)
          dwtest(OLS)
   
-  
-  
-fit <- nls(WCPFC ~ SSlogis(Year, a, b, c), data = Volume)
-summary(fit)
-p <- coef(fit)
-
-Volume$Estimate <- SSlogis(Volume$Year,p["a"],p["b"],p["c"])
-
-Volume <- data.table::melt(Volume,
-                          id.var = c("Year"),
-                          measure.vars = c("Estimate", "WCPFC"))
-                     
+     ##
+     ##     Try Peter's recommendation on estimating a logistic regression
+     ##
+         fit <- nls(WCPFC ~ SSlogis(Year, a, b, c), data = Volume)
+         summary(fit)
+         p <- coef(fit)
 
 
+         
+         fit <- nls(WCPFC ~ SSlogis(Year*Constrained_Logistic, a, b, c), data = Volume)
+         summary(fit)
+         c <- coef(fit)
+
+
+
+         Volume$Unconstrained_Logistic <- SSlogis(Volume$Year,p["a"],p["b"],p["c"])
+         Volume$Constrained_Logistic   <- SSlogis(Volume$Year,c["a"],c["b"],c["c"])
+         Volume <- data.table::melt(Volume,
+                                   id.var = c("Year"),
+                                   measure.vars = c("Unconstrained_Logistic","Constrained_Logistic", "WCPFC"))
+                              
       ggplot(Volume, 
              aes(x = Year, 
                  y = value,
