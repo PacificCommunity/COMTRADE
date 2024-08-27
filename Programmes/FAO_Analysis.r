@@ -91,7 +91,12 @@
 #             facet_grid(. ~ Measure) +
              geom_smooth(se = FALSE) +
              geom_point(alpha = 0.2) +
-             geom_vline(xintercept = c(1977, 1994.25)) +
+             
+             geom_vline(xintercept = c(1977, 1981.5, 1994.25)) +
+             geom_text(aes(x=1976, y=2750000, label="1997",  family ="Open Sans"),show_guide = F, size=3.5)+
+             geom_text(aes(x=1983, y=2750000, label="1981",  family ="Open Sans"), show_guide = F, size=3.5)+
+             geom_text(aes(x=1996, y=2750000, label="1994",  family ="Open Sans"), show_guide = F, size=3.5)+
+   
              scale_y_continuous(labels = comma) +
 #             scale_colour_manual(values = JamesColours()) + 
              labs(title = "World Tuna Catch Volumes") +

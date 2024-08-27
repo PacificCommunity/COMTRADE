@@ -98,6 +98,14 @@
          source("Programmes/Comtrade_CannedFish_Data.r") # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
          source("Programmes/Comtrade_Fish_Data.r")       # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
 
+         source("Programmes/Canned_Tuna_Analysis.r")     # There's a bit of a theory that the opening of the pacific tuna fisheries had the effect of 
+                                                         # flooding the market with raw tuna, depressing both the raw tuna and tinned tuna markets.
+                                                         # This had the effect of decreased tuna catch and tinned price, making higher effort Atlantic 
+                                                         # fishing unprofitable, and stimulating consumer demand relative to other protein sources.
+                                                         # If that is true, than the pacific might have saved the Atlantic fisheries, and stimulated 
+                                                         # demand in the Indian fisheries.
+
+
       ##
       ##    Get the FFA data
       ##
