@@ -38,6 +38,8 @@
    ##    Load some generic functions or colour palattes, depending on what you're doing.
    ##
       source("R/themes.r")
+      
+      
    ##
    ##    Load data from somewhere
    ##
@@ -83,48 +85,107 @@
                                  Year = year(time_start), 
                                  source_authority,
                                  Source_Authority)]
-   
-      ggplot(Core_Tuna, 
+      Core_Tuna$Fishery <- str_wrap(Core_Tuna$Source_Authority, width = 40)
+
+     showtext_auto()
+      ##
+      ##    Lets save two pictures - one with titles and one without
+      ##       First with titles for showing people
+      ##
+      ggplot(Core_Tuna[Year > 1949], 
              aes(x = Year, 
-                 y = measurement_value,
-                 colour = Source_Authority))  + 
-#             facet_grid(. ~ Measure) +
+                 y = measurement_value/1000,
+                 colour = Fishery))  + 
              geom_smooth(se = FALSE) +
-             geom_point(alpha = 0.2) +
+             geom_point(alpha = 0.1) +
              
-             geom_vline(xintercept = c(1977, 1981.5, 1994.25)) +
-             geom_text(aes(x=1976, y=2750000, label="1997",  family ="Open Sans"),show_guide = F, size=3.5)+
-             geom_text(aes(x=1983, y=2750000, label="1981",  family ="Open Sans"), show_guide = F, size=3.5)+
-             geom_text(aes(x=1996, y=2750000, label="1994",  family ="Open Sans"), show_guide = F, size=3.5)+
-   
-             scale_y_continuous(labels = comma) +
-#             scale_colour_manual(values = JamesColours()) + 
-             labs(title = "World Tuna Catch Volumes") +
-             xlab("\nYear\n") +
-             ylab("Total Metrics Tonnes\n") +
-             theme_bw(base_size=12, base_family =  "Open Sans") %+replace%
+             geom_vline(xintercept = c(1977), colour = SPCColours("Light_Blue"), alpha = 0.2, linewidth = 2) +
+             annotate("text", x=1976, y=2750, label = "Catch Volumes pre PSSAP",family ="MyriadPro-Light", hjust = 1.0) +              
+             annotate("text", x=1978, y=2750, label = "Catch Volumes post PSSAP",family ="MyriadPro-Light", hjust = 0.0) +              
+             
+             scale_y_continuous(breaks = seq(from = 0, to = 3000, by =500),
+                                labels = scales::label_comma()) +
+             scale_x_continuous(breaks = seq(from = 1950, to = 2025, by =5)) +
+             scale_colour_manual(values = SPCColours(3:7)) + 
+             labs(title = "Global Annual Tuna Catch Volumes",
+                  caption  = "Data Source: UNFAO https://zenodo.org/records/11410529") +
+             xlab("") +
+             ylab("Metrics Tonnes\n(000)") +
+             theme_bw(base_size=12, base_family =  "Calibri") %+replace%
              theme(legend.title.align=0.5,
                    plot.margin = unit(c(1,3,1,1),"mm"),
                    panel.border = element_blank(),
-                   strip.background =  element_rect(fill   = JamesColours("Light_Blue")),
+                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
                    strip.text = element_text(colour = "white", 
                                              size   = 13,
-                                             family = "Open Sans Semibold",
+                                             family = "MyriadPro-Bold",
                                              margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
                    panel.spacing = unit(1, "lines"),                                              
-                   legend.text   = element_text(size = 10, family = "Open Sans Light"),
-                   plot.title    = element_text(size = 24, colour = JamesColours("Blue"),                   family = "Raleway SemiBold"),
-                   plot.subtitle = element_text(size = 14, colour = JamesColours("Light_Blue"), hjust = 0.5, family = "Raleway SemiBold"),
-                   plot.caption  = element_text(size = 11, colour = JamesColours("Red"),     hjust = 1.0, family = "Open Sans"),
-                   plot.tag      = element_text(size =  9, colour = JamesColours("Red"),     hjust = 0.0, face = "italic" ),
-                   axis.title    = element_text(size = 14, colour = JamesColours("Blue")),
-                   axis.text.x   = element_text(size = 14, colour = JamesColours("Blue"),  angle = 90),
-                   axis.text.y   = element_text(size = 14, colour = JamesColours("Red"), angle = 00),
+                   legend.text   = element_text(size = 10, family = "MyriadPro-Regular"),
+                   plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+                   plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+                   plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+                   axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
+                   axis.text.x   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+                   axis.text.y   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
                    legend.key.width = unit(1, "cm"),
                    legend.spacing.y = unit(1, "cm"),
+                   legend.margin = margin(10, 10, 10, 10),
+                   legend.position  = "bottom")
+    ggsave("Graphical_Output/World_Volumes_Titles.png", height =16.13, width = 20.66, dpi = 165, units = c("cm"))
+      ##
+      ##       Now without titles for including in paper - Word scales it down by 23%
+      ##
+      Core_Tuna$Fishery <- str_wrap(Core_Tuna$Source_Authority, width = 25)
+      
+      ggplot(Core_Tuna[Year > 1949], 
+             aes(x = Year, 
+                 y = measurement_value/1000,
+                 colour = Fishery))  + 
+#             facet_grid(. ~ Measure) +
+             geom_smooth(se = FALSE) +
+             geom_point(alpha = 0.1) +
+             
+             geom_vline(xintercept = c(1977), colour = SPCColours("Light_Blue"), alpha = 0.2, linewidth = 2) +
+             annotate("text", x=1976, y=2750, label = "Catch Volumes pre PSSAP",family ="MyriadPro-Light", hjust = 1.0, size = 7) +              
+             annotate("text", x=1978, y=2750, label = "Catch Volumes post PSSAP",family ="MyriadPro-Light", hjust = 0.0, size = 7) +              
+             # geom_text(aes(x=1978, y=2750, label="First PSSAP Project",  family ="MyriadPro-Light"), size=10)+
+             # geom_text(aes(x=1983, y=2750000, label="1981",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
+             # geom_text(aes(x=1996, y=2750000, label="1994",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
+             
+             scale_y_continuous(breaks = seq(from = 0, to = 3000, by =500),
+                                labels = scales::label_comma()) +
+             scale_x_continuous(breaks = seq(from = 1950, to = 2025, by =5)) +
+             scale_colour_manual(values = SPCColours(3:7)) + 
+#             labs(title = "Global Annual Tuna Catch Volumes",
+#                  caption  = "Data Source: UNFAO https://zenodo.org/records/11410529") +
+             xlab("") +
+             ylab("Metrics Tonnes\n(000)") +
+             theme_bw(base_size=12, base_family =  "Calibri") %+replace%
+             theme(legend.title.align=0.5,
+                   plot.margin = unit(c(1,1,1,1),"mm"),
+                   panel.border = element_blank(),
+                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
+                   strip.text = element_text(colour = "white", 
+                                             size   = 13,
+                                             family = "MyriadPro-Bold",
+                                             margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
+                   panel.spacing = unit(1, "lines"),                                              
+                   legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
+                   plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+                   plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+                   plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+                   axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
+                   axis.text.x   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+                   axis.text.y   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+                   legend.key.width = unit(5, "mm"),
+                   legend.spacing.y = unit(1, "mm"),
                    legend.margin = margin(0, 0, 0, 0),
                    legend.position  = "bottom")
-   
+    ggsave("Graphical_Output/World_Volumes_WithoutTitles.png", height =(.77*16.13), width = (.77*20.66), dpi = 165, units = c("cm"))
+  
    ##
    ## Step 3: Growth and Inflections
    ##
@@ -169,7 +230,7 @@
              geom_vline(xintercept = Volume$Year[Breaks$breakpoints][3]) +
              
              scale_y_continuous(labels = comma) +
-#             scale_colour_manual(values = JamesColours()) + 
+#             scale_colour_manual(values = SPCColours()) + 
              labs(title = "Total Tuna Catch Volumes") +
              xlab("\nYear\n") +
              ylab("Total Metrics Tonnes\n") +
@@ -177,20 +238,20 @@
              theme(legend.title.align=0.5,
                    plot.margin = unit(c(1,3,1,1),"mm"),
                    panel.border = element_blank(),
-                   strip.background =  element_rect(fill   = JamesColours("Light_Blue")),
+                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
                    strip.text = element_text(colour = "white", 
                                              size   = 13,
                                              family = "Open Sans Semibold",
                                              margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
                    panel.spacing = unit(1, "lines"),                                              
                    legend.text   = element_text(size = 10, family = "Open Sans Light"),
-                   plot.title    = element_text(size = 24, colour = JamesColours("Blue"),                   family = "Raleway SemiBold"),
-                   plot.subtitle = element_text(size = 14, colour = JamesColours("Light_Blue"), hjust = 0.5, family = "Raleway SemiBold"),
-                   plot.caption  = element_text(size = 11, colour = JamesColours("Red"),     hjust = 1.0, family = "Open Sans"),
-                   plot.tag      = element_text(size =  9, colour = JamesColours("Red"),     hjust = 0.0, face = "italic" ),
-                   axis.title    = element_text(size = 14, colour = JamesColours("Blue")),
-                   axis.text.x   = element_text(size = 14, colour = JamesColours("Blue"),  angle = 90),
-                   axis.text.y   = element_text(size = 14, colour = JamesColours("Red"), angle = 00),
+                   plot.title    = element_text(size = 24, colour = SPCColours("Blue"),                   family = "Raleway SemiBold"),
+                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), hjust = 0.5, family = "Raleway SemiBold"),
+                   plot.caption  = element_text(size = 11, colour = SPCColours("Red"),     hjust = 1.0, family = "Open Sans"),
+                   plot.tag      = element_text(size =  9, colour = SPCColours("Red"),     hjust = 0.0, face = "italic" ),
+                   axis.title    = element_text(size = 14, colour = SPCColours("Blue")),
+                   axis.text.x   = element_text(size = 14, colour = SPCColours("Blue"),  angle = 90),
+                   axis.text.y   = element_text(size = 14, colour = SPCColours("Red"), angle = 00),
                    legend.key.width = unit(1, "cm"),
                    legend.spacing.y = unit(1, "cm"),
                    legend.margin = margin(0, 0, 0, 0),
@@ -250,7 +311,7 @@
              geom_vline(xintercept = p["b"]) +
              
              scale_y_continuous(labels = comma) +
-#             scale_colour_manual(values = JamesColours()) + 
+#             scale_colour_manual(values = SPCColours()) + 
              labs(title = "Total Tuna Catch Volumes") +
              xlab("\nYear\n") +
              ylab("Total Metrics Tonnes\n") +
@@ -258,20 +319,20 @@
              theme(legend.title.align=0.5,
                    plot.margin = unit(c(1,3,1,1),"mm"),
                    panel.border = element_blank(),
-                   strip.background =  element_rect(fill   = JamesColours("Light_Blue")),
+                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
                    strip.text = element_text(colour = "white", 
                                              size   = 13,
                                              family = "Open Sans Semibold",
                                              margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
                    panel.spacing = unit(1, "lines"),                                              
                    legend.text   = element_text(size = 10, family = "Open Sans Light"),
-                   plot.title    = element_text(size = 24, colour = JamesColours("Blue"),                   family = "Raleway SemiBold"),
-                   plot.subtitle = element_text(size = 14, colour = JamesColours("Light_Blue"), hjust = 0.5, family = "Raleway SemiBold"),
-                   plot.caption  = element_text(size = 11, colour = JamesColours("Red"),     hjust = 1.0, family = "Open Sans"),
-                   plot.tag      = element_text(size =  9, colour = JamesColours("Red"),     hjust = 0.0, face = "italic" ),
-                   axis.title    = element_text(size = 14, colour = JamesColours("Blue")),
-                   axis.text.x   = element_text(size = 14, colour = JamesColours("Blue"),  angle = 90),
-                   axis.text.y   = element_text(size = 14, colour = JamesColours("Red"), angle = 00),
+                   plot.title    = element_text(size = 24, colour = SPCColours("Blue"),                   family = "Raleway SemiBold"),
+                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), hjust = 0.5, family = "Raleway SemiBold"),
+                   plot.caption  = element_text(size = 11, colour = SPCColours("Red"),     hjust = 1.0, family = "Open Sans"),
+                   plot.tag      = element_text(size =  9, colour = SPCColours("Red"),     hjust = 0.0, face = "italic" ),
+                   axis.title    = element_text(size = 14, colour = SPCColours("Blue")),
+                   axis.text.x   = element_text(size = 14, colour = SPCColours("Blue"),  angle = 90),
+                   axis.text.y   = element_text(size = 14, colour = SPCColours("Red"), angle = 00),
                    legend.key.width = unit(1, "cm"),
                    legend.spacing.y = unit(1, "cm"),
                    legend.margin = margin(0, 0, 0, 0),

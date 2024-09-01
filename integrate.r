@@ -47,18 +47,20 @@
       library(ggplot2)
       library(plyr)
       library(stringr)
-      library(reshape2)
       library(lubridate)
       library(calibrate)
       library(Hmisc)
       library(RColorBrewer)
       library(stringi)
       library(sqldf)
-      library(extrafont)
       library(scales)
       library(RDCOMClient)
       library(extrafont)
       library(tictoc)
+      
+      library(sysfonts)
+      library(showtext)
+            
    ##
    ##    Project-specific libraries
    ##
@@ -83,6 +85,7 @@
    ##    Set working directory
    ##
       setwd("C:/Work_Related_Projects/COMTRADE")
+      setwd("C:/Users/jamesh/GIT/COMTRADE")
 
       Sys.setenv('COMTRADE_PRIMARY' = '9cd0ec8d460147f5956f306cbdea1cf6')
       
@@ -96,7 +99,7 @@
       ##
          source("Programmes/Comtrade_MetaData.r")        # This goes into Comtrade and pulls out the import and export conversation factors
          source("Programmes/Comtrade_CannedFish_Data.r") # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
-         source("Programmes/Comtrade_Fish_Data.r")       # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
+         source("Programmes/Comtrade_Fish_Data.r")       # This goes into Comtrade and pulls out any canned fish data that hasn't been previously extracted
 
          source("Programmes/Canned_Tuna_Analysis.r")     # There's a bit of a theory that the opening of the pacific tuna fisheries had the effect of 
                                                          # flooding the market with raw tuna, depressing both the raw tuna and tinned tuna markets.
