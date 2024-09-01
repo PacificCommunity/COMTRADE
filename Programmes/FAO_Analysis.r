@@ -79,6 +79,7 @@
    ## Step 2: Calculate Core Tuna, and estimate a long term growth model
    ##
       Core_Tuna <- FAO[English_name %in% c("Albacore", "Black skipjack", "Skipjack tuna", "Bigeye tuna", "Yellowfin tuna", "Pacific bluefin tuna")]
+      Core_Tuna <- FAO[English_name %in% c("Black skipjack", "Skipjack tuna")]
       Core_Tuna <- Core_Tuna[,
                           list(measurement_value = sum(measurement_value,na.rm = TRUE)),
                           by = .(measurement_unit, 
@@ -100,14 +101,14 @@
              geom_point(alpha = 0.1) +
              
              geom_vline(xintercept = c(1977), colour = SPCColours("Light_Blue"), alpha = 0.2, linewidth = 2) +
-             annotate("text", x=1976, y=2750, label = "Catch Volumes pre PSSAP",family ="MyriadPro-Light", hjust = 1.0) +              
-             annotate("text", x=1978, y=2750, label = "Catch Volumes post PSSAP",family ="MyriadPro-Light", hjust = 0.0) +              
+             annotate("text", x=1976, y=1750, label = "Catch Volumes pre-PSSAP",family ="MyriadPro-Light", hjust = 1.0) +              
+             annotate("text", x=1978, y=1750, label = "Catch Volumes post-PSSAP",family ="MyriadPro-Light", hjust = 0.0) +              
              
-             scale_y_continuous(breaks = seq(from = 0, to = 3000, by =500),
+             scale_y_continuous(breaks = seq(from = 0, to = 2500, by =500),
                                 labels = scales::label_comma()) +
              scale_x_continuous(breaks = seq(from = 1950, to = 2025, by =5)) +
              scale_colour_manual(values = SPCColours(3:7)) + 
-             labs(title = "Global Annual Tuna Catch Volumes",
+             labs(title = "Global Annual Skipjack Tuna Catch Volumes",
                   caption  = "Data Source: UNFAO https://zenodo.org/records/11410529") +
              xlab("") +
              ylab("Metrics Tonnes\n(000)") +
@@ -148,13 +149,13 @@
              geom_point(alpha = 0.1) +
              
              geom_vline(xintercept = c(1977), colour = SPCColours("Light_Blue"), alpha = 0.2, linewidth = 2) +
-             annotate("text", x=1976, y=2750, label = "Catch Volumes pre PSSAP",family ="MyriadPro-Light", hjust = 1.0, size = 7) +              
-             annotate("text", x=1978, y=2750, label = "Catch Volumes post PSSAP",family ="MyriadPro-Light", hjust = 0.0, size = 7) +              
+             annotate("text", x=1976, y=1750, label = "Catch Volumes pre-PSSAP",family ="MyriadPro-Light", hjust = 1.0, size = 7) +              
+             annotate("text", x=1978, y=1750, label = "Catch Volumes post-PSSAP",family ="MyriadPro-Light", hjust = 0.0, size = 7) +              
              # geom_text(aes(x=1978, y=2750, label="First PSSAP Project",  family ="MyriadPro-Light"), size=10)+
              # geom_text(aes(x=1983, y=2750000, label="1981",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
              # geom_text(aes(x=1996, y=2750000, label="1994",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
              
-             scale_y_continuous(breaks = seq(from = 0, to = 3000, by =500),
+             scale_y_continuous(breaks = seq(from = 0, to = 2500, by =500),
                                 labels = scales::label_comma()) +
              scale_x_continuous(breaks = seq(from = 1950, to = 2025, by =5)) +
              scale_colour_manual(values = SPCColours(3:7)) + 
@@ -190,7 +191,8 @@
    ## Step 3: Growth and Inflections
    ##
       Volume <- data.table::dcast(Core_Tuna,
-                                  measurement_unit + Year ~ source_authority)
+                                  measurement_unit + Year ~ source_authority,
+                                  value.var = "measurement_value")
       Volume <- Volume[!is.na(WCPFC)]
    ##
    ##    Estimate a bog standard long run growth model, and then calculate its breakpoints 
@@ -226,8 +228,8 @@
              geom_point(alpha = 0.2) +
              
              geom_vline(xintercept = Volume$Year[Breaks$breakpoints][1]) +
-             geom_vline(xintercept = Volume$Year[Breaks$breakpoints][2]) +
-             geom_vline(xintercept = Volume$Year[Breaks$breakpoints][3]) +
+             #geom_vline(xintercept = Volume$Year[Breaks$breakpoints][2]) +
+             #geom_vline(xintercept = Volume$Year[Breaks$breakpoints][3]) +
              
              scale_y_continuous(labels = comma) +
 #             scale_colour_manual(values = SPCColours()) + 
@@ -312,7 +314,7 @@
              
              scale_y_continuous(labels = comma) +
 #             scale_colour_manual(values = SPCColours()) + 
-             labs(title = "Total Tuna Catch Volumes") +
+             labs(title = "Total Skipjack Tuna Catch Volumes") +
              xlab("\nYear\n") +
              ylab("Total Metrics Tonnes\n") +
              theme_bw(base_size=12, base_family =  "Open Sans") %+replace%
