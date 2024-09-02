@@ -104,7 +104,7 @@
              annotate("text", x=1976, y=1750, label = "Catch Volumes pre-PSSAP",family ="MyriadPro-Light", hjust = 1.0) +              
              annotate("text", x=1978, y=1750, label = "Catch Volumes post-PSSAP",family ="MyriadPro-Light", hjust = 0.0) +              
              
-             scale_y_continuous(breaks = seq(from = 0, to = 2500, by =500),
+             scale_y_continuous(breaks = seq(from = 0, to = 2500, by =250),
                                 labels = scales::label_comma()) +
              scale_x_continuous(breaks = seq(from = 1950, to = 2025, by =5)) +
              scale_colour_manual(values = SPCColours(3:7)) + 
@@ -155,7 +155,7 @@
              # geom_text(aes(x=1983, y=2750000, label="1981",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
              # geom_text(aes(x=1996, y=2750000, label="1994",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
              
-             scale_y_continuous(breaks = seq(from = 0, to = 2500, by =500),
+             scale_y_continuous(breaks = seq(from = 0, to = 2500, by =250),
                                 labels = scales::label_comma()) +
              scale_x_continuous(breaks = seq(from = 1950, to = 2025, by =5)) +
              scale_colour_manual(values = SPCColours(3:7)) + 
