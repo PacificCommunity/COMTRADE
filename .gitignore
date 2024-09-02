@@ -48,5 +48,3 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 *Comtrade_Fish_Data.rda
-*.pdf
-*.png
