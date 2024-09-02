@@ -33,7 +33,7 @@
 ##
 ##    Author   :  James Hogan, FAME - The Pacific Community (SPC)
 ##
-##    Peer     :  <PROGRAMMER>, <TEAM>, <PEER REVIEWED COMPLETED>
+##    Peer     :  Caroline Ton, FAME - The Pacific Community (SPC)
 ##    Reviewer :
 ##
    ##
