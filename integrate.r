@@ -57,6 +57,7 @@
       library(RDCOMClient)
       library(extrafont)
       library(tictoc)
+      library(RODBC)
       
       library(sysfonts)
       library(showtext)
@@ -122,7 +123,9 @@
       ##    STEP 2: Do some fish analytics
       ##
          ##source("Programmes/Fish_Explore.r") # Looks into the comtrade data - not finished yet
-         source("Programmes/FAO_Analysis.r") # Looks at the FAO data - Post Peter Ellis conversation
+         source("Programmes/FAO_Analysis.r")   # Looks at the FAO data - Post Peter Ellis conversation
+         source("Programmes/Vessel_Metrics.r") # Based on Tiffany Vidal code, this code replicates figure 3.1 from here: https://meetings.wcpfc.int/node/23098
+
 
       ##
       ##    Off to the side - look at some of the Data Hub Data

@@ -41,3 +41,17 @@ SPCColours <- function(x=1:12){
    if(x[1]=="Quad4") x <- c(1,2,3,5)
    as.vector(SPC_Colours[x])
 }
+
+gg.theme <- theme(axis.line = element_line(color="black"),
+                  panel.grid.major = element_blank(),
+                  panel.grid.minor = element_blank(),
+                  axis.text = element_text(size=16),
+                  axis.title = element_text(size=18),
+                  strip.background =element_rect(fill="white"),
+                  strip.text = element_text(size=14),
+                  legend.box.background = element_rect(colour = "black"),
+                  legend.background = element_blank(),
+                  legend.text = element_text(size=14),
+                  legend.title=element_blank(),
+                  legend.position = 'top',
+                  panel.background = element_rect(fill = NA, color = "black"))  
