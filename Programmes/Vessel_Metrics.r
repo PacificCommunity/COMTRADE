@@ -18,6 +18,12 @@
       source("R/themes.r")
 
    ##
+   ##    Grab the FFA data
+   ##
+      load('Data_Intermediate/FFASummaryData.rda')
+   
+   
+   ##
    ##    Grab some database information
    ##
       db1 <- odbcDriverConnect("driver=SQL Server;server=nouSQL03;database=LOG_MASTER")
@@ -155,6 +161,7 @@
                  col='black', 
                  alpha = 0.2,
                  linewidth=0.1) +
+
          scale_fill_manual(values = SPCColours(),name = "Vessel Type") +    
          
          geom_line(data=Vessels[(YY >= 1972) & (Fleet == "Distant Water Fleet")], 
@@ -176,10 +183,14 @@
 
                    
          scale_x_discrete(breaks = seq(from = 1972, to = 2025, by =5)) +
+         scale_y_continuous(breaks = seq(from = 0, to = 320, by =20)) +
          labs(title = "Number of Purse Seine Vessels Operating within the WCPFC",
             caption  = "Data Source: The Pacific Community (SPC)") +
          xlab("") +
          ylab("Number of Purse Seine Vessels") +
+         
+         geom_vline(xintercept = c(1977), colour = SPCColours("Green")) +
+         
          theme_bw(base_size=12, base_family =  "Calibri") %+replace%
          theme(legend.title.align=0.5,
              plot.margin = unit(c(1,3,1,1),"mm"),
@@ -196,14 +207,73 @@
              plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
              plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
              axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
-             axis.text.x   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
-             axis.text.y   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+             axis.text.x   = element_text(size = 12, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+             axis.text.y   = element_text(size = 12, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
              legend.key.width = unit(1, "cm"),
              legend.spacing.y = unit(1, "cm"),
              legend.margin = margin(10, 10, 10, 10),
              legend.position  = "bottom")
 
           ggsave("Graphical_Output/Number_of_Purse_Seine_Vessels_Operating_within_the_WCPFC.png", height =16.13, width = 20.66, dpi = 165, units = c("cm"))
+          
+          
+      ggplot() + 
+         geom_bar(data=Vessels[YY >= 1972],
+                 aes(factor(YY), vessels, fill=factor(Fleet)), 
+                 stat='identity', 
+                 col='black', 
+                 alpha = 0.2,
+                 linewidth=0.1) +
+         scale_fill_manual(values = SPCColours(),name = "Vessel Type") +    
+         
+         geom_line(data=Vessels[(YY >= 1972) & (Fleet == "Distant Water Fleet")], 
+                   aes(factor(YY), Additive_Growth_PreResearch ,group=1), 
+                   stat='identity', 
+                   linewidth=1.3, 
+                   linetype=2, 
+                   colour = SPCColours("Red")) +   
+         
+         geom_line(data=Vessels[(YY >= 1972) & (Fleet == "Distant Water Fleet")], 
+                   aes(factor(YY), Exponential_Growth_PreResearch ,group=1), 
+                   stat='identity', 
+                   linewidth=1.3, 
+                   linetype=2, 
+                   colour = SPCColours("Gold")) +   
+
+         annotate("text", x=2, y=280, label = "Exponential Growth from 2023 - 1972", family ="MyriadPro-Light", hjust = 0.0,colour = SPCColours("Gold"), size = 7) +              
+         annotate("text", x=2, y=260, label = "Additive Growth from 1977 - 1972",family ="MyriadPro-Light", hjust = 0.0, colour = SPCColours("Red"), size = 7) +              
+
+                   
+         scale_x_discrete(breaks = seq(from = 1972, to = 2025, by =5)) +
+         scale_y_continuous(breaks = seq(from = 0, to = 320, by =20)) +
+         xlab("") +
+         ylab("Number of Purse Seine Vessels") +
+         geom_vline(xintercept = c(1977), colour = SPCColours("Green")) +
+         theme_bw(base_size=12, base_family =  "Calibri") %+replace%
+         theme(legend.title.align=0.5,
+             plot.margin = unit(c(1,3,1,1),"mm"),
+             panel.border = element_blank(),
+             strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
+             strip.text = element_text(colour = "white", 
+                                       size   = 13,
+                                       family = "MyriadPro-Bold",
+                                       margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
+             panel.spacing = unit(1, "lines"),                                              
+             legend.text   = element_text(size = 10, family = "MyriadPro-Regular"),
+             plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+             plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+             plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+             plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+             axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
+             axis.text.x   = element_text(size = 12, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+             axis.text.y   = element_text(size = 12, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+             legend.key.width = unit(1, "cm"),
+             legend.spacing.y = unit(1, "cm"),
+             legend.margin = margin(10, 10, 10, 10),
+             legend.position  = "bottom")
+
+          ggsave("Graphical_Output/Number_of_Purse_Seine_Vessels_Operating_within_the_WCPFC_NoTitles.png", height =16.13, width = 20.66, dpi = 165, units = c("cm"))
+
 
 ##
 ##    And we're done
