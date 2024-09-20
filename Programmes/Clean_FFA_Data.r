@@ -275,11 +275,11 @@
                             ifelse(str_detect(X$SecondHeading, regex("Onshore", ignore_case = TRUE)), "Onshore processing volumes",X$SecondHeading))))
 
          X$Metrics <- ifelse(str_detect(X$Metrics, regex("Thailand", ignore_case = TRUE)), "Thailand",
-                      ifelse(str_detect(X$Metrics, regex("US", ignore_case = TRUE)), "US",
-                      ifelse(str_detect(X$Metrics, regex("Japan", ignore_case = TRUE)), "Japan",
-                      ifelse(str_detect(X$Metrics, regex("Troll", ignore_case = TRUE)), "Troll",
-                      ifelse(str_detect(X$Metrics, regex("EU", ignore_case = TRUE)), "EU",
-                      ifelse(str_detect(X$Metrics, regex("Licence", ignore_case = TRUE)), "Licence and access fee revenue",
+                      ifelse(str_detect(X$Metrics, regex("US", ignore_case = TRUE)),       "US",
+                      ifelse(str_detect(X$Metrics, regex("Japan", ignore_case = TRUE)),    "Japan",
+                      ifelse(str_detect(X$Metrics, regex("Troll", ignore_case = TRUE)),    "Troll",
+                      ifelse(str_detect(X$Metrics, regex("EU", ignore_case = TRUE)),       "EU",
+                      ifelse(str_detect(X$Metrics, regex("Licence", ignore_case = TRUE)),  "Licence and access fee revenue",
                       ifelse(str_detect(X$Metrics, regex("Employment", ignore_case = TRUE)), "Employment",X$Metrics)))))))
          FFA_Compendium_of_Economic_and_Development_Statistics_2022 <- data.table(X[order(X$Country, X$CountryMeasure, X$FirstHeading, X$SecondHeading, X$Metrics, X$Units, X$Year),])
 

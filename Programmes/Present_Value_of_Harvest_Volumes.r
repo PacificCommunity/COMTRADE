@@ -50,7 +50,6 @@
    ##
       source("R/themes.r")
       
-      
    ##
    ##    Load data from somewhere
    ##
@@ -60,15 +59,27 @@
          load("Data_Intermediate/RAWDATA_ASFIS_spXXASFIS_sp_2023.rda")
          load("Data_Intermediate/RAWDATA_XXglobal_nominal_catch_firms_level0_harmonized.rda")
 
+         ASFIS <- data.table(RAWDATA_ASFIS_spXXASFIS_sp_2023)
+         FAO   <- data.table(RAWDATA_XXglobal_nominal_catch_firms_level0_harmonized)
+
       ##
       ##    FFA data on current volumes and values
       ##
          load('Data_Intermediate/FFASummaryData.rda')
+         load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
+         
+      ##
+      ##    Grab data on CPI
+      ##
+         load('Data_Intermediate/RAWDATA_Spliced IndexXXSplited_Price_Indexes.rda')
+         Splited_Price_Indexes <- `RAWDATA_Spliced IndexXXSplited_Price_Indexes`
+         Splited_Price_Indexes <- Splited_Price_Indexes[,c("X.12","X.13")]
+         names(Splited_Price_Indexes) <- c("TimePeriod", "Composite_Price")
+         Splited_Price_Indexes$TimePeriod <- as.Date(Splited_Price_Indexes$TimePeriod, "%d/%m/%Y")
+         Splited_Price_Indexes$Composite_Price <- as.numeric(Splited_Price_Indexes$Composite_Price)
+         Splited_Price_Indexes <- Splited_Price_Indexes[!is.na(Splited_Price_Indexes$TimePeriod),]
 
 
-      
-      ASFIS <- data.table(RAWDATA_ASFIS_spXXASFIS_sp_2023)
-      FAO   <- data.table(RAWDATA_XXglobal_nominal_catch_firms_level0_harmonized)
                      
    ##
    ## Step 1: Clean up and enrich the FAO Data
@@ -97,17 +108,203 @@
                    by = c("source_authority"))
                    
    ##
-   ## Step 2: Calculate Core Tuna, and estimate a long term growth model
+   ## Calculate Core Tuna
    ##
-      Core_Tuna <- FAO[English_name %in% c("Albacore", "Black skipjack", "Skipjack tuna", "Bigeye tuna", "Yellowfin tuna", "Pacific bluefin tuna")]
-      Core_Tuna <- FAO[English_name %in% c("Black skipjack", "Skipjack tuna")]
-      Core_Tuna <- Core_Tuna[,
-                          list(measurement_value = sum(measurement_value,na.rm = TRUE)),
-                          by = .(measurement_unit, 
-                                 Year = year(time_start), 
-                                 source_authority,
-                                 Source_Authority)]
-      Core_Tuna$Fishery <- str_wrap(Core_Tuna$Source_Authority, width = 40)
+      FAO_Core_Tuna <- FAO[English_name %in% c("Albacore", "Black skipjack", "Skipjack tuna", "Bigeye tuna", "Yellowfin tuna")]
+      FAO_Core_Tuna$Measure <- ifelse(FAO_Core_Tuna$English_name %in% c("Black skipjack", "Skipjack tuna"), "Skipjack",
+                               ifelse(FAO_Core_Tuna$English_name %in% c("Bigeye tuna"), "Bigeye",
+                               ifelse(FAO_Core_Tuna$English_name %in% c("Yellowfin tuna"), "Yellowfin",FAO_Core_Tuna$English_name)))
+                               
+      FAO_Core_Tuna <- FAO_Core_Tuna[source_authority == 'WCPFC',
+                                      list(FAO_Catch_Volume = sum(measurement_value,na.rm = TRUE)),
+                                      by = .(Year = year(time_start), 
+                                             Measure)]
+
+   ##
+   ## Calculate FFA Tuna
+   ##
+      Catch_Value  <- FFASummaryData[["Summary of catch value"]]
+      Catch_Volume <- FFASummaryData[["Summary of catch"]]
+
+      Catch_Value  <- data.table(Catch_Value[Catch_Value$Spreadsheet == "WCPFC-CA_tuna_fisheries_2023",])
+      Catch_Volume <- data.table(Catch_Volume[Catch_Volume$Spreadsheet == "WCPFC-CA_tuna_fisheries_2023",])
+
+      Value_by_Species  <- Catch_Value[Catch_Value$Data_Row == "5.2 VALUE OF CATCH BY SPECIES",c("Measure","Year","value")]
+      Volume_by_Species <- Catch_Volume[Catch_Volume$Data_Row == "4.2 CATCH BY SPECIES",c("Measure","Year","value")]
+      
+      Value_by_Species$Value   <- Value_by_Species$value
+      Volume_by_Species$Volume <- Volume_by_Species$value
+      
+      FFA_Core_Tuna <-merge(Value_by_Species[,c("Measure","Year","Value")],
+                            Volume_by_Species[,c("Measure","Year","Volume")],
+                            by = c("Measure","Year"))
+
+
+   ##
+   ##    How well does the FFA and FAO metrics line up?
+   ##
+   ##       Looks pretty good.
+   ##
+   ##
+      FAO_FFA_Comparison <- merge(FAO_Core_Tuna,
+                                  FFA_Core_Tuna,
+                                  by = c("Measure","Year"),
+                                  all= TRUE)
+
+      FAO_FFA_Comparison <- data.table::melt(FAO_FFA_Comparison,
+                                             id.vars = c("Measure","Year"),
+                                             measure.vars = c("FAO_Catch_Volume","Value","Volume"))
+      FAO_FFA_Comparison$variable <- ifelse(as.character(FAO_FFA_Comparison$variable) == "Volume", "FFA_Volume", as.character(FAO_FFA_Comparison$variable))
+
+
+      showtext_auto()
+
+      ggplot(FAO_FFA_Comparison[variable != "Value"], 
+             aes(x = Year, 
+                 y = value/1000,
+                 colour = variable))  + 
+             geom_line() +
+             geom_point(alpha = 0.1) +
+             facet_wrap( ~ Measure,scales = "free") +
+             
+             scale_colour_manual(values = SPCColours(c(1,5))) + 
+             labs(title = "Comparison in Tuna Catch Volumes",
+                  subtitle = "\nWestern and Central Pacific Fisheries Commission Area\n",
+                  caption  = "Data Sources: FFA, WCPFC-CA tuna fisheries 2023 (1).xlsx, https://www.ffa.int/download/wcpfc-area-catch-value-estimates/ \nUNFAO https://zenodo.org/records/11410529") +
+             ylab("Metrics Tonnes\n(000)") +
+             xlab("Year") +
+             theme_bw(base_size=12, base_family =  "Calibri") %+replace%
+             theme(legend.title.align=0.5,
+                   plot.margin = unit(c(1,1,1,1),"mm"),
+                   panel.border = element_blank(),
+                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
+                   strip.text = element_text(colour = "white", 
+                                             size   = 13,
+                                             family = "MyriadPro-Bold",
+                                             margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
+                   panel.spacing = unit(1, "lines"),                                              
+                   legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
+                   plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+                   plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+                   plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+                   axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
+                   axis.text.x   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+                   axis.text.y   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+                   legend.key.width = unit(5, "mm"),
+                   legend.spacing.y = unit(1, "mm"),
+                   legend.margin = margin(0, 0, 0, 0),
+                   legend.position  = "bottom")
+    ggsave("Graphical_Output/FAO_FFA_Comparison_With_Titles.png", height =(.77*16.13), width = (.77*20.66), dpi = 165, units = c("cm"))
+    
+      ggplot(FAO_FFA_Comparison[variable != "Value"], 
+             aes(x = Year, 
+                 y = value/1000,
+                 colour = variable))  + 
+             geom_line() +
+             geom_point(alpha = 0.1) +
+             facet_wrap( ~ Measure,scales = "free") +
+             
+             scale_colour_manual(values = SPCColours(c(1,5))) + 
+             ylab("Metrics Tonnes\n(000)") +
+             xlab("Year") +
+             theme_bw(base_size=12, base_family =  "Calibri") %+replace%
+             theme(legend.title.align=0.5,
+                   plot.margin = unit(c(1,1,1,1),"mm"),
+                   panel.border = element_blank(),
+                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
+                   strip.text = element_text(colour = "white", 
+                                             size   = 13,
+                                             family = "MyriadPro-Bold",
+                                             margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
+                   panel.spacing = unit(1, "lines"),                                              
+                   legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
+                   plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+                   plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+                   plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+                   axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
+                   axis.text.x   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+                   axis.text.y   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+                   legend.key.width = unit(5, "mm"),
+                   legend.spacing.y = unit(1, "mm"),
+                   legend.margin = margin(0, 0, 0, 0),
+                   legend.position  = "bottom")
+    ggsave("Graphical_Output/FAO_FFA_Comparison_Without_Titles.png", height =(.77*16.13), width = (.77*20.66), dpi = 165, units = c("cm"))
+
+
+   ##
+   ##    Try solution 1: Look at the long-term average price metrics from the FFA and extrapolate the price trend back
+   ##                    in time using the UNFAO data.
+   ##
+   ##                    Goah... I don't feel bold using these prices to estimate any trend to extrapolate back...
+   ##
+   ##                    I'm also deeply suspicious about these prices the FFA are using to estimate catch value. I don't think
+   ##                    they are ... "right"
+   ##
+      FAO_FFA_Comparison <- data.table::dcast(FAO_FFA_Comparison,
+                                              Measure + Year ~ variable)
+                                              
+      FAO_FFA_Comparison$Average_Price_PerTonne <- (FAO_FFA_Comparison$Value*1000000) / FAO_FFA_Comparison$FFA_Volume  
+      
+      ggplot(FAO_FFA_Comparison[!is.na(Average_Price_PerTonne)], 
+             aes(x = Year, 
+                 y = Average_Price_PerTonne))  + 
+             geom_line() +
+             geom_point(alpha = 0.1) +
+             facet_wrap( ~ Measure,scales = "free") +
+             scale_y_continuous(labels = scales::label_dollar()) +
+             
+             scale_colour_manual(values = SPCColours(c(1,5))) + 
+             ylab("Average Price\nPer Tonne") +
+             xlab("Year") +
+             theme_bw(base_size=12, base_family =  "Calibri") %+replace%
+             theme(legend.title.align=0.5,
+                   plot.margin = unit(c(1,1,1,1),"mm"),
+                   panel.border = element_blank(),
+                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
+                   strip.text = element_text(colour = "white", 
+                                             size   = 13,
+                                             family = "MyriadPro-Bold",
+                                             margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
+                   panel.spacing = unit(1, "lines"),                                              
+                   legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
+                   plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+                   plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+                   plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+                   axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
+                   axis.text.x   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+                   axis.text.y   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+                   legend.key.width = unit(5, "mm"),
+                   legend.spacing.y = unit(1, "mm"),
+                   legend.margin = margin(0, 0, 0, 0),
+                   legend.position  = "bottom")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
      showtext_auto()
       ##
