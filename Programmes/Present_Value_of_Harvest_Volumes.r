@@ -132,7 +132,7 @@
       Value_by_Species  <- Catch_Value[Catch_Value$Data_Row == "5.2 VALUE OF CATCH BY SPECIES",c("Measure","Year","value")]
       Volume_by_Species <- Catch_Volume[Catch_Volume$Data_Row == "4.2 CATCH BY SPECIES",c("Measure","Year","value")]
       
-      Value_by_Species$Value   <- Value_by_Species$value
+      Value_by_Species$Value   <- (Value_by_Species$value)*1000
       Volume_by_Species$Volume <- Volume_by_Species$value
       
       FFA_Core_Tuna <-merge(Value_by_Species[,c("Measure","Year","Value")],
@@ -159,7 +159,8 @@
 
       showtext_auto()
 
-      ggplot(FAO_FFA_Comparison[variable != "Value"], 
+      ggplot(FAO_FFA_Comparison, 
+#      ggplot(FAO_FFA_Comparison[variable != "Value"], 
              aes(x = Year, 
                  y = value/1000,
                  colour = variable))  + 
@@ -167,8 +168,8 @@
              geom_point(alpha = 0.1) +
              facet_wrap( ~ Measure,scales = "free") +
              
-             scale_colour_manual(values = SPCColours(c(1,5))) + 
-             labs(title = "Comparison in Tuna Catch Volumes",
+             scale_colour_manual(values = SPCColours(c(1,3,5))) + 
+             labs(title = "Comparison in Tuna Catch Volumes (FFA vs FAO), and FFA Value",
                   subtitle = "\nWestern and Central Pacific Fisheries Commission Area\n",
                   caption  = "Data Sources: FFA, WCPFC-CA tuna fisheries 2023 (1).xlsx, https://www.ffa.int/download/wcpfc-area-catch-value-estimates/ \nUNFAO https://zenodo.org/records/11410529") +
              ylab("Metrics Tonnes\n(000)") +
@@ -195,7 +196,8 @@
                    legend.spacing.y = unit(1, "mm"),
                    legend.margin = margin(0, 0, 0, 0),
                    legend.position  = "bottom")
-    ggsave("Graphical_Output/FAO_FFA_Comparison_With_Titles.png", height =(.77*16.13), width = (.77*20.66), dpi = 165, units = c("cm"))
+#    ggsave("Graphical_Output/FAO_FFA_Comparison_With_Titles.png", height =(.77*16.13), width = (.77*20.66), dpi = 165, units = c("cm"))
+    ggsave("Graphical_Output/FAO_FFA_Comparison_With_Titles.png", height =(1.5*16.13), width = (1.5*20.66), dpi = 165, units = c("cm"))
     
       ggplot(FAO_FFA_Comparison[variable != "Value"], 
              aes(x = Year, 
