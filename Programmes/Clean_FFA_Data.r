@@ -23,6 +23,7 @@
       Contents <- Contents[str_detect(Contents$DataFrames, "RAWDATA"),]
       Contents <- Contents[!is.na(Contents$Year),]
       Contents <- Contents[!(Contents$Tab %in% c("Contents","Introduction","Prices", "Intoduction")),]
+      Contents <- Contents[!(Contents$Spreadsheet %in% c("FFA_Compendium_of_Economic_and_Development_Statistics_2022")),]
          
    ##
    ## Summary data has a different structure than non-summary data
@@ -210,6 +211,79 @@
       FFASummaryData_Revisions$Relative_Difference <- (FFASummaryData_Revisions$Value2 / FFASummaryData_Revisions$Value1)-1
 
    ##
+   ## Clean up the FFA_Compendium_of_Economic_and_Development_Statistics_2022
+   ##
+      load("Data_Intermediate/RAWDATA_C. Country level dataXXFFA_Compendium_of_Economic_and_Development_Statistics_2022.rda")  
+      X <- `RAWDATA_C. Country level dataXXFFA_Compendium_of_Economic_and_Development_Statistics_2022`
+      
+      names(X)    <- X[2,]
+      names(X)[1] <- "Metrics"
+      X$Metrics <- str_trim(stri_enc_toascii(X$Metrics), side = "both")
+      
+      X$CountryMeasure <- ifelse((str_detect(X$Metrics, regex("Catch and catch values", ignore_case = TRUE)) | 
+                                  str_detect(X$Metrics, regex("Economic contribution", ignore_case = TRUE))), X$Metrics, "")
+                                  
+      X$FirstHeading <- ifelse((str_detect(X$Metrics, regex("National", ignore_case = TRUE)) &
+                               !(str_detect(X$Metrics, regex("Note", ignore_case = TRUE)))), X$Metrics, "")
+                                
+      X$SecondHeading <- ifelse((str_detect(X$Metrics, regex("Catch", ignore_case = TRUE))   | 
+                                 str_detect(X$Metrics, regex("vessels", ignore_case = TRUE)) |  
+                                 str_detect(X$Metrics, regex("Licence", ignore_case = TRUE)) |  
+                                 str_detect(X$Metrics, regex("processing", ignore_case = TRUE)) |  
+                                 str_detect(X$Metrics, regex("Employment", ignore_case = TRUE)) |  
+                                 str_detect(X$Metrics, regex("Exports", ignore_case = TRUE))) &
+                               !(str_detect(X$Metrics, regex("Note", ignore_case = TRUE))), X$Metrics, "")
+      for(i in 2:nrow(X))
+      {
+         X$CountryMeasure[i] <- str_trim(ifelse((X$CountryMeasure[i] == "") & (X$CountryMeasure[(i-1)] != ""), X$CountryMeasure[(i-1)], X$CountryMeasure[i]), side = "both")
+         X$FirstHeading[i]   <- str_trim(ifelse((X$FirstHeading[i]   == "") & (X$FirstHeading[(i-1)]   != ""), X$FirstHeading[(i-1)],   X$FirstHeading[i]), side = "both")
+         X$SecondHeading[i]  <- str_trim(ifelse((X$SecondHeading[i]  == "") & (X$SecondHeading[(i-1)]  != ""), X$SecondHeading[(i-1)],  X$SecondHeading[i]), side = "both")
+         X$Units[i]          <- str_trim(ifelse((X$Units[i] == "") & (X$Units[(i-1)] != ""), X$Units[(i-1)], X$Units[i]), side = "both")
+      }
+      X$CountryMeasure <- str_trim(str_replace_all(X$CountryMeasure,"\032", "-"), side = "both")
+      X$Country        <- str_trim(str_split_fixed(str_split_fixed(X$CountryMeasure,"-", 2)[,1], " ",2)[,2], side = "both")
+      X$CountryMeasure <- str_trim(str_split_fixed(X$CountryMeasure,"-", 2)[,2], side = "both")
+      X <- data.table(X)
+      X <- data.table::melt(X,
+                            id.vars =c("Country", "CountryMeasure","FirstHeading","SecondHeading", "Metrics","Units"),
+                            variable.name = "Year")
+      X$Value <- as.numeric(str_replace_all(X$value, "\\,", ""))
+      
+      X <- X[!is.na(X$Value),]
+      X <- X[X$Metrics != "",]
+      X$KillMe <- (X$Metrics == X$SecondHeading)
+      X$KillMeNext <- !(str_detect(X$Metrics, regex("Licence", ignore_case = TRUE)) |  
+                        str_detect(X$Metrics, regex("processing", ignore_case = TRUE)) |  
+                        str_detect(X$Metrics, regex("Employment", ignore_case = TRUE)))
+                                                 
+      X <- data.frame(X[(X$KillMe != X$KillMeNext),])
+      X$Year <- as.numeric(as.character(X$Year))
+      X <- X[, c("Country", "CountryMeasure", "Year", "FirstHeading", "SecondHeading", "Metrics", "Units", "Value")]
+      ##
+      ##    Clean up the country names and other bits
+      ##
+         X$FirstHeading <- ifelse(X$FirstHeading == "National fleeta", "National fleet",X$FirstHeading)
+
+         X$SecondHeading <- ifelse(str_detect(X$SecondHeading, regex("Exports", ignore_case = TRUE)), "Exports",
+                            ifelse(str_detect(X$SecondHeading, regex("Employment", ignore_case = TRUE)), "Employment",
+                            ifelse(str_detect(X$SecondHeading, regex("Licence", ignore_case = TRUE)), "Licence and access fee revenue",
+                            ifelse(str_detect(X$SecondHeading, regex("Onshore", ignore_case = TRUE)), "Onshore processing volumes",X$SecondHeading))))
+
+         X$SecondHeading <- ifelse(str_detect(X$SecondHeading, regex("Exports", ignore_case = TRUE)), "Exports",
+                            ifelse(str_detect(X$SecondHeading, regex("Employment", ignore_case = TRUE)), "Employment",
+                            ifelse(str_detect(X$SecondHeading, regex("Licence", ignore_case = TRUE)), "Licence and access fee revenue",
+                            ifelse(str_detect(X$SecondHeading, regex("Onshore", ignore_case = TRUE)), "Onshore processing volumes",X$SecondHeading))))
+
+         X$Metrics <- ifelse(str_detect(X$Metrics, regex("Thailand", ignore_case = TRUE)), "Thailand",
+                      ifelse(str_detect(X$Metrics, regex("US", ignore_case = TRUE)), "US",
+                      ifelse(str_detect(X$Metrics, regex("Japan", ignore_case = TRUE)), "Japan",
+                      ifelse(str_detect(X$Metrics, regex("Troll", ignore_case = TRUE)), "Troll",
+                      ifelse(str_detect(X$Metrics, regex("EU", ignore_case = TRUE)), "EU",
+                      ifelse(str_detect(X$Metrics, regex("Licence", ignore_case = TRUE)), "Licence and access fee revenue",
+                      ifelse(str_detect(X$Metrics, regex("Employment", ignore_case = TRUE)), "Employment",X$Metrics)))))))
+         FFA_Compendium_of_Economic_and_Development_Statistics_2022 <- data.table(X[order(X$Country, X$CountryMeasure, X$FirstHeading, X$SecondHeading, X$Metrics, X$Units, X$Year),])
+
+   ##
    ## Save files
    ##
       save(FFASummaryData,    file = 'Data_Intermediate/FFASummaryData.rda')
@@ -217,6 +291,8 @@
       
       save(FFANonSummaryData_Revisions,file = 'Data_Intermediate/FFANonSummaryData_Revisions.rda')
       save(FFASummaryData_Revisions,   file = 'Data_Intermediate/FFASummaryData_Revisions.rda')
+      
+      save(FFA_Compendium_of_Economic_and_Development_Statistics_2022,   file = 'Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
 ##
 ##    And we're done
 ##
