@@ -1,9 +1,33 @@
 ##
 ##    Programme:  Canned_Tuna_Analysis.r
 ##
-##    Objective:  What is this programme designed to do?
+##    Objective:  There's a bit of a theory that the opening of the pacific tuna fisheries had the effect of 
+##                flooding the market with raw tuna, depressing both the raw tuna and tinned tuna markets.
+##                This had the effect of decreased tuna catch and tinned price, making higher effort Atlantic 
+##                fishing unprofitable, and stimulating consumer demand relative to other protein sources.
+##                If that is true, than the pacific might have saved the Atlantic fisheries, and stimulated 
+##                demand in the Indian fisheries.
 ##
-##    Author:     <PROGRAMMER>, <TEAM>, <DATE STARTED>
+##                Secondly, I've found that there is a shocking durth of monetary value measures for the volume
+##                of Tuna caught, so I'm going to try and estimate some price measures using export / import 
+##                information. 
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##    Author:     James Hogan, FAME - SPC, 22 September 2024
 ##
 ##
    ##

@@ -35,7 +35,7 @@
    ## Step 1: Grab the fish codes
    ##
    
-      All_Codes <- data.table(Description = ct_commodity_lookup(c("0302","0303"),return_char = TRUE))
+      All_Codes <- data.table(Description = ct_commodity_lookup(c("tuna"),return_char = TRUE))
       All_Codes$Code <- str_split_fixed(All_Codes$Description ," ", 2)[,1]
       All_Codes <- All_Codes[((as.numeric(All_Codes$Code) > 10000) & 
                               (as.numeric(All_Codes$Code) < 90000)),]

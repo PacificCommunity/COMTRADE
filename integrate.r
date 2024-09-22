@@ -23,6 +23,11 @@
 ##                https://www.fao.org/markets-and-trade/commodities/meat/fao-meat-price-index/en/
 ##
 ##
+##                Other interesting things... Thailand Input/Output tables: https://www.nesdc.go.th/nesdb_en/ewt_news.php?nid=4429&filename=national_account
+##
+##
+##
+##
 ##
 ##    Plan of  :  You need an api to access the data, which can be a little bit confusing to 
 ##    Attack   :  get. Follow this document: https://uncomtrade.org/docs/api-subscription-keys/
