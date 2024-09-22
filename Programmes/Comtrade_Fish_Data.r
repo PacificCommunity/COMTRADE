@@ -53,7 +53,7 @@
       Contents$Year      <- str_split_fixed(Contents$Dframe, "XX",3)[,3]
  
    ##
-   ## Step 3: Cycle through the codes and the months
+   ## Step 3: Cycle through the codes and the months getting all data since 1962
    ##
       Fish_Data <- lapply(unique(All_Codes$Code), function(Fish_Code)
                           {
