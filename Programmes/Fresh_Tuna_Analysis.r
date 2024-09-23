@@ -47,7 +47,7 @@
                                                       #  world tuna trade in local currency indicies, base weighed together using hte import / export
                                                       #  conversation factors at a single point in time, so change is 
    ##
-   ##    Collect all of the individual canned tuna datasets
+   ##    Collect all of the individual fresh tuna codes
    ##   
          Inscope_Codes <- c('030194','030195','030231','030232','030233','030234','030235','030236','030239','030341','030342','030343','030344','030345','030346','030349','030487','160414')
          
@@ -92,14 +92,17 @@
                                                                list(Total_Gross_Wgt = sum(gross_wgt,na.rm = TRUE),
                                                                     Total_Net_Wgt   = sum(net_wgt,na.rm = TRUE),
                                                                     Domestic_Currency_PrimaryValue = sum(Domestic_Currency_PrimaryValue,na.rm = TRUE),
+                                                                    primary_value   = sum(primary_value, na.rm = TRUE),
                                                                     Implicit_Price_Domestic_Currancy = sum(Domestic_Currency_PrimaryValue,na.rm = TRUE) / sum(net_wgt,na.rm = TRUE)),
-                                                                by = .(cmd_code, 
+                                                                by = .(Species <- ifelse(cmd_code %in% c('030194', '030195', '030235', '030236', '030345', '030346'), "Bluefin", 
+                                                                                  ifelse(cmd_code %in% c('030231', '030341'), "Albacore", 
+                                                                                  ifelse(cmd_code %in% c('030233', '030343','030487','160414'), "Skipjack", 
+                                                                                  ifelse(cmd_code %in% c('030232', '030342'), "Yellowfin", 
+                                                                                  ifelse(cmd_code %in% c('030234', '030344'), "Bigeye", "Tuna NEC"))))), 
                                                                        Year = year(Period), 
                                                                        reporter_desc, 
                                                                        partner_desc,
                                                                        Cleaned_Measure)]
-
-      Import_Export_in_Domestic_Currency[Year == 2022]
 
    ##
    ##    Base weight the domestic values using conversion factors from A SPECIFIC YEAR - this expresses that domestic value as US dollars for a specific year
@@ -115,229 +118,241 @@
       ##
       ##    Lets have a small peek
       ##
-      Peek <- Import_Export_in_Domestic_and_USD_Currency[Total_Net_Wgt > 0,
+      Peek <- data.frame(Import_Export_in_Domestic_and_USD_Currency[Total_Net_Wgt > 0,
                                                          list(Total_Net_Wgt        = sum(Total_Net_Wgt,na.rm = TRUE),
                                                               PrimaryValue_USD2019 = sum(PrimaryValue_USD2019,na.rm = TRUE),
-                                                              Implicit_Price_USD2019 = sum(PrimaryValue_USD2019,na.rm = TRUE) / sum(Total_Net_Wgt,na.rm = TRUE)),
-                                                          by = .(Year = Year,
+                                                              primary_value        = sum(primary_value,na.rm = TRUE),
+                                                              Implicit_Price_USD2019 = sum(primary_value,na.rm = TRUE) / sum(Total_Net_Wgt,na.rm = TRUE)),
+                                                          by = .(Year,
+                                                                 Species,
                                                                  reporter_desc,
                                                                  partner_desc,
-                                                                 Cleaned_Measure)]
+                                                                 Cleaned_Measure)])
                                                                                      
-
       ##
       ##    Allocate the countries to wine price deciles for each year
       ##
       Years <- unique(Peek$Year)
       Results <- data.frame()
-      Cleaned_Measure <- unique(Peek$Cleaned_Measure)
+      Cleaned_Measure <- unique(as.character(Peek$Cleaned_Measure))
+      Species <- unique(Peek$Species)
       Deciles_over_time <- data.frame()
-      for(j in 1:length(Cleaned_Measure))
+      for(S in 1:length(Species))
       {
-         for(i in 1:length(Years))
+         for(j in 1:length(Cleaned_Measure))
          {
-              One_Year <- Peek[(Peek$Year == Years[i]) & (Peek$Cleaned_Measure == Cleaned_Measure[j]),]
-                               
-              Deciles <- data.frame(Value = quantile(One_Year$Implicit_Price_USD2019, prob = seq(0, 1, length = 11), type = 5, na.rm = TRUE))
-              Deciles$Decile_Group <- row.names(Deciles)
-              Deciles$ID <- 1:nrow(Deciles)
-              Deciles$MatchID = Deciles$ID - 1
-              Deciles <- merge(Deciles,
-                               Deciles,
-                               by.x = c("ID"),
-                               by.y = c("MatchID"))
-              Deciles$DGroup <- paste(Deciles$Decile_Group.x, Deciles$Decile_Group.y, sep = " - ")
-            Deciles$Year <- Years[i]
-              
-            for(i in 1:nrow(One_Year))
-               {
-                  One_Year$Decile[i]      <- Deciles$DGroup[((One_Year$Implicit_Price_USD2019[i] >= Deciles$Value.x ) &
-                                                             (One_Year$Implicit_Price_USD2019[i] <= Deciles$Value.y ))]
-                  One_Year$DecileGroup[i] <- Deciles$ID[((One_Year$Implicit_Price_USD2019[i] >= Deciles$Value.x ) &
-                                                         (One_Year$Implicit_Price_USD2019[i] <= Deciles$Value.y ))]
-               }  
-            Results <- rbind.fill(Results, One_Year)
-            Deciles$Cleaned_Measure <- Cleaned_Measure[j]
-            Deciles_over_time <- rbind.fill(Deciles_over_time, Deciles)
+            for(i in 1:length(Years))
+            {
+              One_Year <- Peek[(Peek$Year == Years[i]) & 
+                               (Peek$Cleaned_Measure == as.character(Cleaned_Measure[j])) & 
+                               (Peek$Species == Species[S]),]
+              if(nrow(One_Year) > 0)
+                {
+                 Deciles <- data.frame(Value = quantile(One_Year$Implicit_Price_USD2019, prob = seq(0, 1, length = 11), type = 5, na.rm = TRUE))
+                 Deciles$Decile_Group <- row.names(Deciles)
+                 Deciles$ID <- 1:nrow(Deciles)
+                 Deciles$MatchID = Deciles$ID - 1
+                 Deciles <- merge(Deciles,
+                                  Deciles,
+                                  by.x = c("ID"),
+                                  by.y = c("MatchID"))
+                 Deciles$DGroup <- paste(Deciles$Decile_Group.x, Deciles$Decile_Group.y, sep = " - ")
+                 Deciles$Year <- Years[i]
+                    
+                  for(i in 1:nrow(One_Year))
+                     {
+                        One_Year$Decile[i]      <- Deciles$DGroup[((One_Year$Implicit_Price_USD2019[i] >= Deciles$Value.x ) &
+                                                                   (One_Year$Implicit_Price_USD2019[i] <= Deciles$Value.y ))]
+                        One_Year$DecileGroup[i] <- Deciles$ID[((One_Year$Implicit_Price_USD2019[i] >= Deciles$Value.x ) &
+                                                               (One_Year$Implicit_Price_USD2019[i] <= Deciles$Value.y ))]
+                     }  
+                  Results <- rbind.fill(Results, One_Year)
+                  Deciles$Cleaned_Measure <- Cleaned_Measure[j]
+                  Deciles$Species         <- Species[S]
+                  Deciles_over_time       <- rbind.fill(Deciles_over_time, Deciles)
+                  rm(One_Year)
+                 }
+            }
          }
       }
 
-                     
-         Deciles_over_time <- Deciles_over_time[order(Deciles_over_time$Cleaned_Measure, Deciles_over_time$DGroup, Deciles_over_time$Year),]
+          
+         Deciles_over_time <- data.table(Deciles_over_time[order(Deciles_over_time$Species,Deciles_over_time$Cleaned_Measure, Deciles_over_time$DGroup, Deciles_over_time$Year),])
          #Deciles_over_time <- Deciles_over_time[Deciles_over_time$Value.y < 100,]
           
-         AverPrices <- aggregate(cbind(Value.y) ~ Cleaned_Measure + DGroup,
-                                 data = Deciles_over_time,
-                                 FUN  = mean,
-                                 na.action = NULL)
-                                 
-         names(AverPrices)[3] ="Average_over_Time"
-
+          
+         AverPrices <- Deciles_over_time[,
+                                         list(Average_over_Time = mean(Value.y,na.rm = TRUE)),
+                                         by = .(Species, 
+                                                Cleaned_Measure,
+                                                DGroup)]
+      
          Deciles_over_time <- merge(Deciles_over_time,
                                     AverPrices,
-                                    by = c("Cleaned_Measure", "DGroup"))
+                                    by = c("Species", "Cleaned_Measure", "DGroup"))
        
+         for(i in unique(AverPrices$Species))
+         {
          showtext_auto()
+            ggplot(Deciles_over_time[((Deciles_over_time$Species == i) & 
+                                      (Deciles_over_time$ID.y < 11) &
+                                      (Deciles_over_time$Year < 2024)),])      + 
+             geom_line(aes(x=Year, y=Value.y), colour = SPCColours("Green"), size = 0.7) +
+             geom_line(aes(x=Year, y=Average_over_Time), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.7) +
+             facet_grid(Cleaned_Measure ~ DGroup, scales = "free", space = "free") +
+             scale_y_continuous(labels = dollar, breaks = seq(from = 0, to = 100, by =2.5)) +
+             labs(title = paste0("Average Raw Tuna Price - by Decile over Time\nSpecies: ", i, "\n"),  
+                  caption = "SPC - FAME\n") +
+                  ylab("Average USD Implicit Export Price\nPer Kilogram\n") +
+                  xlab("\nCalendar Year\n") +
+                theme_bw(base_size=12, base_family =  "Calibri") %+replace%
+                theme(legend.title.align=0.5,
+                      plot.margin = unit(c(1,1,1,1),"mm"),
+                      panel.border = element_blank(),
+                      strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
+                      strip.text = element_text(colour = "white", 
+                                                size   = 13,
+                                                family = "MyriadPro-Regular",
+                                                margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
+                      panel.spacing = unit(1, "lines"),                                              
+                      legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
+                      plot.title    = element_text(size = 18, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+                      plot.subtitle = element_text(size = 12, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+                      plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+                      plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+                      axis.title    = element_text(size = 12, colour = SPCColours("Dark_Blue")),
+                      axis.text.x   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 90, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+                      axis.text.y   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+                      legend.key.width = unit(5, "mm"),
+                      legend.spacing.y = unit(1, "mm"),
+                      legend.margin = margin(0, 0, 0, 0),
+                      legend.position  = "bottom")
+                  
+             ggsave(paste0("Graphical_Output/Raw Tuna Export and Import Prices Species ", i, ".png"), height =16.13, width = 20.66, dpi = 165, units = c("cm"))
+         }
          
-         ggplot(Deciles_over_time[((Deciles_over_time$ID.y < 11) &
-                                  (Deciles_over_time$Year < 2024)),])      + 
-          geom_line(aes(x=Year, y=Value.y), colour = SPCColours("Green"), size = 0.7) +
-          geom_line(aes(x=Year, y=Average_over_Time), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.7) +
-          facet_grid(Cleaned_Measure ~ DGroup, scales = "free", space = "free") +
-          scale_y_continuous(labels = dollar, breaks = seq(from = 0, to = 100, by =2.5)) +
-          labs(title = "Average Raw Tuna Price - by Decile over Time\n",  
-               caption = "SPC - FAME\n") +
-               ylab("Average USD Base Period Price\nBase Period = 2019") +
-               xlab("\nCalendar Year\n") +
-             theme_bw(base_size=12, base_family =  "Calibri") %+replace%
-             theme(legend.title.align=0.5,
-                   plot.margin = unit(c(1,1,1,1),"mm"),
-                   panel.border = element_blank(),
-                   strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
-                   strip.text = element_text(colour = "white", 
-                                             size   = 13,
-                                             family = "MyriadPro-Regular",
-                                             margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
-                   panel.spacing = unit(1, "lines"),                                              
-                   legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
-                   plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
-                   plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
-                   plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
-                   plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
-                   axis.title    = element_text(size = 12, colour = SPCColours("Dark_Blue")),
-                   axis.text.x   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 90, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
-                   axis.text.y   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
-                   legend.key.width = unit(5, "mm"),
-                   legend.spacing.y = unit(1, "mm"),
-                   legend.margin = margin(0, 0, 0, 0),
-                   legend.position  = "bottom")
-               
-          ggsave("Graphical_Output/Raw Tuna Export and Import Prices.png", height =16.13, width = 20.66, dpi = 165, units = c("cm"))
-
 ##
 ##    Which markets are Exporting and Importing the volumes into?
 ##               
-   Export_Volumes <- aggregate(Total_Net_Wgt ~ Decile + Year + partner_desc,
+   Export_Volumes <- aggregate(Total_Net_Wgt ~ Species + Decile + Year + partner_desc,
                            data = Results[Results$Cleaned_Measure == "Import",],
                            FUN  = sum,
                            subset = Year < 2024,
                            na.action = NULL)
 
-   AverVolumes <- aggregate(Total_Net_Wgt ~ Decile + partner_desc,
+   AverVolumes <- aggregate(Total_Net_Wgt ~ Species + Decile + partner_desc,
                            data = Export_Volumes,
                            FUN  = mean,
                            subset = Year < 2024,
                            na.action = NULL)
                            
-   names(AverVolumes)[3] ="Average_over_Time"
+   names(AverVolumes)[4] ="Average_over_Time"
 
    Export_Volumes <- merge(Export_Volumes,
                            AverVolumes,
-                           by = c("Decile", "partner_desc"))
+                           by = c("Species", "Decile", "partner_desc"))
 
                                     
-   Export_Volumes <- Export_Volumes[order(Export_Volumes$Decile, Export_Volumes$Year),]
+   Export_Volumes <- Export_Volumes[order(Export_Volumes$Species, Export_Volumes$Decile, Export_Volumes$Year),]
    ##
    ##    Identify the major markets, and the minnows
    ##               
-      Majors_and_Minnows <- sqldf("Select a.Decile,
+      Majors_and_Minnows <- sqldf("Select a.Species,
+                                          a.Decile,
                                           a.partner_desc,
                                           a.Average_over_Time,
                                           b.Total,
                                           a.Average_over_Time / b.Total as Proportion
                                      from AverVolumes a,
-                                       (select Decile,
+                                       (select Species,
+                                               Decile,
                                                sum(Average_over_Time) as total
                                          from AverVolumes
-                                         group by Decile) b
-                                     where a.Decile = b.Decile
-                                     order by a.Decile,
+                                         group by Decile, Species) b
+                                     where (a.Decile = b.Decile)
+                                       and (a.Species = b.Species)
+                                     order by a.Decile,a.Species,
                                            a.Average_over_Time / b.Total desc")
                                            
      Majors_and_Minnows$Major <- ifelse(Majors_and_Minnows$Proportion >= 0.05, Majors_and_Minnows$partner_desc, "Collective Minnows")
-     Majors_and_Minnows <- Majors_and_Minnows[,c("partner_desc", "Decile", "Major")]
+     Majors_and_Minnows <- Majors_and_Minnows[,c("partner_desc", "Species", "Decile", "Major")]
 
      Results <- merge(Results[Results$Cleaned_Measure == "Import",],
                       Majors_and_Minnows,
-                      by = c("partner_desc", "Decile"))
+                      by = c("partner_desc", "Species", "Decile"))
 
    ##
    ##    Re-estimate the volumes
    ##               
-      Export_Volumes <- aggregate(Total_Net_Wgt ~ Decile + Year + Major,
+      Export_Volumes <- aggregate(Total_Net_Wgt ~ Species + Decile + Year + Major,
                               data = Results,
                               FUN  = sum,
                               subset = Year < 2024,
                               na.action = NULL)
 
-      AverVolumes <- aggregate(Total_Net_Wgt ~ Decile + Major,
+      AverVolumes <- aggregate(Total_Net_Wgt ~ Species + Decile + Major,
                               data = Export_Volumes,
                               FUN  = mean,
                               subset = Year < 2022,
                               na.action = NULL)
                               
-      names(AverVolumes)[3] ="Average_over_Time"
+      names(AverVolumes)[4] ="Average_over_Time"
 
       Export_Volumes <- merge(Export_Volumes,
                               AverVolumes,
-                              by = c("Decile", "Major"))
+                              by = c("Species", "Decile", "Major"))
                                        
-      Export_Volumes <- Export_Volumes[order(Export_Volumes$Decile, Export_Volumes$Calendar_Year),]
+      Export_Volumes <- Export_Volumes[order(Export_Volumes$Species, Export_Volumes$Decile, Export_Volumes$Year),]
                
       Export_Volumes$Major_Short <- str_wrap(Export_Volumes$Major, 10)
 
 Deciles <- unique(Export_Volumes$Decile)
+Species <- unique(Export_Volumes$Species)
 
-for(i in 1:length(Deciles))
+for(j in 1:length(Species))
 {
-   showtext_auto()
-   ggplot(Export_Volumes[(Export_Volumes$Year < 2024) &
-                        (Export_Volumes$Decile == Deciles[i]),])      + 
-    geom_line(aes(x=Year, y=Total_Net_Wgt/1000000), colour = SPCColours("Green"), size = 0.5) +
-    geom_line(aes(x=Year, y=Average_over_Time/1000000), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.5) +
-    facet_grid( . ~ Major_Short, scales = "free", space = "free") +
-    scale_y_continuous(labels = comma) +
-    labs(title = "Exporting Raw Tuna Volumes - Major Markets",  
-         subtitle = paste0("Price Decile: ", Deciles[i], "\n"),
-         caption = "SPC - FAME\n") +
-         ylab("Exported Tuna Volumes\nMegatonnes\n") +
-         xlab("\nCalendar Year\n") +
-    theme_bw(base_size=12, base_family =  "Calibri") %+replace%
-    theme(legend.title.align=0.5,
-          plot.margin = unit(c(1,1,1,1),"mm"),
-          panel.border = element_blank(),
-          strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
-          strip.text = element_text(colour = "white", 
-                                    size   = 13,
-                                    family = "MyriadPro-Regular",
-                                    margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
-          panel.spacing = unit(1, "lines"),                                              
-          legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
-          plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
-          plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
-          plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
-          plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
-          axis.title    = element_text(size = 12, colour = SPCColours("Dark_Blue")),
-          axis.text.x   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 90, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
-          axis.text.y   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
-          legend.key.width = unit(5, "mm"),
-          legend.spacing.y = unit(1, "mm"),
-          legend.margin = margin(0, 0, 0, 0),
-          legend.position  = "bottom")
 
-    ggsave(paste0("Graphical_Output/Exported Tuna Volumes - Major Markets - Price Decile ", i, ".png"), height =16.13, width = 20.66, dpi = 165, units = c("cm"))
-}
-      
-      
-   ##
-   ## Save files our produce some final output of something
-   ##
+   for(i in 1:length(Deciles))
+   {
+      showtext_auto()
+      ggplot(Export_Volumes[(Export_Volumes$Species == Species[j]) &
+                            (Export_Volumes$Year < 2024) &
+                            (Export_Volumes$Decile == Deciles[i]),])      + 
+       geom_line(aes(x=Year, y=Total_Net_Wgt/1000000), colour = SPCColours("Green"), size = 0.5) +
+       geom_line(aes(x=Year, y=Average_over_Time/1000000), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.5) +
+       facet_grid( . ~ Major_Short, scales = "free", space = "free") +
+       scale_y_continuous(labels = comma) +
+       labs(title = paste0("Exporting Raw Tuna Volumes -",Species[j], " - Major Markets"),  
+            subtitle = paste0("\nPrice Decile: ", Deciles[i], "\n"),
+            caption = "SPC - FAME\n") +
+            ylab("Exported Tuna Volumes\nMega tonnes\n") +
+            xlab("\nCalendar Year\n") +
+       theme_bw(base_size=12, base_family =  "Calibri") %+replace%
+       theme(legend.title.align=0.5,
+             plot.margin = unit(c(1,1,1,1),"mm"),
+             panel.border = element_blank(),
+             strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
+             strip.text = element_text(colour = "white", 
+                                       size   = 13,
+                                       family = "MyriadPro-Regular",
+                                       margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
+             panel.spacing = unit(1, "lines"),                                              
+             legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
+             plot.title    = element_text(size = 18, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
+             plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
+             plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
+             plot.tag      = element_text(size =  9, colour = SPCColours("Red")),
+             axis.title    = element_text(size = 12, colour = SPCColours("Dark_Blue")),
+             axis.text.x   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 90, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
+             axis.text.y   = element_text(size = 11, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
+             legend.key.width = unit(5, "mm"),
+             legend.spacing.y = unit(1, "mm"),
+             legend.margin = margin(0, 0, 0, 0),
+             legend.position  = "bottom")
 
-   ##
-   ## Save files our produce some final output of something
-   ##
-      save(xxxx, file = 'Data_Intermediate/xxxxxxxxxxxxx.rda')
-      save(xxxx, file = 'Data_Output/xxxxxxxxxxxxx.rda')
+       ggsave(paste0("Graphical_Output/",Species[j], " Exported Tuna Volumes - Major Markets - Price Decile ", i,".png"), height =16.13, width = 20.66, dpi = 165, units = c("cm"))
+   }
+}      
 ##
 ##    And we're done
 ##
