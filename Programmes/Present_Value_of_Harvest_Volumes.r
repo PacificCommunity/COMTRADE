@@ -165,7 +165,7 @@
                  y = value/1000,
                  colour = variable))  + 
              geom_line() +
-             geom_point(alpha = 0.1) +
+#             geom_point(alpha = 0.1) +
              facet_wrap( ~ Measure,scales = "free") +
              
              scale_colour_manual(values = SPCColours(c(1,3,5))) + 
@@ -204,7 +204,7 @@
                  y = value/1000,
                  colour = variable))  + 
              geom_line() +
-             geom_point(alpha = 0.1) +
+#             geom_point(alpha = 0.1) +
              facet_wrap( ~ Measure,scales = "free") +
              
              scale_colour_manual(values = SPCColours(c(1,5))) + 
@@ -253,7 +253,7 @@
              aes(x = Year, 
                  y = Average_Price_PerTonne))  + 
              geom_line() +
-             geom_point(alpha = 0.1) +
+#             geom_point(alpha = 0.1) +
              facet_wrap( ~ Measure,scales = "free") +
              scale_y_continuous(labels = scales::label_dollar()) +
              

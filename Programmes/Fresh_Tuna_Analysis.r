@@ -90,10 +90,10 @@
    ##
       Import_Export_in_Domestic_Currency <- Comtrade_Fish_Data[,
                                                                list(Total_Gross_Wgt = sum(gross_wgt,na.rm = TRUE),
-                                                                    Total_Net_Wgt   = sum(net_wgt,na.rm = TRUE),
+                                                                    Total_Net_Wgt   = sum(net_wgt,na.rm = TRUE)/1000,
                                                                     Domestic_Currency_PrimaryValue = sum(Domestic_Currency_PrimaryValue,na.rm = TRUE),
                                                                     primary_value   = sum(primary_value, na.rm = TRUE),
-                                                                    Implicit_Price_Domestic_Currancy = sum(Domestic_Currency_PrimaryValue,na.rm = TRUE) / sum(net_wgt,na.rm = TRUE)),
+                                                                    Implicit_Price_Domestic_Currancy = sum(Domestic_Currency_PrimaryValue,na.rm = TRUE) / (sum(net_wgt,na.rm = TRUE)/1000)),
                                                                 by = .(Species <- ifelse(cmd_code %in% c('030194', '030195', '030235', '030236', '030345', '030346'), "Bluefin", 
                                                                                   ifelse(cmd_code %in% c('030231', '030341'), "Albacore", 
                                                                                   ifelse(cmd_code %in% c('030233', '030343','030487','160414'), "Skipjack", 
@@ -200,10 +200,10 @@
              geom_line(aes(x=Year, y=Value.y), colour = SPCColours("Green"), size = 0.7) +
              geom_line(aes(x=Year, y=Average_over_Time), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.7) +
              facet_grid(Cleaned_Measure ~ DGroup, scales = "free", space = "free") +
-             scale_y_continuous(labels = dollar, breaks = seq(from = 0, to = 100, by =2.5)) +
+             scale_y_continuous(labels = dollar, breaks = seq(from = 0, to = 100000, by =2500)) +
              labs(title = paste0("Average Raw Tuna Price - by Decile over Time\nSpecies: ", i, "\n"),  
                   caption = "SPC - FAME\n") +
-                  ylab("Average USD Implicit Export Price\nPer Kilogram\n") +
+                  ylab("Average USD Implicit Export Price\nPer Metric Tonne\n") +
                   xlab("\nCalendar Year\n") +
                 theme_bw(base_size=12, base_family =  "Calibri") %+replace%
                 theme(legend.title.align=0.5,
@@ -318,8 +318,8 @@ for(j in 1:length(Species))
       ggplot(Export_Volumes[(Export_Volumes$Species == Species[j]) &
                             (Export_Volumes$Year < 2024) &
                             (Export_Volumes$Decile == Deciles[i]),])      + 
-       geom_line(aes(x=Year, y=Total_Net_Wgt/1000000), colour = SPCColours("Green"), size = 0.5) +
-       geom_line(aes(x=Year, y=Average_over_Time/1000000), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.5) +
+       geom_line(aes(x=Year, y=Total_Net_Wgt), colour = SPCColours("Green"), size = 0.5) +
+       geom_line(aes(x=Year, y=Average_over_Time), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.5) +
        facet_grid( . ~ Major_Short, scales = "free", space = "free") +
        scale_y_continuous(labels = comma) +
        labs(title = paste0("Exporting Raw Tuna Volumes -",Species[j], " - Major Markets"),  
