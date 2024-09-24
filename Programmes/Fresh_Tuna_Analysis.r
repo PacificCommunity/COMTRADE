@@ -88,9 +88,9 @@
    ##
    ##    Lets just work on the volume exports and imports
    ##
-      Import_Export_in_Domestic_Currency <- Comtrade_Fish_Data[(partner_desc %in% c("American Samoa","Areas, nes","Cambodia","China","China, Hong Kong SAR","China, Macao SAR","Cook Isds",
+      Import_Export_in_Domestic_Currency <- Comtrade_Fish_Data[(partner_desc %in% c("American Samoa","Areas, nes","Australia","Cambodia","China","China, Hong Kong SAR","China, Macao SAR","Cook Isds",
                                                                                     "Fiji","France","French Polynesia","FS Micronesia","Guam","Indonesia","Kiribati","Malaysia","Marshall Isds",
-                                                                                    "N. Mariana Isds","Nauru","New Caledonia","Oceania, nes","Other Asia, nes","Palau","Papua New Guinea","Philippines",
+                                                                                    "N. Mariana Isds","Nauru","New Caledonia", "New Zealand","Oceania, nes","Other Asia, nes","Palau","Papua New Guinea","Philippines",
                                                                                     "Pitcairn","Rep. of Korea","Samoa","Solomon Isds","Thailand","Tokelau","Tonga","Tuvalu","Vanuatu","Viet Nam",
                                                                                     "Christmas Isds","Japan","Niue","Singapore","Timor-Leste","Wallis and Futuna Isds","USA")),
                                                                list(Total_Gross_Wgt = sum(gross_wgt,na.rm = TRUE),
