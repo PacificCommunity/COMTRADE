@@ -100,16 +100,16 @@
                                                                                   ifelse(cmd_code %in% c('030232', '030342'), "Yellowfin", 
                                                                                   ifelse(cmd_code %in% c('030234', '030344'), "Bigeye", "Tuna NEC"))))), 
                                                                        Year = year(Period), 
-                                                                       reporter_desc <- ifelse(reporter_desc %in% c("American Samoa","Areas, nes","Cambodia","China","China, Hong Kong SAR","China, Macao SAR","Cook Isds",
+                                                                       reporter_desc <- ifelse(reporter_desc %in% c("American Samoa","Areas, nes","Australia","Cambodia","China","China, Hong Kong SAR","China, Macao SAR","Cook Isds",
                                                                                                                     "Fiji","France","French Polynesia","FS Micronesia","Guam","Indonesia","Kiribati","Malaysia","Marshall Isds",
-                                                                                                                    "N. Mariana Isds","Nauru","New Caledonia","Oceania, nes","Other Asia, nes","Palau","Papua New Guinea","Philippines",
+                                                                                                                    "N. Mariana Isds","Nauru","New Caledonia", "New Zealand","Oceania, nes","Other Asia, nes","Palau","Papua New Guinea","Philippines",
                                                                                                                     "Pitcairn","Rep. of Korea","Samoa","Solomon Isds","Thailand","Tokelau","Tonga","Tuvalu","Vanuatu","Viet Nam",
                                                                                                                     "Christmas Isds","Japan","Niue","Singapore","Timor-Leste","Wallis and Futuna Isds","USA"), "Pacific", "Non-Pacific"), 
-                                                                       partner_desc <- ifelse(partner_desc %in% c("American Samoa","Areas, nes","Cambodia","China","China, Hong Kong SAR","China, Macao SAR","Cook Isds",
+                                                                       partner_desc <- ifelse(partner_desc %in% c("American Samoa","Areas, nes","Australia","Cambodia","China","China, Hong Kong SAR","China, Macao SAR","Cook Isds",
                                                                                                                   "Fiji","France","French Polynesia","FS Micronesia","Guam","Indonesia","Kiribati","Malaysia","Marshall Isds",
-                                                                                                                  "N. Mariana Isds","Nauru","New Caledonia","Oceania, nes","Other Asia, nes","Palau","Papua New Guinea","Philippines",
+                                                                                                                  "N. Mariana Isds","Nauru","New Caledonia", "New Zealand","Oceania, nes","Other Asia, nes","Palau","Papua New Guinea","Philippines",
                                                                                                                   "Pitcairn","Rep. of Korea","Samoa","Solomon Isds","Thailand","Tokelau","Tonga","Tuvalu","Vanuatu","Viet Nam",
-                                                                                                                   "Christmas Isds","Japan","Niue","Singapore","Timor-Leste","Wallis and Futuna Isds","USA"), "Pacific", "Non-Pacific"),
+                                                                                                                  "Christmas Isds","Japan","Niue","Singapore","Timor-Leste","Wallis and Futuna Isds","USA"), "Pacific", "Non-Pacific"),
                                                                        Cleaned_Measure)]
 
       ##
