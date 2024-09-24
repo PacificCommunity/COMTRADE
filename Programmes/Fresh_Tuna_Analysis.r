@@ -88,7 +88,11 @@
    ##
    ##    Lets just work on the volume exports and imports
    ##
-      Import_Export_in_Domestic_Currency <- Comtrade_Fish_Data[,
+      Import_Export_in_Domestic_Currency <- Comtrade_Fish_Data[(partner_desc %in% c("American Samoa","Areas, nes","Cambodia","China","China, Hong Kong SAR","China, Macao SAR","Cook Isds",
+                                                                                    "Fiji","France","French Polynesia","FS Micronesia","Guam","Indonesia","Kiribati","Malaysia","Marshall Isds",
+                                                                                    "N. Mariana Isds","Nauru","New Caledonia","Oceania, nes","Other Asia, nes","Palau","Papua New Guinea","Philippines",
+                                                                                    "Pitcairn","Rep. of Korea","Samoa","Solomon Isds","Thailand","Tokelau","Tonga","Tuvalu","Vanuatu","Viet Nam",
+                                                                                    "Christmas Isds","Japan","Niue","Singapore","Timor-Leste","Wallis and Futuna Isds","USA")),
                                                                list(Total_Gross_Wgt = sum(gross_wgt,na.rm = TRUE),
                                                                     Total_Net_Wgt   = sum(net_wgt,na.rm = TRUE)/1000,
                                                                     Domestic_Currency_PrimaryValue = sum(Domestic_Currency_PrimaryValue,na.rm = TRUE),
@@ -318,8 +322,8 @@ for(j in 1:length(Species))
       ggplot(Export_Volumes[(Export_Volumes$Species == Species[j]) &
                             (Export_Volumes$Year < 2024) &
                             (Export_Volumes$Decile == Deciles[i]),])      + 
-       geom_line(aes(x=Year, y=Total_Net_Wgt), colour = SPCColours("Green"), size = 0.5) +
-       geom_line(aes(x=Year, y=Average_over_Time), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.5) +
+       geom_line(aes(x=Year, y=Total_Net_Wgt/1000), colour = SPCColours("Green"), size = 0.5) +
+       geom_line(aes(x=Year, y=Average_over_Time/1000), linetype = "dashed", colour = SPCColours("Light_Blue"), size = 0.5) +
        facet_grid( . ~ Major_Short, scales = "free", space = "free") +
        scale_y_continuous(labels = comma) +
        labs(title = paste0("Exporting Raw Tuna Volumes -",Species[j], " - Major Markets"),  

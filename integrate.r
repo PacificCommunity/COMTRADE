@@ -131,7 +131,10 @@
          ##source("Programmes/Fish_Explore.r") # Looks into the comtrade data - not finished yet
          source("Programmes/FAO_Analysis.r")   # Looks at the FAO data - Post Peter Ellis conversation
          source("Programmes/Vessel_Metrics.r") # Based on Tiffany Vidal code, this code replicates figure 3.1 from here: https://meetings.wcpfc.int/node/23098
-         source("Programmes/Present_Value_of_Harvest_Volumes_Version2.r") # Estimate the present value of the historic catch volumes.
+         source("Programmes/Present_Value_of_Harvest_Volumes_Version3.r") # Estimate the present value of the historic catch volumes.
+                                                                          # Version 1 looked at basic FAO/FFA data
+                                                                          # Version 2 brought in COMTRADE data and compared volumes and values.
+                                                                          # Version 3 limits COMTRADE to pacific / asian countries and does the present value measures.
 
 
       ##
