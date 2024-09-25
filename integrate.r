@@ -142,9 +142,9 @@
       ##
 
       ##
-      ##    Off to the side - Thinking about Palau 
+      ##    Write up Victoria's report
       ##
-         rmarkdown::render("Programmes/Palau Economic Fisheries Model.rmd", output_file = "C:\\Work_Related_Projects\\COMTRADE\\Product_Output\\Palau Economic Fisheries Model.docx")
+         rmarkdown::render("Programmes/SSAP_Value_Report_for_Victoria_Pilbeam.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria.docx")
 
 
 

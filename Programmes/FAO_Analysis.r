@@ -144,28 +144,22 @@
              aes(x = Year, 
                  y = measurement_value/1000,
                  colour = Fishery))  + 
-#             facet_grid(. ~ Measure) +
              geom_smooth(se = FALSE) +
              geom_point(alpha = 0.1) +
              
              geom_vline(xintercept = c(1977), colour = SPCColours("Light_Blue"), alpha = 0.2, linewidth = 2) +
-             annotate("text", x=1976, y=1750, label = "Catch Volumes pre-PSSAP",family ="MyriadPro-Light", hjust = 1.0, size = 7) +              
-             annotate("text", x=1978, y=1750, label = "Catch Volumes post-PSSAP",family ="MyriadPro-Light", hjust = 0.0, size = 7) +              
-             # geom_text(aes(x=1978, y=2750, label="First PSSAP Project",  family ="MyriadPro-Light"), size=10)+
-             # geom_text(aes(x=1983, y=2750000, label="1981",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
-             # geom_text(aes(x=1996, y=2750000, label="1994",  family ="MyriadPro-BoldItalics"), show_guide = F, size=3.5)+
+             annotate("text", x=1976, y=1750, label = "Catch Volumes pre-PSSAP",family ="MyriadPro-Light", hjust = 1.0, size = 5) +              
+             annotate("text", x=1978, y=1750, label = "Catch Volumes post-PSSAP",family ="MyriadPro-Light", hjust = 0.0, size = 5) +              
              
              scale_y_continuous(breaks = seq(from = 0, to = 2500, by =250),
                                 labels = scales::label_comma()) +
              scale_x_continuous(breaks = seq(from = 1950, to = 2025, by =5)) +
              scale_colour_manual(values = SPCColours(3:7)) + 
-#             labs(title = "Global Annual Tuna Catch Volumes",
-#                  caption  = "Data Source: UNFAO https://zenodo.org/records/11410529") +
              xlab("") +
              ylab("Metrics Tonnes\n(000)") +
              theme_bw(base_size=12, base_family =  "Calibri") %+replace%
              theme(legend.title.align=0.5,
-                   plot.margin = unit(c(1,1,1,1),"mm"),
+                   plot.margin = unit(c(1,3,1,1),"mm"),
                    panel.border = element_blank(),
                    strip.background =  element_rect(fill   = SPCColours("Light_Blue")),
                    strip.text = element_text(colour = "white", 
@@ -173,7 +167,7 @@
                                              family = "MyriadPro-Bold",
                                              margin = margin(1.25,1.25,1.25,1.25, unit = "mm")),
                    panel.spacing = unit(1, "lines"),                                              
-                   legend.text   = element_text(size = 12, family = "MyriadPro-Regular"),
+                   legend.text   = element_text(size = 10, family = "MyriadPro-Regular"),
                    plot.title    = element_text(size = 24, colour = SPCColours("Dark_Blue"),  family = "MyriadPro-Light"),
                    plot.subtitle = element_text(size = 14, colour = SPCColours("Light_Blue"), family = "MyriadPro-Light"),
                    plot.caption  = element_text(size = 10,  colour = SPCColours("Dark_Blue"), family = "MyriadPro-Light", hjust = 1.0),
@@ -181,9 +175,9 @@
                    axis.title    = element_text(size = 14, colour = SPCColours("Dark_Blue")),
                    axis.text.x   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 10, r = 0,  b = 0, l = 0, unit = "pt"),hjust = 0.5),
                    axis.text.y   = element_text(size = 14, colour = SPCColours("Dark_Blue"), angle = 00, margin = margin(t = 0,  r = 10, b = 0, l = 0, unit = "pt"),hjust = 1.0),
-                   legend.key.width = unit(5, "mm"),
-                   legend.spacing.y = unit(1, "mm"),
-                   legend.margin = margin(0, 0, 0, 0),
+                   legend.key.width = unit(1, "cm"),
+                   legend.spacing.y = unit(1, "cm"),
+                   legend.margin = margin(10, 10, 10, 10),
                    legend.position  = "bottom")
     ggsave("Graphical_Output/World_Volumes_WithoutTitles.png", height =(.77*16.13), width = (.77*20.66), dpi = 165, units = c("cm"))
   

@@ -274,7 +274,14 @@
 
           ggsave("Graphical_Output/Number_of_Purse_Seine_Vessels_Operating_within_the_WCPFC_NoTitles.png", height =16.13, width = 20.66, dpi = 165, units = c("cm"))
 
+   ##
+   ##    Save the datasets
+   ##
+      save(Vessels, file = "Data_Output/Vessels.rda")
+
 
 ##
 ##    And we're done
 ##
+
+

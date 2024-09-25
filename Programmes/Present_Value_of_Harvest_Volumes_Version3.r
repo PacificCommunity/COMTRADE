@@ -341,4 +341,52 @@
                    
     ggsave("Graphical_Output/FAO_FFA_Comparison_Values.png", height =(1.5*16.13), width = (1.5*20.66), dpi = 165, units = c("cm"))
                    
-                   
+   ##
+   ##    Save the datasets
+   ##
+      save(FAO_Core_Tuna,      file = "Data_Output/FAO_Core_Tuna.rda")
+      save(FFA_Core_Tuna,      file = "Data_Output/FFA_Core_Tuna.rda")
+
+
+##
+##    Estimate the present day value - focus only on the FFA dollars 
+##
+   Skipjack <- data.frame(FAO_FFA_Comparison[(variable == "FFA_Value") & (Measure == "Skipjack")])
+   
+   Current_Date  <- 2024
+   Interest_Rate <- .03
+   
+   Present_Value <- function(Start_Date,
+                             End_Date,
+                             Start_Value,
+                             Interest_Rate)
+                     {
+                        Current_Value <- Start_Value
+                        for(Period in (Start_Date+1):End_Date)
+                        {
+                           Current_Value <- Current_Value + (Interest_Rate)*Current_Value
+                        }
+                        return(Current_Value)
+                     }
+   
+   
+   Skipjack$Present_Value <- sapply(1:nrow(Skipjack), function(Obs){
+      
+                                     return(Present_Value(Start_Date    = Skipjack$Year[Obs],
+                                                          End_Date      = Current_Date,
+                                                          Start_Value   = Skipjack$value[Obs],
+                                                          Interest_Rate = Interest_Rate))
+                                    })
+
+##
+##    And the initial 3 mill investment in 1977?
+##
+   Present_Value(Start_Date  = 1977,
+                 End_Date    = 2024,
+                 Start_Value = 3,
+                 Interest_Rate = Interest_Rate)
+                      
+   sum(Skipjack$value)
+   sum(Skipjack$Present_Value)
+
+
