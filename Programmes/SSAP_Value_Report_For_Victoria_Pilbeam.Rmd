@@ -44,8 +44,8 @@ references:
   URL: 'https://www.ffa.int/download/wcpfc-area-catch-value-estimates/'
   publisher: Pacific Island Forum Fisheries Agency
   issued:
-    year: 2021
-    month: 5
+    year: 2023
+    month: 10
     
 - id: Hedron
   title: Forecasting the Socio-Economic Impact of the Large Hadron Collider -  A Cost–Benefit Analysis to 2025 and Beyond.
@@ -236,15 +236,15 @@ names(Government_Revenues) <- c("Pacific Island Country and Territory","1999 Acc
 ##    Make a table
 ##
    Present_Value_Pretty <- data.frame(Year = as.character(Skipjack[,c("Year")]))
-   Present_Value_Pretty$`Volume - Tonnes(Mill)` <- format(Skipjack$Volume,big.mark   = ",")
-   Present_Value_Pretty$`Value - USD(Mill)` <- str_replace_all(paste0("$", format(Skipjack$Value,big.mark   = ",")), " ","") 
-   Present_Value_Pretty$`Present Value - USD(Mill) at 2024` <- str_replace_all(paste0("$", format(round(Skipjack$Present_Value),big.mark   = ",")), " ","")  
+   Present_Value_Pretty$`Volume - Tonnes (Mill)` <- format(Skipjack$Volume,big.mark   = ",")
+   Present_Value_Pretty$`Value - USD (Mill)` <- str_replace_all(paste0("$", format(Skipjack$Value,big.mark   = ",")), " ","") 
+   Present_Value_Pretty$`Present Value - USD(Mill) in 2024 Dollars` <- str_replace_all(paste0("$", format(round(Skipjack$Present_Value),big.mark   = ",")), " ","")  
 
    Totals <- data.frame(Year = "Total",
-                        `Volume - Tonnes(Mill)` = format(sum(Skipjack$Volume),big.mark   = ","),
-                        `Value - USD(Mill)` = paste0("$", format(sum(Skipjack$Value),big.mark   = ",")), 
-                        `Present Value - USD(Mill) at 2024` <- paste0("$", format(round(sum(Skipjack$Present_Value)),big.mark   = ",")))
-   names(Totals) <- c("Year","Volume - Tonnes(Mill)","Value - USD(Mill)","Present Value - USD(Mill) at 2024")
+                        `Volume - Tonnes (Mill)` = format(sum(Skipjack$Volume),big.mark   = ","),
+                        `Value - USD (Mill)` = paste0("$", format(sum(Skipjack$Value),big.mark   = ",")), 
+                        `Present Value - USD(Mill) in 2024 Dollars` <- paste0("$", format(round(sum(Skipjack$Present_Value)),big.mark   = ",")))
+   names(Totals) <- c("Year","Volume - Tonnes (Mill)","Value - USD (Mill)","Present Value - USD(Mill) in 2024 Dollars")
 
  
    Present_Value_Pretty <- rbind(Present_Value_Pretty,Totals)
@@ -258,13 +258,17 @@ names(Government_Revenues) <- c("Pacific Island Country and Territory","1999 Acc
 ##       This bit below is the commentary written in R Markup
 --> 
 
-### Skipjack science lifting economic ceiling
+### Skipjack Science Lifting the Pacific Region's Economic Ceiling
 
-SPC's Skipjack Survey and Assessment Programme (SSAP) ran from 1977 until 1981 and measured for the first time the size of the skipjack tuna fishery. The Programme was funded from approximately US$3 million of donor funding, which was approximately 33% of SPC's total funding at the time. In 1977, SPC was a small organisation which had no experience in undertaking such an ambitious piece of advanced applied scientific research. Nor was it organisationally equipped or experienced with undertaking technical work of this size. 
+The Pacific Community (SPC)'s Skipjack Survey and Assessment Programme (SSAP), which ran from 1977 until 1981, measured for the first time the size of the pacific skipjack tuna fishery and laid the foundations for what has become a US$81 billion regional fishing industry. 
+
+The Programme was funded from approximately US$3 million of donor funding, which was 33% of SPC's total funding at the time. In 1977, SPC was a small organisation which had no experience in undertaking such an ambitious piece of advanced applied scientific research. Nor was it organisationally equipped or experienced with undertaking technical work of this size. 
 
 SSAP greatly expanded the world's knowledge of the biology of skipjack and other tuna species. It quantified for the first time the large size of the skipjack resource in the Western and Central Pacific, estimated at around 3 million tonnes of fishing biomass.
 
-The value of the 1977 work to pacific countries, producers and consumers has been immense. The overwhelming growth of the pacific activity is shown in Figure \@ref(fig:PurseSeineBoats).
+The value of the 1977 work to pacific countries, producers and consumers has been immense. 
+
+The overwhelming growth in pacific fishing activity is shown in Figures \@ref(fig:PurseSeineBoats) and \@ref(fig:WorldVolumes).
 
 ```{r PurseSeineBoats, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = 'Number of Purse Seine Vessels Operating in the WCPFO Purse Seine Fishery'}
 
@@ -273,10 +277,12 @@ knitr::include_graphics(paste0(BaseDir, "Number_of_Purse_Seine_Vessels_Operating
 ```
 
 \FloatBarrier
+The growth in fishing activity far exceeded any indicative comparative growth rates.  Figure \@ref(fig:PurseSeineBoats) presents comparative growth rates from either:
+
+* Pre-SSAP (1972 – 1977) vessel growth rates additively extrapolated into the future, and 
+* Exponential vessel growth rates from between 1977 – 2023.
 
 Between 1977 and 1980, the number of distant water nation purse seine vessels fishing the pacific increased from `r sum(Vessels$vessels[Vessels$YY == 1977])` to `r sum(Vessels$vessels[Vessels$YY == 1980])`. Between 1980 and 1982, they had increased again by a further `r sum(Vessels$vessels[Vessels$YY == 1982])-sum(Vessels$vessels[Vessels$YY == 1980])` vessels. And in 1983 the total number of purse seine vessels working the pacific became `r sum(Vessels$vessels[Vessels$YY == 1983])`.
-
-The growth in fishing activity far exceeded any indicative comparative growth rates. either additive growth from the pre-SSAP (1972 – 1997) extrapolated into the future, or from exponential vessel growth rates between 1977 – 2023.
 
 Increased fishing activity extracted increasing volumes of mainly skipjack tuna from the pacific, making the pacific the overwhelming source of the world’s tuna supply (Figure \@ref(fig:WorldVolumes)).
 
@@ -291,7 +297,7 @@ knitr::include_graphics(paste0(BaseDir, "World_Volumes_WithoutTitles.png"))
 
 \newpage 
 ### The Value of Harvested Pacific Skipjack
-The Pacific Island Forum Fisheries Agency (FFA) estimate the value of tuna extracted from the Pacific.[^FFAData] Unfortunately, value information prior 1997 is unavailable, so the FFA metrics only provide a partial picture of the value of the economic potential generated by the SSAP programme.
+The Pacific Islands Forum Fisheries Agency (FFA) estimates the value of tuna extracted from the Pacific.[^FFAData] Unfortunately, value information prior to 1997 is unavailable, so the FFA metrics only provide a partial picture of the value of the fisheries since 1977.
 
 ```{r PresentValue, echo=FALSE}
 knitr::kable(Present_Value_Pretty,
@@ -301,21 +307,20 @@ knitr::kable(Present_Value_Pretty,
                booktabs = TRUE,
                caption= "Present Value of Historical Catch Value")
 ```
-Assuming a conservative 3% potential investment rate then, over the shortened timeframe of the available catch value statistics, the current day nominal value of the historically skipjack harvest since `r Present_Value_Pretty$Year[1]` is approximately US`r Present_Value_Pretty[nrow(Present_Value_Pretty),length(Present_Value_Pretty)]` million in 2024. 
+Assuming a conservative 3% potential investment rate then, over the shortened timeframe of the available catch value statistics, the current day nominal value of the historical skipjack harvested since `r Present_Value_Pretty$Year[1]` is approximately `r Present_Value_Pretty[nrow(Present_Value_Pretty),length(Present_Value_Pretty)]` million in nominal 2024 US\$. 
 
-In comparison, if the initial US$3 million SSAP investment made in 1977 was invested at 3% per annual, it would be worth `r 
- paste0("US$", format(round(Present_Value(Start_Date  = 1977,
+In comparison, if the initial US$3 million SSAP investment made in 1977 was invested at 3% per annum, it would be worth 
+`r paste0("US$", format(round(Present_Value(Start_Date  = 1977,
                  End_Date    = Current_Date,
                  Start_Value = 3,
-                 Interest_Rate = Interest_Rate)),big.mark   = ",")) ` million in today's nominal dollars. 
-                 
-The initial US$3 million investment has generated a compounding average nominal rate of return of
-`r paste0(round((((Total_Present_Value / Science_cost)^(1/(2024 - 1977)))-1)*1000)/10, "%")` per annum since 1977. 
+                 Interest_Rate = Interest_Rate)),big.mark   = ","))` million in nominal 2024 US\$. 
+     
+Connecting those two measures together, the compounding rate of return from the 1977 donor funding is `r paste0(round((((Total_Present_Value / Science_cost)^(1/(2024 - 1977)))-1)*1000)/10, "%")` per annum since 1977, even excluding the unknown monetary value of harvested skipjack that occurred between 1977 and 1997.
 
-And that is without measure the value of the harvested skipjack between 1997 and `r Present_Value_Pretty$Year[1]`!
+### Returning Value to Pacific Governments
+Annual fishing access fees received by pacific governments in 2021 (or the latest year for which data was available) were approximately US$515 million, or 26.8% of the value of the regional offshore catch, which represents a significant return to pacific governments from their fishery's natural stocks.  
 
-### Returning Value to Pacific Countries
-Access fees received by pacific countries in 2021 (or the latest year for which data are available) were approximately US$515 million: approximately 26.8% of the value of the regional offshore catch.  Table \@ref(tab:GovtRevs), from the Benefish Study 1[^BenefishO] and 4[^Benefish] reports provide a partial picture into the growth in fishing-generated licensing fees. 
+Table \@ref(tab:GovtRevs), from the Benefish 1[^BenefishO] and 4[^Benefish] studies provide a partial picture behind the growth in fisheries licensing fees. 
 
 ```{r GovtRevs, echo=FALSE}
 knitr::kable(Government_Revenues,
@@ -326,9 +331,11 @@ knitr::kable(Government_Revenues,
                caption= "Access fees for offshore fishing 2007–202 (or latest year)")
 ```
 
-No report prior to the Benefish Study 1 report compiled the fishing access fees from SPC countries into a single table. However, from Table \@ref(tab:GovtRevs), its clear that prior to the introduction of the Vessel Day Scheme (VDS) in 2007 significantly increased access fees. 
+No report prior to the Benefish Study 1 compiled the fishing access fees from SPC countries into a single table. However, from Table \@ref(tab:GovtRevs), the Vessel Day Scheme (VDS), introduced in 2007, significantly increased the proportion of the fisheries economic value returned to pacific governments. 
 
-Benefish Study 4 notes that although VDS commenced in December 2007, it wasn't fully implementated until 2012.[^VDS] Early in the scheme access fees were derived from predominately foreign fleets as governments sort to encourage their domestic offshore fishing industries. However, with the growth in the various domestic vessel numbers (Figure \@ref(fig:PurseSeineBoats)), governments are now receiving access fees from all vessels active in their waters.
+Although VDS commenced in December 2007, it wasn't fully implemented until 2012.[^VDS] Early in the scheme, access fees were derived from predominately foreign fleets as governments sort to encourage their domestic offshore fishing industries. However, with the growth in domestic vessel numbers (Figure \@ref(fig:PurseSeineBoats)), governments are now receiving annually over US\$500 milllion in access fees from vessels active in their waters, and have sucessfully created regional fishing industries providing income and employment for their countries.
+
+And all of this started with US\$3 million from donor funding received in 1977. As the Rockefeller Foundation wrote in 1980: "It might be noted that had this grant been evaluated shortly following its termination in May 1976, few if any of the above comments concerning its success could have been made. Seed grants need time to grow. [Rockefeller Foundation, September 29, 1980]" 
 
 \FloatBarrier
 
