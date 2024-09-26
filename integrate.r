@@ -136,10 +136,11 @@
                                                                           # Version 2 brought in COMTRADE data and compared volumes and values.
                                                                           # Version 3 limits COMTRADE to pacific / asian countries and does the present value measures.
 
+         source("Programmes/Fresh_Tuna_Analysis_Version2.r") # Looks at comtrade data with a pacific/non-pacific split.
+         source("Programmes/Export Qty by Major Market and Decile.r") # Looks at which countries are the major exporting countries
 
-      ##
-      ##    Off to the side - look at some of the Data Hub Data
-      ##
+
+
 
       ##
       ##    Write up Victoria's report
