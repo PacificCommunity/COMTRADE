@@ -1,5 +1,5 @@
 ---
-title: Skipjack Survey and Assessment Programme 
+title: The Seeds of the Skipjack Survey and Assessment Programme Spawns the Development of Regional Tuna Fisheries
 author: James Hogan, FAME - SPC
 date: "`r format(Sys.time(), '%d %B %Y')`"
 fontsize: 11pt
@@ -259,18 +259,20 @@ names(Government_Revenues) <- c("Pacific Island Country and Territory","1999 Acc
 --> 
 
 ### Skipjack Science Lifting the Pacific Region's Economic Ceiling
+[^RefJudd]: The history is extensively documented in @Judd1 and @Judd2.
 
-The Pacific Community (SPC)'s Skipjack Survey and Assessment Programme (SSAP), which ran from 1977 until 1981, measured for the first time the size of the pacific skipjack tuna fishery and laid the foundations for what has become a US$81 billion regional fishing industry. 
 
-The Programme was funded from approximately US$3 million of donor funding, which was 33% of SPC's total funding at the time. In 1977, SPC was a small organisation which had no experience in undertaking such an ambitious piece of advanced applied scientific research. Nor was it organisationally equipped or experienced with undertaking technical work of this size. 
+The Pacific Community (SPC)'s Skipjack Survey and Assessment Programme (SSAP), which ran from 1977 until 1981, measured for the first time the size of the Western and Central Pacific Ocean (WCPO) skipjack tuna stock and laid the foundations for what has become a US$81 billion regional fishing industry.[^RefJudd] 
+
+The Programme, led by Dr Robert (Bob) Kearney, was funded from approximately US$3 million of donor funding, which was 33% of SPC's total funding at the time. In 1977, SPC was a small organisation which had no previous experience in undertaking such an ambitious piece of advanced applied scientific research. Nor was it organisationally equipped or experienced with undertaking technical work of this size. 
 
 SSAP greatly expanded the world's knowledge of the biology of skipjack and other tuna species. It quantified for the first time the large size of the skipjack resource in the Western and Central Pacific, estimated at around 3 million tonnes of fishing biomass.
 
-The value of the 1977 work to pacific countries, producers and consumers has been immense. 
+The value of the 1977 work to Pacific Island countries, producers and consumers has been immense. 
 
-The overwhelming growth in pacific fishing activity is shown in Figures \@ref(fig:PurseSeineBoats) and \@ref(fig:WorldVolumes).
+The overwhelming growth in WCPO fishing activity is shown in Figures \@ref(fig:PurseSeineBoats) and \@ref(fig:WorldVolumes).
 
-```{r PurseSeineBoats, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = 'Number of Purse Seine Vessels Operating in the WCPFO Purse Seine Fishery'}
+```{r PurseSeineBoats, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = 'Number of Purse Seine Vessels Operating in the WCPO Purse Seine Fishery'}
 
 knitr::include_graphics(paste0(BaseDir, "Number_of_Purse_Seine_Vessels_Operating_within_the_WCPFC_NoTitles.png"))
 
@@ -282,9 +284,9 @@ The growth in fishing activity far exceeded any indicative comparative growth ra
 * Pre-SSAP (1972 – 1977) vessel growth rates additively extrapolated into the future, and 
 * Exponential vessel growth rates from between 1977 – 2023.
 
-Between 1977 and 1980, the number of distant water nation purse seine vessels fishing the pacific increased from `r sum(Vessels$vessels[Vessels$YY == 1977])` to `r sum(Vessels$vessels[Vessels$YY == 1980])`. Between 1980 and 1982, they had increased again by a further `r sum(Vessels$vessels[Vessels$YY == 1982])-sum(Vessels$vessels[Vessels$YY == 1980])` vessels. And in 1983 the total number of purse seine vessels working the pacific became `r sum(Vessels$vessels[Vessels$YY == 1983])`.
+Between 1977 and 1980, the number of distant water nation purse seine vessels fishing the WCPO area increased from `r sum(Vessels$vessels[Vessels$YY == 1977])` to `r sum(Vessels$vessels[Vessels$YY == 1980])`. Between 1980 and 1982, they had increased again by a further `r sum(Vessels$vessels[Vessels$YY == 1982])-sum(Vessels$vessels[Vessels$YY == 1980])` vessels. And in 1983 the total number of purse seine vessels working in the WCPO area became `r sum(Vessels$vessels[Vessels$YY == 1983])`.
 
-Increased fishing activity extracted increasing volumes of mainly skipjack tuna from the pacific, making the pacific the overwhelming source of the world’s tuna supply (Figure \@ref(fig:WorldVolumes)).
+Increased fishing activity extracted increasing volumes of mainly skipjack tuna from the WCPO, making the WCPO the overwhelming source of the world’s skipjack tuna supply (Figure \@ref(fig:WorldVolumes)).
 
 
 ```{r WorldVolumes, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Global Annual Skipjack Tuna Catch Volumes"}
@@ -297,8 +299,8 @@ knitr::include_graphics(paste0(BaseDir, "World_Volumes_WithoutTitles.png"))
 
 \newpage 
 
-### The Value of Harvested Pacific Skipjack
-The Pacific Islands Forum Fisheries Agency (FFA) estimates the value of tuna extracted from the Pacific.[^FFAData] Unfortunately, value information prior to 1997 is unavailable, so the FFA metrics only provide a partial picture of the value of the fisheries since 1977.
+### The Value of Harvested WCPO Skipjack
+The Pacific Islands Forum Fisheries Agency (FFA) estimates the value of skipjack tuna extracted from the WCPO.[^FFAData] Unfortunately, value information prior to 1997 is unavailable, so the FFA metrics only provide a partial picture of the value of the fisheries since 1977.
 
 ```{r PresentValue, echo=FALSE}
 knitr::kable(Present_Value_Pretty,
@@ -306,7 +308,7 @@ knitr::kable(Present_Value_Pretty,
                format = "markdown",
                align = c('lcccc'),
                booktabs = TRUE,
-               caption= "Present Value of Historical Catch Value")
+               caption= "Present Value of Historical Catch Value for Skipjack Tuna")
 ```
 Assuming a conservative 3% potential investment rate then, over the shortened timeframe of the available catch value statistics, the current day nominal value of the historical skipjack harvested since `r Present_Value_Pretty$Year[1]` is approximately `r Present_Value_Pretty[nrow(Present_Value_Pretty),length(Present_Value_Pretty)]` million in nominal 2024 US\$. 
 
@@ -318,8 +320,8 @@ In comparison, if the initial US$3 million SSAP investment made in 1977 was inve
      
 Connecting those two measures together, the compounding rate of return from the 1977 donor funding is `r paste0(round((((Total_Present_Value / Science_cost)^(1/(2024 - 1977)))-1)*1000)/10, "%")` per annum since 1977, even excluding the unknown monetary value of harvested skipjack that occurred between 1977 and 1997.
 
-### Returning Value to Pacific Governments
-Annual fishing access fees received by pacific governments in 2021 (or the latest year for which data was available) were approximately US$515 million, or 26.8% of the value of the regional offshore catch, which represents a significant return to pacific governments from their fishery's natural stocks.  
+### Returning Value to Pacific Island Governments
+Annual fishing access fees received by Pacific Islands governments in 2021 (or the latest year for which data was available) were approximately US$515 million, or 26.8% of the value of the regional offshore catch, which represents a significant return to Pacific Islands governments from their fishery's natural stocks.  
 
 Table \@ref(tab:GovtRevs), from the Benefish 1[^BenefishO] and 4[^Benefish] studies provide a partial picture behind the growth in fisheries licensing fees. 
 
@@ -332,15 +334,22 @@ knitr::kable(Government_Revenues,
                caption= "Access fees for offshore fishing 2007–202 (or latest year)")
 ```
 
-No report prior to the Benefish Study 1 compiled the fishing access fees from SPC countries into a single table. However, from Table \@ref(tab:GovtRevs), the Vessel Day Scheme (VDS), introduced in 2007, significantly increased the proportion of the fisheries economic value returned to pacific governments. 
+No report prior to the Benefish Study 1 compiled the fishing access fees from SPC countries into a single table. However, from Table \@ref(tab:GovtRevs), the Vessel Day Scheme (VDS), developed and implemented by the Parties to the Nauru Agreement (PNA)[^PWRef] and introduced in 2007, significantly increased the proportion of the fisheries economic value returned to Pacific Island governments. 
 
 Although VDS commenced in December 2007, it wasn't fully implemented until 2012.[^VDS] Early in the scheme, access fees were derived from predominately foreign fleets as governments sort to encourage their domestic offshore fishing industries. However, with the growth in domestic vessel numbers (Figure \@ref(fig:PurseSeineBoats)), governments are now receiving annually over US\$500 milllion in access fees from vessels active in their waters, and have sucessfully created regional fishing industries providing income and employment for their countries.
 
-And all of this started with US\$3 million from donor funding received in 1977. As the Rockefeller Foundation wrote in 1980: "It might be noted that had this grant been evaluated shortly following its termination in May 1976, few if any of the above comments concerning its success could have been made. Seed grants need time to grow. [Rockefeller Foundation, September 29, 1980]" 
+And all of this started with US\$3 million from donor funding received in 1977 to support the fundamental work of the Skipjack Survey and Assessment Programme. 
+
+### From Science Springs Wealth
+
+As the Rockefeller Foundation wrote in 1980: 
+
+> "It might be noted that had this grant been evaluated shortly following its termination in May 1976, few if any of the above comments concerning its success could have been made. Seed grants need time to grow. [Rockefeller Foundation, September 29, 1980]" --- @Judd2 at page 44
 
 \FloatBarrier
 
 
+[^PWRef]: The [Vessel Day Scheme](https://www.pnatuna.com/content/pna-vessel-day-scheme) is a fisheries licensing scheme overseen by the [Parties to the Nauru Agreement](https://www.pnatuna.com/our-members).
 [^VDS]:@Benefish4 on page 495
 [^Benefish]:@Benefish4
 [^BenefishO]:@Benefish1

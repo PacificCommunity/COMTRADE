@@ -25,8 +25,9 @@
 ##
 ##                Other interesting things... Thailand Input/Output tables: https://www.nesdc.go.th/nesdb_en/ewt_news.php?nid=4429&filename=national_account
 ##
-##
-##
+##                WORK TO DO:
+##                It looks like FAO data excludes the South Pacific Regional Fisheries Management Organisation (https://www.sprfmo.int/fisheries/data-2/catch-information/)
+##                ... here's a list of a whole group of others: https://www.sprfmo.int/cooperation/other-organisations/
 ##
 ##
 ##    Plan of  :  You need an api to access the data, which can be a little bit confusing to 
@@ -143,9 +144,12 @@
 
 
       ##
-      ##    Write up Victoria's report
+      ##    Report write ups
       ##
-         rmarkdown::render("Programmes/SSAP_Value_Report_for_Victoria_Pilbeam.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria.docx")
+         #rmarkdown::render("Programmes/SSAP_Value_Report_for_Victoria_Pilbeam.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria.docx")
+         rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_Post_Peter_Williams.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_Post_Peter_Williams.docx")
+
+
 
 
 
