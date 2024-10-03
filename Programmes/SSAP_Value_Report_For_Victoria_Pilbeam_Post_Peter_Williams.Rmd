@@ -110,7 +110,49 @@ references:
   issued:
     year: 2001
     month: 12
-    
+
+- id: StkAss2022
+  title: "Stock assessment of skipjack tuna in the western and central Pacific Ocean: 2022"
+  author: 
+   - family: Castillo-Jordan 
+     given: C
+   - family: Tears
+     given: T
+   - family: Hampton
+     given: J
+   - family: Davies
+     given: N
+   - family: Day
+     given: J
+   - family: Magnusson
+     given: A
+   - family: Scott
+     given: R
+   - family: Pilling
+     given: G
+   - family: Scott
+     given: F
+   - family: Hamer
+     given: P
+  type: article-journal 
+  volume: WCPFC-SC18-2022/SA-WP-01
+  URL: 'https://meetings.wcpfc.int/node/16242'
+  publisher: Western and Central Pacific Fisheries Commission
+  issued:
+    year: 2022
+    month: 8
+   
+- id: Outcomes
+  title: Eighth Regular Session of the WCPFC Scientific Committee (SC18) Outcomes Document
+  author: 
+   - family: WCPFC 
+  type: article-journal 
+  URL: 'https://meetings.wcpfc.int/node/17118'
+  publisher: Western and Central Pacific Fisheries Commission
+  issued:
+    year: 2022
+    month: 8
+   
 ---
 \newpage
 
@@ -286,7 +328,10 @@ The growth in fishing activity far exceeded any indicative comparative growth ra
 
 Between 1977 and 1980, the number of distant water nation purse seine vessels fishing the WCPO area increased from `r sum(Vessels$vessels[Vessels$YY == 1977])` to `r sum(Vessels$vessels[Vessels$YY == 1980])`. Between 1980 and 1982, they had increased again by a further `r sum(Vessels$vessels[Vessels$YY == 1982])-sum(Vessels$vessels[Vessels$YY == 1980])` vessels. And in 1983 the total number of purse seine vessels working in the WCPO area became `r sum(Vessels$vessels[Vessels$YY == 1983])`.
 
-Increased fishing activity extracted increasing volumes of mainly skipjack tuna from the WCPO, making the WCPO the overwhelming source of the world’s skipjack tuna supply (Figure \@ref(fig:WorldVolumes)).
+Increased fishing activity extracted increasing volumes of mainly skipjack tuna from the WCPO, making the WCPO the overwhelming source of the world’s skipjack tuna supply (Figure \@ref(fig:WorldVolumes)). While recent annual catches of skipjack tuna are currently amongst the highest ever, the WCPFC scientific advice from the most recent WCPO skipjack tuna stock assessment (2022) continues to show that the stock is currently moderately exploited and the level of fishing mortality is sustainable; the skipjack tuna stock is not overfished and is not experiencing overfishing.[^PeterRef]
+
+
+[^PeterRef]: See @StkAss2022, and @Outcomes
 
 
 ```{r WorldVolumes, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Global Annual Skipjack Tuna Catch Volumes"}
