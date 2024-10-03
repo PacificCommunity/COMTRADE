@@ -1,0 +1,410 @@
+---
+title: The Seeds of the Skipjack Survey and Assessment Programme Spawns the Development of Regional Tuna Fisheries
+subtitle: Final Version
+author: James Hogan, FAME - SPC
+date: "`r format(Sys.time(), '%d %B %Y')`"
+fontsize: 11pt
+urlcolor: blue
+classoption: a4paper
+geometry: margin = 1in
+fig_caption: true
+output: 
+   bookdown::word_document2:
+      reference_docx: "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Word_Template.docx"
+      toc: false  
+      figure:
+        style: Table
+        layout: autofit
+        width: 1.0
+        caption:
+          style: Table Caption
+          pre: 'Table '
+          sep: ': '
+          topcaption: true
+      
+   bibliography: bibliography.json
+header-includes:
+   - \usepackage[percent]{overpic}   
+   - \usepackage{tikz}
+   - \usetikzlibrary{calc}
+   - \usepackage{graphicx}
+   - \usepackage{placeins}
+   - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \fancyhf{}
+   - \addtolength{\headwidth}{\marginparsep}
+   - \addtolength{\headwidth}{\marginparwidth}   
+   - \usepackage{floatrow}
+   - \floatsetup[figure]{capposition=top}
+
+references:
+- id: FFA
+  title: Value of WCPFC-CA Tuna Fisheries 2023
+  author:
+  - family: FFA
+  URL: 'https://www.ffa.int/download/wcpfc-area-catch-value-estimates/'
+  publisher: Pacific Island Forum Fisheries Agency
+  issued:
+    year: 2023
+    month: 10
+    
+- id: Hedron
+  title: Forecasting the Socio-Economic Impact of the Large Hadron Collider -  A Cost–Benefit Analysis to 2025 and Beyond.
+  author: 
+   - family: Florio 
+     given: Massimo
+   - family: Stefano
+     given: Forte
+   - family: Emanuela 
+     given: Sirtori
+  type: article-journal 
+  volume: 112
+  page: 38-53
+  URL: 'https://doi.org/10.1016/j.techfore.2016.03.007'
+  publisher:  Technological Forecasting and Social Change 
+  issued:
+    year: 2016
+    month: 11
+    
+    
+- id: Judd1
+  title: A short history of the Skipjack Survey and Assessment Programme (SSAP) [Part 1]
+  author: 
+   - family: Judd 
+     given: Paul
+  URL: 'https://purl.org/spc/digilib/doc/e66zt'
+  publisher: The Pacific Community
+  issued:
+    year: 2016
+    
+- id: Judd2
+  title: A short history of the Skipjack Survey and Assessment Programme (SSAP) [Part 2]
+  author: 
+   - family: Judd 
+     given: Paul
+  URL: 'https://purl.org/spc/digilib/doc/d28qz'
+  publisher: The Pacific Community
+  issued:
+    year: 2016
+    
+- id: Benefish4
+  title: Fisheries in the economies of Pacific Island countries and territories (Benefish Study 4)
+  author: 
+   - family: Gillett 
+     given: R
+   - family: Fong
+     given: M
+  URL: 'https:// purl.org/spc/digilib/doc/ppizh'
+  publisher: The Pacific Community 
+  issued:
+    year: 2023
+
+- id: Benefish1
+  title: The Contribution of Fisheries to the Economies of Pacific Island Countries
+  author: 
+   - family: Gillett 
+     given: R
+   - family: Lightfoot
+     given: C
+  URL: 'https://www.adb.org/sites/default/files/publication/28819/contribution-fisheries.pdf'
+  publisher: The Asian Development Bank
+  issued:
+    year: 2001
+    month: 12
+
+- id: StkAss2022
+  title: "Stock assessment of skipjack tuna in the western and central Pacific Ocean: 2022"
+  author: 
+   - family: Castillo-Jordan 
+     given: C
+   - family: Tears
+     given: T
+   - family: Hampton
+     given: J
+   - family: Davies
+     given: N
+   - family: Day
+     given: J
+   - family: Magnusson
+     given: A
+   - family: Scott
+     given: R
+   - family: Pilling
+     given: G
+   - family: Scott
+     given: F
+   - family: Hamer
+     given: P
+  type: article-journal 
+  volume: WCPFC-SC18-2022/SA-WP-01
+  URL: 'https://meetings.wcpfc.int/node/16242'
+  publisher: Western and Central Pacific Fisheries Commission
+  issued:
+    year: 2022
+    month: 8
+   
+- id: Outcomes
+  title: Eighth Regular Session of the WCPFC Scientific Committee (SC18) Outcomes Document
+  author: 
+   - family: WCPFC 
+  type: article-journal 
+  URL: 'https://meetings.wcpfc.int/node/17118'
+  publisher: Western and Central Pacific Fisheries Commission
+  issued:
+    year: 2022
+    month: 8
+   
+---
+\newpage
+
+
+```{r setup, cache=FALSE, include=FALSE}
+
+##
+##    Core libraries
+##
+      library(ggplot2)
+      library(plyr)
+      library(stringr)
+      library(lubridate)
+      library(calibrate)
+      library(Hmisc)
+      library(RColorBrewer)
+      library(stringi)
+      library(sqldf)
+      library(scales)
+      library(RDCOMClient)
+      library(extrafont)
+      library(tictoc)
+      library(RODBC)
+      
+      library(sysfonts)
+      library(showtext)
+##
+##    Project-specific libraries
+##
+      library(comtradr)
+      library(curl)
+      library(XML)   
+      library(RJSONIO)   
+      library(data.table)
+      library(ggrepel)
+
+      library(strucchange)
+      library(lmtest)
+      library(dynlm)
+      library(systemfit)
+      library(tseries)
+      library(cluster)
+      library(nlme)
+      library(plm)
+      library(splines)
+      library(systemfit)
+      library(forecast)  
+
+      library(knitr)
+      library(htmlTable)
+      library(png)
+      library(bookdown)
+      library(kableExtra)
+      library(pander)
+      library(officer)
+
+##
+##    Grab the reporting datasets
+##
+   load("C:\\Users\\jamesh\\GIT\\COMTRADE\\Data_Output\\Vessels.rda")
+   load("C:\\Users\\jamesh\\GIT\\COMTRADE\\Data_Output\\FAO_Core_Tuna.rda")
+   load("C:\\Users\\jamesh\\GIT\\COMTRADE\\Data_Output\\FFA_Core_Tuna.rda")
+
+
+options(xtable.comment = FALSE)
+
+BaseDir <- "C:\\Users\\jamesh\\GIT\\COMTRADE\\Graphical_Output\\"
+   
+##
+##    Hardcode Benefish4 govt revenues
+##
+Government_Revenues <- data.frame(
+`Pacific Island Country and Territory` = c('Cook Islands','FSM','Fiji','Kiribati','Marshall Islands','Nauru', 'Niue', 'Palau', 'PNG','Samoa', 'Solomon Islands','Tonga', 'Tuvalu', 'Vanuatu', 'Tokelau','Total'),
+
+`1999 access fees` = c('169,072','15,400,000','212,000','20,600,000','4,982,699','3,400,000','151,793','800,000'  ,'5,840,000' ,'188,616','273,458'   ,'152,041','5,900,000','218,448'  ,'Not Recorded','58,288,127'),
+`2007 access fees` = c('298,680','16,823,232','292,963','24,351,784','2,227,154','5,868,605','300,941','1,278,260','17,061,486','292,963','13,411,764','150,715','3,927,731','1,550,058','1,685,691','89,522,027'),
+`2014 access fees` = c('350,352','19,733,651','343,645','28,564,643','2,612,451','6,883,874','353,003','1,499,400','20,013,123','343,645','15,731,999','176,789','4,607,228','1,818,218','1,977,315','105,009,336'),
+`2021 access fees` = c('6,598,639','72,300,000','163,174','116,989,340','33,031,253','42,165,943','883,086','7,870,000','145,014,245','1,119,691','42,110,205','1,045,629','31,650,914','1,253,206','12,600,000','514,795,325'),
+`% change` = c('3803%','369%','-23%','468%','563%','1140%','482%','884%','2383%','494%','15299%','588%','436%','474%','647%','783%'))
+names(Government_Revenues) <- c("Pacific Island Country and Territory","1999 Access Fees","2007 Access Fees","2014 Access Fees","2021 Access Fees","% Change")
+
+
+##
+##    Estimate the present day value - focus only on the FFA dollars 
+##
+   Skipjack <- data.frame(FFA_Core_Tuna[Measure == "Skipjack"])
+   
+   Current_Date  <- year(Sys.Date())
+   Interest_Rate <- .03
+   
+   Present_Value <- function(Start_Date,
+                             End_Date,
+                             Start_Value,
+                             Interest_Rate)
+                     {
+                        Current_Value <- Start_Value
+                        for(Period in (Start_Date+1):End_Date)
+                        {
+                           Current_Value <- Current_Value + (Interest_Rate)*Current_Value
+                        }
+                        return(Current_Value)
+                     }
+   
+   
+   Skipjack$Present_Value <- sapply(1:nrow(Skipjack), function(Obs){
+      
+                                     return(Present_Value(Start_Date    = Skipjack$Year[Obs],
+                                                          End_Date      = Current_Date,
+                                                          Start_Value   = Skipjack$Value[Obs],
+                                                          Interest_Rate = Interest_Rate))
+                                    })
+
+
+   Science_cost <- Present_Value(Start_Date  = 1977,
+                                 End_Date    = Current_Date,
+                                 Start_Value = 3,
+                                 Interest_Rate = Interest_Rate)
+                                 
+   Total_Value <- sum(Skipjack$Value)
+   Total_Present_Value <- sum(Skipjack$Present_Value)
+
+##
+##    Make a table
+##
+   Present_Value_Pretty <- data.frame(Year = as.character(Skipjack[,c("Year")]))
+   Present_Value_Pretty$`Volume - Tonnes (Mill)` <- format(Skipjack$Volume,big.mark   = ",")
+   Present_Value_Pretty$`Value - USD (Mill)` <- str_replace_all(paste0("$", format(Skipjack$Value,big.mark   = ",")), " ","") 
+   Present_Value_Pretty$`Present Value - USD(Mill) in 2024 Dollars` <- str_replace_all(paste0("$", format(round(Skipjack$Present_Value),big.mark   = ",")), " ","")  
+
+   Totals <- data.frame(Year = "Total",
+                        `Volume - Tonnes (Mill)` = format(sum(Skipjack$Volume),big.mark   = ","),
+                        `Value - USD (Mill)` = paste0("$", format(sum(Skipjack$Value),big.mark   = ",")), 
+                        `Present Value - USD(Mill) in 2024 Dollars` <- paste0("$", format(round(sum(Skipjack$Present_Value)),big.mark   = ",")))
+   names(Totals) <- c("Year","Volume - Tonnes (Mill)","Value - USD (Mill)","Present Value - USD(Mill) in 2024 Dollars")
+
+ 
+   Present_Value_Pretty <- rbind(Present_Value_Pretty,Totals)
+
+```
+
+   
+
+<!-- 
+##
+##       This bit below is the commentary written in R Markup
+--> 
+
+### Skipjack Science Lifting the Pacific Region's Economic Ceiling
+[^RefJudd]: The history is extensively documented in @Judd1 and @Judd2.
+
+
+The Pacific Community (SPC)'s Skipjack Survey and Assessment Programme (SSAP), which ran from 1977 until 1981, measured for the first time the size of the Western and Central Pacific Ocean (WCPO) skipjack tuna stock and laid the foundations for what has become a US$81 billion regional fishing industry.[^RefJudd] 
+
+The Programme, led by Dr Robert (Bob) Kearney, was funded from approximately US$3 million of donor funding, which was 33% of SPC's total funding at the time. In 1977, SPC was a small organisation which had no previous experience in undertaking such an ambitious piece of advanced applied scientific research. Nor was it organisationally equipped or experienced with undertaking technical work of this size. 
+
+SSAP greatly expanded the world's knowledge of the biology of skipjack and other tuna species. It quantified for the first time the large size of the skipjack resource in the Western and Central Pacific, estimated at around 3 million tonnes of fishing biomass.
+
+The value of the 1977 work to Pacific Island countries, producers and consumers has been immense. 
+
+The overwhelming growth in WCPO fishing activity is shown in Figures \@ref(fig:PurseSeineBoats) and \@ref(fig:WorldVolumes).
+
+```{r PurseSeineBoats, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = 'Number of Purse Seine Vessels Operating in the WCPO Purse Seine Fishery'}
+
+knitr::include_graphics(paste0(BaseDir, "Number_of_Purse_Seine_Vessels_Operating_within_the_WCPFC_NoTitles.png"))
+
+```
+
+\FloatBarrier
+The growth in fishing activity far exceeded any indicative comparative growth rates.  Figure \@ref(fig:PurseSeineBoats) presents comparative growth rates from either:
+
+* Pre-SSAP (1972 – 1977) vessel growth rates additively extrapolated into the future, and 
+* Exponential vessel growth rates from between 1977 – 2023.
+
+Between 1977 and 1980, the number of distant water nation purse seine vessels fishing the WCPO area increased from `r sum(Vessels$vessels[Vessels$YY == 1977])` to `r sum(Vessels$vessels[Vessels$YY == 1980])`. Between 1980 and 1982, they had increased again by a further `r sum(Vessels$vessels[Vessels$YY == 1982])-sum(Vessels$vessels[Vessels$YY == 1980])` vessels. And in 1983 the total number of purse seine vessels working in the WCPO area became `r sum(Vessels$vessels[Vessels$YY == 1983])`.
+
+Increased fishing activity extracted increasing volumes of mainly skipjack tuna from the WCPO, making the WCPO the overwhelming source of the world’s skipjack tuna supply (Figure \@ref(fig:WorldVolumes)). While recent annual catches of skipjack tuna are currently amongst the highest ever, the WCPFC scientific advice from the most recent WCPO skipjack tuna stock assessment (2022) continues to show that the stock is currently moderately exploited, and the level of fishing mortality is sustainable; the skipjack tuna stock is not overfished and is not experiencing overfishing.[^PeterRef]
+
+
+[^PeterRef]: See @StkAss2022, and @Outcomes
+
+
+```{r WorldVolumes, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Global Annual Skipjack Tuna Catch Volumes"}
+
+knitr::include_graphics(paste0(BaseDir, "World_Volumes_WithoutTitles.png"))
+
+```
+
+\FloatBarrier
+
+\newpage 
+
+### The Value of Harvested WCPO Skipjack
+The Pacific Islands Forum Fisheries Agency (FFA) estimates the value of skipjack tuna extracted from the WCPO.[^FFAData] Unfortunately, value information prior to 1997 is unavailable, so the FFA metrics only provide a partial picture of the value of the fisheries since 1977.
+
+```{r PresentValue, echo=FALSE}
+knitr::kable(Present_Value_Pretty,
+               row.names = FALSE,
+               format = "markdown",
+               align = c('lcccc'),
+               booktabs = TRUE,
+               caption= "Present Value of Historical Catch Value for Skipjack Tuna")
+```
+Assuming a conservative 3% potential investment rate then, over the shortened timeframe of the available catch value statistics, the current day nominal value of the historical skipjack harvested since `r Present_Value_Pretty$Year[1]` is approximately `r Present_Value_Pretty[nrow(Present_Value_Pretty),length(Present_Value_Pretty)]` million in nominal 2024 US\$. 
+
+In comparison, if the initial US$3 million SSAP investment made in 1977 had been invested at 3% per annum, it would be worth 
+`r paste0("US$", format(round(Present_Value(Start_Date  = 1977,
+                 End_Date    = Current_Date,
+                 Start_Value = 3,
+                 Interest_Rate = Interest_Rate)),big.mark   = ","))` million in nominal 2024 US\$. 
+     
+Connecting those two measures together, the compounding rate of return from the 1977 donor funding is `r paste0(round((((Total_Present_Value / Science_cost)^(1/(2024 - 1977)))-1)*1000)/10, "%")` per annum since 1977, even excluding the unknown monetary value of harvested skipjack that occurred between 1977 and 1997.
+
+### Returning Value to Pacific Island Governments
+Annual fishing access fees received by Pacific Islands governments in 2021 (or the latest year for which data was available) were approximately US$515 million, or 26.8% of the value of the regional offshore catch, which represents a significant return to Pacific Islands governments from their fishery's natural stocks.  
+
+Table \@ref(tab:GovtRevs), from the Benefish 1[^BenefishO] and 4[^Benefish] studies provide a partial picture behind the growth in fisheries licensing fees. 
+
+```{r GovtRevs, echo=FALSE}
+knitr::kable(Government_Revenues,
+               row.names = FALSE,
+               format = "markdown",
+               align = c('lccccc'),
+               booktabs = TRUE,
+               caption= "Access fees for offshore fishing 2007–202 (or latest year)")
+```
+
+No report prior to the Benefish Study 1 compiled the fishing access fees from SPC countries into a single table. However, from Table \@ref(tab:GovtRevs), the Vessel Day Scheme (VDS), developed and implemented by the Parties to the Nauru Agreement (PNA)[^PWRef] and introduced in 2007, significantly increased the proportion of the fisheries economic value returned to Pacific Island governments. 
+
+Although VDS commenced in December 2007, it wasn't fully implemented until 2012.[^VDS] Early in the scheme, access fees were derived from predominately foreign fleets as governments sought to encourage their domestic offshore fishing industries. However, with the growth in domestic vessel numbers (Figure \@ref(fig:PurseSeineBoats)), governments are now receiving annually over US\$500 million in access fees from vessels active in their waters, and have successfully created regional fishing industries providing income and employment for their countries.
+
+And all of this started with US\$3 million from donor funding received in 1977 to support the fundamental work of the Skipjack Survey and Assessment Programme. 
+
+### From Science Springs Wealth
+
+As the Rockefeller Foundation wrote in 1980: 
+
+> "It might be noted that had this grant been evaluated shortly following its termination in May 1976, few if any of the above comments concerning its success could have been made. Seed grants need time to grow. [Rockefeller Foundation, September 29, 1980]" --- @Judd2 at page 44
+
+\FloatBarrier
+
+
+[^PWRef]: The [Vessel Day Scheme](https://www.pnatuna.com/content/pna-vessel-day-scheme) is a fisheries licensing scheme overseen by the [Parties to the Nauru Agreement](https://www.pnatuna.com/our-members).
+[^VDS]:@Benefish4 on page 495
+[^Benefish]:@Benefish4
+[^BenefishO]:@Benefish1
+[^FFAData]:@FFA
+
+
+\FloatBarrier
+
+\newpage
+
+# References
+

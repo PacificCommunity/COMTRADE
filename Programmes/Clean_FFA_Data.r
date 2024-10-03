@@ -286,11 +286,11 @@
    ##
    ## Save files
    ##
-      save(FFASummaryData,    file = 'Data_Intermediate/FFASummaryData.rda')
-      save(FFANonSummaryData, file = 'Data_Intermediate/FFANonSummaryData.rda')
+      save(FFASummaryData,             file = 'Data_Output/FFASummaryData.rda')
+      save(FFANonSummaryData,          file = 'Data_Output/FFANonSummaryData.rda')
       
-      save(FFANonSummaryData_Revisions,file = 'Data_Intermediate/FFANonSummaryData_Revisions.rda')
-      save(FFASummaryData_Revisions,   file = 'Data_Intermediate/FFASummaryData_Revisions.rda')
+      save(FFANonSummaryData_Revisions,file = 'Data_Output/FFANonSummaryData_Revisions.rda')
+      save(FFASummaryData_Revisions,   file = 'Data_Output/FFASummaryData_Revisions.rda')
       
       save(FFA_Compendium_of_Economic_and_Development_Statistics_2022,   file = 'Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
 ##

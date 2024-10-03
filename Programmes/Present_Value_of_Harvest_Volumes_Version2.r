@@ -65,7 +65,7 @@
       ##
       ##    FFA data on current volumes and values
       ##
-         load('Data_Intermediate/FFASummaryData.rda')
+         load('Data_Output/FFASummaryData.rda')
          load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
          
       ##

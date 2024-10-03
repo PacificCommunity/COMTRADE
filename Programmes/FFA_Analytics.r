@@ -49,7 +49,7 @@
    ##
    ##    Grab the FFA data
    ##
-      load('Data_Intermediate/FFASummaryData.rda')
+      load('Data_Output/FFASummaryData.rda')
 
    ##
    ##    Estimate the value of the tuna fish extracted
