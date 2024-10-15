@@ -80,24 +80,6 @@
                print(p)
             dev.off()
 
-
-
-   ##
-   ## Step 2: xxxxxxxxxxx
-   ##
-   
-   
-   ##
-   ## Step 3: xxxxxxxxxxx
-   ##
-
-
-
-   ##
-   ## Save files our produce some final output of something
-   ##
-      save(xxxx, file = 'Data_Intermediate/xxxxxxxxxxxxx.rda')
-      save(xxxx, file = 'Data_Output/xxxxxxxxxxxxx.rda')
 ##
 ##    And we're done
 ##
