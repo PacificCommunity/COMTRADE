@@ -139,6 +139,7 @@
 
          source("Programmes/Fresh_Tuna_Analysis_Version2.r") # Looks at comtrade data with a pacific/non-pacific split.
          source("Programmes/Export Qty by Major Market and Decile.r") # Looks at which countries are the major exporting countries
+         source("Programmes/Vessel_Metrics_Revenue_Vs_Effort_Version2.r") # Estimates the VDS Day Price, as a test on the https://github.com/emlab-ucsb/vds-mpa-paper model
 
 
 
