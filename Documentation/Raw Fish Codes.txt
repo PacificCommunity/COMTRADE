@@ -1,0 +1,18 @@
+## 1:                                                                                                            030194 - Fish; live, Atlantic and Pacific bluefin tunas (Thunnus thynnus, Thunnus orientalis)
+## 2:                                                                                                                                           030195 - Fish; live, southern bluefin tunas (Thunnus maccoyii)
+## 3:                          030231 - Fish; fresh or chilled, albacore or longfinned tunas (Thunnus alalunga), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0302.91 to 0302.99
+## 4:                                      030232 - Fish; fresh or chilled, yellowfin tunas (Thunnus albacares), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0302.91 to 0302.99
+## 5:               030233 - Fish; fresh or chilled, skipjack tuna (stripe-bellied bonito) (Katsuwonus pelamis), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0302.91 to 0302.99
+## 6:                                            030234 - Fish; fresh or chilled, bigeye tunas (Thunnus obesus), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0302.91 to 0302.99
+## 7: 030235 - Fish; fresh or chilled, Atlantic and Pacific bluefin tunas (Thunnus thynnus, Thunnus orientalis), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0302.91 to 0302.99
+## 8:                                030236 - Fish; fresh or chilled, southern bluefin tunas (Thunnus maccoyii), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0302.91 to 0302.99
+## 9:                                          030239 - Fish; fresh or chilled, tuna, n.e.c. in item no. 0302.3, excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0302.91 to 0302.99
+## 10:                                    030341 - Fish; frozen, albacore or longfinned tunas (Thunnus alalunga), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0303.91 to 0303.99
+## 11:                                                030342 - Fish; frozen, yellowfin tunas (Thunnus albacares), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0303.91 to 0303.99
+## 12:                         030343 - Fish; frozen, skipjack tuna (stripe-bellied bonito) (Katsuwonus pelamis), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0303.91 to 0303.99
+## 13:                                                      030344 - Fish; frozen, bigeye tunas (Thunnus obesus), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0303.91 to 0303.99
+## 14:           030345 - Fish; frozen, Atlantic and Pacific bluefin tunas (Thunnus thynnus, Thunnus orientalis), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0303.91 to 0303.99
+## 15:                                          030346 - Fish; frozen, southern bluefin tunas (Thunnus maccoyii), excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0303.91 to 0303.99
+## 16:                                                    030349 - Fish; frozen, tuna, n.e.c. in item no. 0303.4, excluding fillets, fish meat of 0304, and edible fish offal of subheadings 0303.91 to 0303.99
+## 17:                                                                                  030487 - Fish fillets; frozen, tunas (of the genus Thunnus), skipjack tuna (stripe-bellied bonito) (Katsuwonus pelamis)
+## 18:                                                                     160414 - Fish preparations; tunas, skipjack tuna and bonito (Sarda spp.), prepared or preserved, whole or in pieces (but not minced)

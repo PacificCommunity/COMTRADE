@@ -23,7 +23,8 @@
       Contents <- Contents[str_detect(Contents$DataFrames, "RAWDATA"),]
       Contents <- Contents[!is.na(Contents$Year),]
       Contents <- Contents[!(Contents$Tab %in% c("Contents","Introduction","Prices", "Intoduction")),]
-      Contents <- Contents[!(Contents$Spreadsheet %in% c("FFA_Compendium_of_Economic_and_Development_Statistics_2022")),]
+      #Contents <- Contents[!(Contents$Spreadsheet %in% c("FFA_Compendium_of_Economic_and_Development_Statistics_2022")),]
+      Contents <- Contents[!(Contents$Spreadsheet %in% c("Compendium_of_Economic_and_Development_Statistics_2024")),]
          
    ##
    ## Summary data has a different structure than non-summary data
@@ -211,10 +212,15 @@
       FFASummaryData_Revisions$Relative_Difference <- (FFASummaryData_Revisions$Value2 / FFASummaryData_Revisions$Value1)-1
 
    ##
-   ## Clean up the FFA_Compendium_of_Economic_and_Development_Statistics_2022
+   ## Clean up the FFA_Compendium_of_Economic_and_Development_Statistics
    ##
-      load("Data_Intermediate/RAWDATA_C. Country level dataXXFFA_Compendium_of_Economic_and_Development_Statistics_2022.rda")  
-      X <- `RAWDATA_C. Country level dataXXFFA_Compendium_of_Economic_and_Development_Statistics_2022`
+#      load("Data_Intermediate/RAWDATA_C. Country level dataXXFFA_Compendium_of_Economic_and_Development_Statistics_2022.rda")  
+#      X <- `RAWDATA_C. Country level dataXXFFA_Compendium_of_Economic_and_Development_Statistics_2022`
+      load("Data_Intermediate/RAWDATA_C. Country level dataXXCompendium_of_Economic_and_Development_Statistics_2024.rda")  
+      X <- `RAWDATA_C. Country level dataXXCompendium_of_Economic_and_Development_Statistics_2024`
+
+
+
       
       names(X)    <- X[2,]
       names(X)[1] <- "Metrics"
@@ -281,7 +287,8 @@
                       ifelse(str_detect(X$Metrics, regex("EU", ignore_case = TRUE)),       "EU",
                       ifelse(str_detect(X$Metrics, regex("Licence", ignore_case = TRUE)),  "Licence and access fee revenue",
                       ifelse(str_detect(X$Metrics, regex("Employment", ignore_case = TRUE)), "Employment",X$Metrics)))))))
-         FFA_Compendium_of_Economic_and_Development_Statistics_2022 <- data.table(X[order(X$Country, X$CountryMeasure, X$FirstHeading, X$SecondHeading, X$Metrics, X$Units, X$Year),])
+#         FFA_Compendium_of_Economic_and_Development_Statistics_2022 <- data.table(X[order(X$Country, X$CountryMeasure, X$FirstHeading, X$SecondHeading, X$Metrics, X$Units, X$Year),])
+         FFA_Compendium_of_Economic_and_Development_Statistics_2024 <- data.table(X[order(X$Country, X$CountryMeasure, X$FirstHeading, X$SecondHeading, X$Metrics, X$Units, X$Year),])
 
    ##
    ## Save files
@@ -292,7 +299,8 @@
       save(FFANonSummaryData_Revisions,file = 'Data_Output/FFANonSummaryData_Revisions.rda')
       save(FFASummaryData_Revisions,   file = 'Data_Output/FFASummaryData_Revisions.rda')
       
-      save(FFA_Compendium_of_Economic_and_Development_Statistics_2022,   file = 'Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
+#      save(FFA_Compendium_of_Economic_and_Development_Statistics_2022,   file = 'Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
+      save(FFA_Compendium_of_Economic_and_Development_Statistics_2024,   file = 'Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2024.rda')
 ##
 ##    And we're done
 ##

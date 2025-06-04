@@ -93,7 +93,7 @@
    ##    Set working directory
    ##
       setwd("C:/Work_Related_Projects/COMTRADE")
-      setwd("C:/Users/jamesh/GIT/COMTRADE")
+      setwd("C:/From BigDisk/GIT/COMTRADE")
 
       Sys.setenv('COMTRADE_PRIMARY' = '9cd0ec8d460147f5956f306cbdea1cf6')
       
@@ -152,6 +152,10 @@
          rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_FINAL.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_FINAL.docx")
 
 
+      ##
+      ##    CRGA Presentation
+      ##
+         rmarkdown::render("Programmes/CRGA_Presentation.rmd", output_file = "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\CRGA Presentation.pptx")                
 
 
 

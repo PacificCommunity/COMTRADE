@@ -1,0 +1,94 @@
+---
+title: Economics Training
+subtitle: Understanding the Macroeconomy
+author: James Hogan, FAME - SPC
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  powerpoint_presentation:
+    reference_doc: "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\SPC_R_template.pptx"
+---
+
+
+# The Big Questions
+
+::: incremental
+* And what is economics anyway?
+
+* If Macro means "big", what's Micro ("little") economics?
+
+* And where does microeconomics become macroeconomics?
+
+
+:::
+
+
+# What is economics?
+::: incremental
+
+Economics is about _constrained optimisation_ and choice.
+
+   * Economics is the science of choice. Every choice
+   * The difference between macro and microeconomics economics is the scale of the choice, and the constraints involved.
+   * Every single choice is **constrained** by something.
+
+   1. Scarcity
+      * Resources (land, money, wealth and resource endowment)
+      * Time
+      * Capability and Technology
+
+   2. Uncertainty
+      * The Future State of the World
+      * Future time, future resources
+      
+   3. System Responses
+      * How will competitors respond?
+      * How will prices change in the future (and make something affordable/unaffordable?)
+      * How quickly will resources renew - if ever?
+
+:::
+
+
+# Micro / Macro economic?
+
+:::::::::::::: {.columns}
+
+::: {.column width="50%"}
+Micro Economics: how do people and firms operate?
+   
+::: incremental
+   * Consumer demand
+      * How do I maximise my happiness (utility), subject to my available resources (my income)?
+      
+   * Economic production
+      * How do I make the most widgets, subject to my workforce, and machinery ("capital")?
+      
+   * Exchange
+      * If I make widgets, and you make gadgets, how do we trade gadgets for widgets and at what price?
+
+
+:::
+   
+:::
+
+::: {.column width="50%"}
+Macro Economics: how do countries operate?
+
+::: incremental
+   * Economic Development
+      * Why are some countries wealtier than others, and how did that happen?
+      
+   * Labour Markets and Economic Growth
+      * Why are people unemployed? Why can't everybody get a job?
+      * Why is America rich and Tuvalu poor?
+      
+   * International Trade
+      * What's the kaffufle about tariffs?
+      * Why does 
+
+
+:::
+
+:::
+
+::::::::::::::
+

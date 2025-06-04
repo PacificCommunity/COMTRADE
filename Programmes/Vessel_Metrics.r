@@ -18,24 +18,12 @@
       source("R/themes.r")
 
    ##
-   ##    Grab the FFA data
-   ##
-      load('Data_Output/FFASummaryData.rda')
-   
-   
-   ##
    ##    Grab some database information
    ##
       db1 <- odbcDriverConnect("driver=SQL Server;server=nouSQL03;database=LOG_MASTER")
       db2 <- odbcDriverConnect("driver=SQL Server;server=noufameSQL01;database=vms")
       db3 <- odbcDriverConnect("driver=SQL Server;server=noufameSQL01;database=tufman2")
       
-      ##
-      ##    Grab the ocean names
-      ##
-         World_Oceans = sqlQuery(db1,"SELECT *
-                                        FROM ace.oceans")
-
       ##
       ##    Extract vessel activity metrics. 
       ##       tufman2.vms.vms_trips = a VMS-derived record of unique vessel IDs (based on VMS data), departing and returning to ports, 

@@ -1,13 +1,7 @@
 ##
 ##    Programme:  Vessel_Metrics_Revenue_Vs_Effort.r
 ##
-##    Objective:  Based on Peter Williams code. Its a nice confirmation and test of the model 
-##                in Villaseñor-Derbez, Juan Carlos, John Lynham, and Christopher Costello. 2020. 
-##                   “Environmental Market Design for Large-Scale Marine Conservation.” 
-##                    Nature Sustainability 3 (3): 234–40. https://doi.org/10.1038/s41893-019-0459-z, 
-##                which is the outcome of the code here: : https://github.com/emlab-ucsb/vds-mpa-paper
-##
-##                emLab have made a nice model which seems predictive of trading behaviour between countries
+##    Objective: 
 ##
 ##    Author:     James Hogan, 3 December 2024
 ##
