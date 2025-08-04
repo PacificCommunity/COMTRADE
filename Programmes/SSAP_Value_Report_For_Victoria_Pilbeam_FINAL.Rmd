@@ -10,7 +10,7 @@ geometry: margin = 1in
 fig_caption: true
 output: 
    bookdown::word_document2:
-      reference_docx: "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Word_Template.docx"
+      reference_docx: "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\Word_Template.docx"
       toc: false  
       figure:
         style: Table
@@ -39,7 +39,7 @@ header-includes:
 
 references:
 - id: FFA
-  title: Value of WCPFC-CA Tuna Fisheries 2023
+  title: Value of WCPFC-CA Tuna Fisheries 2024
   author:
   - family: FFA
   URL: 'https://www.ffa.int/download/wcpfc-area-catch-value-estimates/'
@@ -213,14 +213,16 @@ references:
 ##
 ##    Grab the reporting datasets
 ##
-   load("C:\\Users\\jamesh\\GIT\\COMTRADE\\Data_Output\\Vessels.rda")
-   load("C:\\Users\\jamesh\\GIT\\COMTRADE\\Data_Output\\FAO_Core_Tuna.rda")
-   load("C:\\Users\\jamesh\\GIT\\COMTRADE\\Data_Output\\FFA_Core_Tuna.rda")
+   load("C:\\From BigDisk\\GIT\\COMTRADE\\Data_Output\\Vessels.rda")
+   load("C:\\From BigDisk\\GIT\\COMTRADE\\Data_Output\\FAO_Core_Tuna.rda")
+   load("C:\\From BigDisk\\GIT\\COMTRADE\\Data_Output\\FFA_Core_Tuna.rda")
+   load("C:\\From BigDisk\\GIT\\COMTRADE\\Data_Intermediate\\FFA_Compendium_of_Economic_and_Development_Statistics_2024.rda")
+
 
 
 options(xtable.comment = FALSE)
 
-BaseDir <- "C:\\Users\\jamesh\\GIT\\COMTRADE\\Graphical_Output\\"
+BaseDir <- "C:\\From BigDisk\\GIT\\COMTRADE\\Graphical_Output\\"
    
 ##
 ##    Hardcode Benefish4 govt revenues
@@ -276,6 +278,29 @@ names(Government_Revenues) <- c("Pacific Island Country and Territory","1999 Acc
    Total_Present_Value <- sum(Skipjack$Present_Value)
 
 ##
+##    Calculate the licensing revenues
+##
+      License_Revenues <- FFA_Compendium_of_Economic_and_Development_Statistics_2024[SecondHeading == "Licence and access fee revenue",
+                                                                                     list(Value = sum(Value,na.rm = TRUE)),
+                                                                                      by = .(Year = Year,
+                                                                                             Country = Country)]
+      License_Revenues_Agg <- FFA_Compendium_of_Economic_and_Development_Statistics_2024[SecondHeading == "Licence and access fee revenue",
+                                                                                     list(Value = sum(Value,na.rm = TRUE),
+                                                                                          Country = "Total"),
+                                                                                      by = .(Year = Year)]
+      License_Revenues <- data.table::dcast(License_Revenues,
+                                            Country ~ Year,
+                                            value.var = "Value")
+      License_Revenues_Agg <- data.table::dcast(License_Revenues_Agg,
+                                            Country ~ Year,
+                                            value.var = "Value")
+                                            
+      License_Revenues <- rbind(License_Revenues[order(-License_Revenues$`2023`),],
+                                License_Revenues_Agg)
+                                                                                      
+
+
+##
 ##    Make a table
 ##
    Present_Value_Pretty <- data.frame(Year = as.character(Skipjack[,c("Year")]))
@@ -325,7 +350,7 @@ knitr::include_graphics(paste0(BaseDir, "Number_of_Purse_Seine_Vessels_Operating
 The growth in fishing activity far exceeded any indicative comparative growth rates.  Figure \@ref(fig:PurseSeineBoats) presents comparative growth rates from either:
 
 * Pre-SSAP (1972 – 1977) vessel growth rates additively extrapolated into the future, and 
-* Exponential vessel growth rates from between 1977 – 2023.
+* Exponential vessel growth rates from between 1977 – 2024.
 
 Between 1977 and 1980, the number of distant water nation purse seine vessels fishing the WCPO area increased from `r sum(Vessels$vessels[Vessels$YY == 1977])` to `r sum(Vessels$vessels[Vessels$YY == 1980])`. Between 1980 and 1982, they had increased again by a further `r sum(Vessels$vessels[Vessels$YY == 1982])-sum(Vessels$vessels[Vessels$YY == 1980])` vessels. And in 1983 the total number of purse seine vessels working in the WCPO area became `r sum(Vessels$vessels[Vessels$YY == 1983])`.
 
@@ -372,12 +397,11 @@ Annual fishing access fees received by Pacific Islands governments in 2021 (or t
 Table \@ref(tab:GovtRevs), from the Benefish 1[^BenefishO] and 4[^Benefish] studies provide a partial picture behind the growth in fisheries licensing fees. 
 
 ```{r GovtRevs, echo=FALSE}
-knitr::kable(Government_Revenues,
+knitr::kable(License_Revenues,
                row.names = FALSE,
                format = "markdown",
-               align = c('lccccc'),
                booktabs = TRUE,
-               caption= "Access fees for offshore fishing 2007–202 (or latest year)")
+               caption= "Access fees for offshore fishing 2008–2024 (or latest year)")
 ```
 
 No report prior to the Benefish Study 1 compiled the fishing access fees from SPC countries into a single table. However, from Table \@ref(tab:GovtRevs), the Vessel Day Scheme (VDS), developed and implemented by the Parties to the Nauru Agreement (PNA)[^PWRef] and introduced in 2007, significantly increased the proportion of the fisheries economic value returned to Pacific Island governments. 

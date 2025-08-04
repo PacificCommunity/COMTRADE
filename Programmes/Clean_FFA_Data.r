@@ -23,7 +23,7 @@
       Contents <- Contents[str_detect(Contents$DataFrames, "RAWDATA"),]
       Contents <- Contents[!is.na(Contents$Year),]
       Contents <- Contents[!(Contents$Tab %in% c("Contents","Introduction","Prices", "Intoduction")),]
-      #Contents <- Contents[!(Contents$Spreadsheet %in% c("FFA_Compendium_of_Economic_and_Development_Statistics_2022")),]
+      Contents <- Contents[!(Contents$Spreadsheet %in% c("FFA_Compendium_of_Economic_and_Development_Statistics_2022")),]
       Contents <- Contents[!(Contents$Spreadsheet %in% c("Compendium_of_Economic_and_Development_Statistics_2024")),]
          
    ##
@@ -72,7 +72,7 @@
          FFANonSummaryData <- lapply(unique(Contents$Tab[!str_detect(Contents$Tab, "Summary")]), function(Dset)
                            {
                               DataSet <- Contents[Contents$Tab == Dset,]
-                              
+                              #print(DataSet)
                               Data <- lapply(1:nrow(DataSet), function(File)
                                              {
                                                 load(paste0("Data_Intermediate/", DataSet$DataFrames[File]))  

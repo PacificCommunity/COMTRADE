@@ -20,13 +20,13 @@
    ##    Grab the FFA data
    ##
       load('Data_Output/FFASummaryData.rda')
-      load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
+      load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2024.rda')
    
    
    ##
    ##    Grab some database information
    ##
-      db1 <- odbcDriverConnect("driver=SQL Server;server=nouSQL03;database=LOG_MASTER")
+      db1 <- odbcDriverConnect("driver=SQL Server;server=NOUFAMESQL4;database=FISH_MASTER")
       db2 <- odbcDriverConnect("driver=SQL Server;server=noufameSQL01;database=vms")
       db3 <- odbcDriverConnect("driver=SQL Server;server=noufameSQL01;database=tufman2")
       
@@ -46,21 +46,21 @@
       ##       tufman2.ref.vessel_instances = a point in time record of what is the vessel_id known by at different time, and how is it
       ##                                      flagged
       ##
-      ##       log_master.log.trips_ps = looks like an older datasource, containing older metrics of vessels, flags, departure and return ports
+      ##       FISH_MASTER.log.trips_ps = looks like an older datasource, containing older metrics of vessels, flags, departure and return ports
       ##                                 
-      ##       log_master.ref.vessel = gives basic details for what we knew about that vessel at that time. Note the link between vessel and trips_ps
+      ##       FISH_MASTER.ref.vessel = gives basic details for what we knew about that vessel at that time. Note the link between vessel and trips_ps
       ##                               is through trips_ps.vfp_boat_id = vessel.BOAT_ID. 
-      ##                               Also, it looks like log_master.ref.vessel.ref2_guid is the same variable as tufman2.ref.vessels.vessel_id
+      ##                               Also, it looks like FISH_MASTER.ref.vessel.ref2_guid is the same variable as tufman2.ref.vessels.vessel_id
       ##                               since Tiffany later appends them together 
       ##
-      ##       log_master.log.sets_ps = Looks to be a specific Purse seine table (there's also sets_ll, sets_pl, and sets_tr) with a catch-all "in_wcpfc_area"
+      ##       FISH_MASTER.log.sets_ps = Looks to be a specific Purse seine table (there's also sets_ll, sets_pl, and sets_tr) with a catch-all "in_wcpfc_area"
       ##                                variable. 
       ##
          Dayz <- data.table(sqlQuery(db1,
                                         "SELECT YY,
                                                 eez.country_name as EEZ,
                                                 sum(days) as days
-                                          FROM [LOG_Master].[ace].[A_ACE_EZ] a
+                                          FROM [FISH_MASTER].[ace].[A_ACE_EZ] a
                                              INNER JOIN [ref].[countries] eez    ON 
                                                 case 
                                                    when a.eez_code in ('GL','LN','PX') then 'KI'
@@ -85,18 +85,19 @@
                    "SELECT  year(logdate) as YY,
                            eez.country_name as EEZ,
                            count(distinct t.vessel_id) as vessels
-                     FROM log.trips_ps t inner join log.sets_ps s on t.log_trip_id = s.log_trip_id 
-                        INNER JOIN [ref].[countries] eez    ON 
+                     FROM [FISH_MASTER].log.trips_ps t inner join [FISH_MASTER].log.sets_ps s on t.log_trip_id = s.log_trip_id 
+                        INNER JOIN [FISH_MASTER].[ref].[countries] eez    ON 
                            case 
                               when s.eez_code in ('GL','LN','PX') then 'KI'
                               when s.eez_code in ('I1','I2','I3','I4','I5','I6','I7','I8','I9','H4','H5') then 'IW'
                            else s.eez_code end  = eez.country_code 
+                        left join [FISH_MASTER].[ref].[vessel_instances] v on t.vessel_id =  v.vessel_id
                      where in_wcpfc_area = 1
                         and year(logdate) >= 2008
-                         and not (flag_code= 'PH' and s.eez_code in ('ID','I1','PH','PW','I3','I4'))       -- and not Phillipino flagged vessels located in Indonesian, Palau, Phillipine or international waters
-                         and flag_code not in ('ID','VN','BN','SG')                                         -- and not flagged to Brunei, Indonesia, Singapore or Vietnam
+                         and not (v.flag_id= 'PH' and s.eez_code in ('ID','I1','PH','PW','I3','I4'))      -- and not Phillipino flagged vessels located in Indonesian, Palau, Phillipine or international waters
+                         and v.flag_id not in ('ID','VN','BN','SG')                                       -- and not flagged to Brunei, Indonesia, Singapore or Vietnam
                          and s.eez_code not in ('I6','JP')                                                -- and not in Japanese or international waters
-                         and not (s.eez_code in ('I7','AU','NZ'))                                              -- and not in Australian or international waters
+                         and not (s.eez_code in ('I7','AU','NZ'))                                         -- and not in Australian or international waters
                         and coalesce(effort_factor,0) > 0
                         and in_AWs <> 1
                      group  by 
@@ -200,7 +201,7 @@
 ##
 ##    Match to licensing revenue
 ##
-   Revenue <- data.frame(FFA_Compendium_of_Economic_and_Development_Statistics_2022[Metrics == "Licence and access fee revenue"])
+   Revenue <- data.frame(FFA_Compendium_of_Economic_and_Development_Statistics_2024[Metrics == "Licence and access fee revenue"])
 
    unique(Unique_Vessels_Count$Country_Name)
    unique(Revenue$Country)

@@ -66,7 +66,8 @@
       ##    FFA data on current volumes and values
       ##
          load('Data_Output/FFASummaryData.rda')
-         load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
+#        load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2022.rda')
+         load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2024.rda')
          
       ##
       ##    Grab data on CPI
@@ -134,8 +135,8 @@
       Catch_Value  <- FFASummaryData[["Summary of catch value"]]
       Catch_Volume <- FFASummaryData[["Summary of catch"]]
 
-      Catch_Value  <- data.table(Catch_Value[Catch_Value$Spreadsheet == "WCPFC-CA_tuna_fisheries_2023",])
-      Catch_Volume <- data.table(Catch_Volume[Catch_Volume$Spreadsheet == "WCPFC-CA_tuna_fisheries_2023",])
+      Catch_Value  <- data.table(Catch_Value[Catch_Value$Spreadsheet == "WCPFC-CA_tuna_fisheries_2024",])
+      Catch_Volume <- data.table(Catch_Volume[Catch_Volume$Spreadsheet == "WCPFC-CA_tuna_fisheries_2024",])
 
       Value_by_Species  <- Catch_Value[Catch_Value$Data_Row == "5.2 VALUE OF CATCH BY SPECIES",c("Measure","Year","value")]
       Volume_by_Species <- Catch_Volume[Catch_Volume$Data_Row == "4.2 CATCH BY SPECIES",c("Measure","Year","value")]
@@ -259,7 +260,7 @@
              scale_colour_manual(values = SPCColours()) + 
              labs(title = "Comparison in Tuna Catch Volumes (FFA vs FAO vs Comtrade)",
                   subtitle = "\nWestern and Central Pacific Fisheries Commission Area\n",
-                  caption  = "Data Sources: FFA, WCPFC-CA tuna fisheries 2023 (1).xlsx, https://www.ffa.int/download/wcpfc-area-catch-value-estimates/ \nUNFAO https://zenodo.org/records/11410529\nUN Comtrade https://comtradeplus.un.org/") +
+                  caption  = "Data Sources: FFA, WCPFC-CA tuna fisheries 2023 (1).xlsx, https://www.ffa.int/download/wcpfc-area-catch-value-estimates/ \nUNFAO https://zenodo.org/records/15311770\nUN Comtrade https://comtradeplus.un.org/") +
              ylab("Metrics Tonnes\n(000)") +
              xlab("Year") +
              theme_bw(base_size=12, base_family =  "Calibri") %+replace%
@@ -313,7 +314,7 @@
              scale_colour_manual(values = SPCColours()) + 
              labs(title = "Comparison in Tuna Catch Values (FFA vs Comtrade)",
                   subtitle = "\nWestern and Central Pacific Fisheries Commission Area\n",
-                  caption  = "Data Sources: FFA, WCPFC-CA tuna fisheries 2023 (1).xlsx, https://www.ffa.int/download/wcpfc-area-catch-value-estimates/ \nUN Comtrade https://comtradeplus.un.org/") +
+                  caption  = "Data Sources: FFA, WCPFC-CA tuna fisheries 2024 (1).xlsx, https://www.ffa.int/download/wcpfc-area-catch-value-estimates/ \nUN Comtrade https://comtradeplus.un.org/") +
              ylab("Metrics Tonnes\n(000)") +
              xlab("Year") +
              theme_bw(base_size=12, base_family =  "Calibri") %+replace%
@@ -353,7 +354,7 @@
 ##
    Skipjack <- data.frame(FAO_FFA_Comparison[(variable == "FFA_Value") & (Measure == "Skipjack")])
    
-   Current_Date  <- 2024
+   Current_Date  <- 2025
    Interest_Rate <- .03
    
    Present_Value <- function(Start_Date,
@@ -382,7 +383,7 @@
 ##    And the initial 3 mill investment in 1977?
 ##
    Present_Value(Start_Date  = 1977,
-                 End_Date    = 2024,
+                 End_Date    = 2025,
                  Start_Value = 3,
                  Interest_Rate = Interest_Rate)
                       

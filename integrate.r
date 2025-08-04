@@ -16,6 +16,8 @@
 ##                here: https://www.ffa.int/download/wcpfc-area-catch-value-estimates/
 ##
 ##                Other sources of information: https://zenodo.org/records/11410529
+##                There's a newer record here: https://zenodo.org/records/15311770
+##
 ##                with codeset described here: https://www.fao.org/fishery/en/collection/asfis/en
 ##
 ##                The FAO data was accessed on the 23 August and is the file: Data_Raw/global_nominal_catch_firms_level0_harmonized.csv 
@@ -149,12 +151,13 @@
       ##
          #rmarkdown::render("Programmes/SSAP_Value_Report_for_Victoria_Pilbeam.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria.docx")
          #rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_Post_Peter_Williams.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_Post_Peter_Williams.docx")
-         rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_FINAL.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_FINAL.docx")
+         rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_FINAL.rmd", output_file = "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_FINAL.docx")
 
 
       ##
       ##    CRGA Presentation
       ##
+      
          rmarkdown::render("Programmes/CRGA_Presentation.rmd", output_file = "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\CRGA Presentation.pptx")                
 
 
