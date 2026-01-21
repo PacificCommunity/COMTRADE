@@ -68,8 +68,8 @@
    ##    Lets just work on the volume exports and imports and see if we can reconcile trade flows
    ##
       Import_Export <- Comtrade_Fish_Data[,
-                                         list(Total_Gross_Wgt = sum(gross_wgt/1000000,na.rm = TRUE),
-                                              Total_Net_Wgt   = sum(net_wgt/1000000,na.rm = TRUE)),
+                                         list(Total_Gross_Wgt = sum(gross_wgt/1000,na.rm = TRUE),
+                                              Total_Net_Wgt   = sum(net_wgt/1000,na.rm = TRUE)),
                                           by = .(cmd_code, 
                                                  Year = year(Period), 
                                                  reporter_desc, 
