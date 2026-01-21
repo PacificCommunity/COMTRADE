@@ -27,6 +27,9 @@
 ##
 ##                Other interesting things... Thailand Input/Output tables: https://www.nesdc.go.th/nesdb_en/ewt_news.php?nid=4429&filename=national_account
 ##
+##                4 August 2025: Found this: https://www.fao.org/fishery/en/fishstat/fishpriceindex from here https://www.fao.org/fishery/en/fishstat
+##
+##
 ##                WORK TO DO:
 ##                It looks like FAO data excludes the South Pacific Regional Fisheries Management Organisation (https://www.sprfmo.int/fisheries/data-2/catch-information/)
 ##                ... here's a list of a whole group of others: https://www.sprfmo.int/cooperation/other-organisations/
@@ -142,7 +145,8 @@
          source("Programmes/Clean_FFA_Data.r")    # Clean the FFA Data 
          source("Programmes/FFA_Revisions.r")     # Look into the revisions
 
-         source("Programmes/FFA_Analytics.r") # Look into the FFA Data
+         source("Programmes/FFA_Analytics.r")     # Look into the FFA Data
+         source("Programmes/For_Stephen_Howes.r") # Decompose who is catching what where
          
       ##
       ##    STEP 2: Do some fish analytics
@@ -168,6 +172,7 @@
          #rmarkdown::render("Programmes/SSAP_Value_Report_for_Victoria_Pilbeam.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria.docx")
          #rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_Post_Peter_Williams.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_Post_Peter_Williams.docx")
          rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_FINAL.rmd", output_file = "S:\\FAME\\NC_NOU\\FAME COMMON\\FAME Economics\\Oceanic_Fisheries\\COMTRADE\\Product_Output\\Paper_for_Victoria_FINAL.docx")
+         rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_FINAL.rmd", output_file = "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_FINAL.docx")
 
 
       ##
