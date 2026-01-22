@@ -44,7 +44,7 @@
 ##
 ##    Author   :  James Hogan, FAME - The Pacific Community (SPC)
 ##
-##    Peer     :  Caroline Ton, FAME - The Pacific Community (SPC)
+##    Peer     :  
 ##    Reviewer :
 ##
    ##
@@ -93,14 +93,24 @@
       library(plm)
       library(splines)
       library(systemfit)
-      library(forecast)   
+      library(forecast) 
+      library(sf)
+
+      library(ggraph)
+      library(ggmap)
+      library(networkD3)
+      library(tidygraph)
+      remotes::install_github("davidsjoberg/ggsankey")
+      library(ggsankey) 
+      
    ##
    ##    Set working directory
    ##
       setwd("C:/Work_Related_Projects/COMTRADE")
-      setwd("C:/From BigDisk/GIT/COMTRADE")
+      setwd("S:\\FAME\\NC_NOU\\FAME COMMON\\FAME Economics\\Oceanic_Fisheries\\COMTRADE")
 
-      Sys.setenv('COMTRADE_PRIMARY' = '9cd0ec8d460147f5956f306cbdea1cf6')
+#      Sys.setenv('COMTRADE_PRIMARY' = '9cd0ec8d460147f5956f306cbdea1cf6')
+      Sys.setenv('COMTRADE_PRIMARY' = 'c894211e85524d10874eff4cf3b24475')
       
    ##
    ##    Read the raw data in
@@ -113,6 +123,10 @@
          source("Programmes/Comtrade_MetaData.r")        # This goes into Comtrade and pulls out the import and export conversation factors
          source("Programmes/Comtrade_CannedFish_Data.r") # This goes into Comtrade and pulls out any fish data that hasn't been previously extracted
          source("Programmes/Comtrade_Fish_Data.r")       # This goes into Comtrade and pulls out any canned fish data that hasn't been previously extracted
+         source("Programmes/Comtrade_Ornamental_Fish_Data.r")     # This goes into Comtrade and pulls out ornamental fish for the pet fish industry
+
+         source("Programmes/Ornamental_Fish_Analysis_Version2.r") # does that price analysis on ornamental fish
+
 
          source("Programmes/Canned_Tuna_Analysis.r")     # There's a bit of a theory that the opening of the pacific tuna fisheries had the effect of 
                                                          # flooding the market with raw tuna, depressing both the raw tuna and tinned tuna markets.
@@ -121,6 +135,11 @@
                                                          # If that is true, than the pacific might have saved the Atlantic fisheries, and stimulated 
                                                          # demand in the Indian fisheries.
 
+         source("Programmes/Canned_Tuna_International_Trade_Map.r") # Canned_Tuna_Analysis generated a dataset of canned tuna trade across time and countries
+                                                                    # Now turn this into a Sankey plot. For every tinned can exporter, they must have received raw stock...
+                                                                    
+         source("Programmes/Raw_Tuna_Analysis.r")                   # Similar to the above
+         source("Programmes/Raw_Tuna_International_Trade_Map.r")    # The counterparty picture to the above
 
       ##
       ##    Get the FFA data
@@ -155,6 +174,7 @@
       ##
          #rmarkdown::render("Programmes/SSAP_Value_Report_for_Victoria_Pilbeam.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria.docx")
          #rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_Post_Peter_Williams.rmd", output_file = "C:\\Users\\jamesh\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_Post_Peter_Williams.docx")
+         rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_FINAL.rmd", output_file = "S:\\FAME\\NC_NOU\\FAME COMMON\\FAME Economics\\Oceanic_Fisheries\\COMTRADE\\Product_Output\\Paper_for_Victoria_FINAL.docx")
          rmarkdown::render("Programmes/SSAP_Value_Report_For_Victoria_Pilbeam_FINAL.rmd", output_file = "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\Paper_for_Victoria_FINAL.docx")
 
 
@@ -162,7 +182,7 @@
       ##    CRGA Presentation
       ##
       
-         rmarkdown::render("Programmes/CRGA_Presentation.rmd", output_file = "C:\\From BigDisk\\GIT\\COMTRADE\\Product_Output\\CRGA Presentation.pptx")                
+         rmarkdown::render("Programmes/CRGA_Presentation.rmd", output_file = "S:\\FAME\\NC_NOU\\FAME COMMON\\FAME Economics\\Oceanic_Fisheries\\COMTRADE\\Product_Output\\CRGA Presentation.pptx")                
 
 
 

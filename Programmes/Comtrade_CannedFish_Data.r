@@ -44,7 +44,7 @@
       
  
    ##
-   ## Step 2: Who's already been processed?
+   ## Step 2: Who's already been processed? 
    ##
       Contents <- as.data.frame(list.files(path = "Data_Raw/",  pattern = "*.rda"))
       names(Contents) = "DataFrames"
@@ -53,6 +53,11 @@
 
       Contents$Fish_Code <- str_split_fixed(Contents$Dframe, "XX",3)[,2]
       Contents$Year      <- str_split_fixed(Contents$Dframe, "XX",3)[,3]
+      
+      ##
+      ##    repeated load everything post 2019 - there's revisions
+      ##
+      Contents <- Contents[Contents$Year < 2020,]
  
    ##
    ## Step 3: Cycle through the codes and the months

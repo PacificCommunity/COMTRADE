@@ -38,7 +38,7 @@
          Contents <- as.data.frame(list.files(path = "Data_Raw/",  pattern = "*.rda"))
          names(Contents) = "DataFrames"
          Contents$Dframe <- str_split_fixed(Contents$DataFrames, "\\.", n = 2)[,1]
-         Contents <- Contents[str_detect(Contents$DataFrames, "160414"),]
+         Contents <- Contents[str_detect(Contents$DataFrames, "160414"),]     ##    This is the bit that identifies the tinned can code
 
          All_Data <- lapply(Contents$DataFrames, function(File){
                               load(paste0("Data_Raw/", File))  
@@ -65,28 +65,71 @@
       
       
    ##
-   ##    Lets just work on the volume exports and imports
+   ##    Lets just work on the volume exports and imports and see if we can reconcile trade flows
    ##
       Import_Export <- Comtrade_Fish_Data[,
-                                         list(Total_Gross_Wgt = sum(gross_wgt,na.rm = TRUE),
-                                              Total_Net_Wgt   = sum(net_wgt,na.rm = TRUE)),
+                                         list(Total_Gross_Wgt = sum(gross_wgt/1000,na.rm = TRUE),
+                                              Total_Net_Wgt   = sum(net_wgt/1000,na.rm = TRUE)),
                                           by = .(cmd_code, 
                                                  Year = year(Period), 
                                                  reporter_desc, 
                                                  partner_desc,
                                                  Cleaned_Measure)]
+      AggCheck <- Import_Export[,
+                                list(Total_Net_Wgt   = sum(Total_Net_Wgt,na.rm = TRUE)),
+                                 by = .(Cleaned_Measure, 
+                                        Year)]
+      AggCheck <- data.table::dcast(AggCheck,
+                                    Year ~ Cleaned_Measure,
+                                    value.var = "Total_Net_Wgt")
+                                    
+      AggCheck$Difference <- AggCheck$Export - AggCheck$Import
+      AggCheck$Percent_Difference <- (AggCheck$Export / AggCheck$Import) - 1
+      
+      ##
+      ##    Ok, quite out - up to 70% out in 2024 :(
+      ##       Is this generally? Or isolated in a range of countries?
+      ##
 
-      Check <- Import_Export[Year == 2022,
+      Check <- Import_Export[,
                              list(Total_Net_Wgt   = sum(Total_Net_Wgt,na.rm = TRUE)),
                               by = .(Cleaned_Measure, 
+                                     Year,
                                      reporter_desc, 
                                      partner_desc)]
-      write.csv(Check, file = "Exploratory_Output/Import_Exports_Tinned_Tuna_2000.csv", row.names = FALSE)
+      ##
+      ##    How much of total exports and total imports are explained by the different reporter countries?
+      ##
+      Imports <- Import_Export[Cleaned_Measure == "Import",
+                             list(Total_Net_Wgt   = sum(Total_Net_Wgt,na.rm = TRUE)),
+                              by = .(Cleaned_Measure, 
+                                     Year,
+                                     reporter_desc)]
+                                     
+      Exports <- Import_Export[Cleaned_Measure == "Export",
+                             list(Total_Net_Wgt   = sum(Total_Net_Wgt,na.rm = TRUE)),
+                              by = .(Cleaned_Measure, 
+                                     Year,
+                                     reporter_desc)]
+                                     
+      Imports <- data.table::dcast(Imports,
+                                   Year + reporter_desc ~ Cleaned_Measure,
+                                    value.var = "Total_Net_Wgt")
+      Exports <- data.table::dcast(Exports,
+                                   Year + reporter_desc ~ Cleaned_Measure,
+                                    value.var = "Total_Net_Wgt")
+                                    
+      Canned_Tuna_Imports_and_Exports <- merge(Imports,
+                                               Exports,
+                                                by = c("Year", "reporter_desc"),
+                                                all = TRUE)
       
-      
-   ##
-   ## Save files our produce some final output of something
-   ##
+      data.frame(Canned_Tuna_Imports_and_Exports[Year == 2020])
+      ##
+      ##    Ok, that's kind of interesting - save it and map it
+      ##
+         save(Canned_Tuna_Imports_and_Exports, file = "Data_Output/Canned_Tuna_Imports_and_Exports.rda")
+         
 ##
 ##    And we're done
 ##
