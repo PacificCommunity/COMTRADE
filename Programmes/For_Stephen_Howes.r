@@ -60,7 +60,7 @@
       load('Data_Output/FFANonSummaryData.rda')
       load('Data_Intermediate/FFA_Compendium_of_Economic_and_Development_Statistics_2024.rda')
 
-      Spreadsheet <- "WCPFC-CA_tuna_fisheries_2024"
+      Spreadsheet <- "Value_of_WCPFC-CA_tuna_fisheries_2025"
    ##
    ##    Estimate the value of the tuna fish extracted
    ##
@@ -178,7 +178,8 @@
                                                    Fleet_catch_in_highseas_non_FFA_Member = Fleet_catch_in_highseas_non_FFA_Member,
                                                    Other_Country_Catch_in_National_Waters = Other_Country_Catch_in_National_Waters),
                                               list(Year = Year,
-                                                   Country = ifelse(PNA == "PNA Member", "PNA Member",
+                                                   Country = Measure,
+                                                   Grouping = ifelse(PNA == "PNA Member", "PNA Member",
                                                              ifelse(FFA == "FFA Member", "FFA Member", 
                                                              ifelse(SPC == "SPC Member", "SPC Member",
                                                              ifelse(SPC == "High Seas",  "High Seas", "DWFN"))))),
@@ -188,13 +189,33 @@
    ##   Great! Now graph it
    ##
       Plot_Me <- reshape2::melt(Volume_Aggregates,
-                                id.vars = c("Year", "Country"))
+                                id.vars = c("Year","Grouping", "Country"))
                                 
+      write.table(Plot_Me, file = "Data_Output/Disaggregated_Volumes_for_Stephen_Howes.csv", sep = ",", row.names = FALSE)
+     
+      Volume_Aggregates <-  with(Fisheries_Decomposition,
+                                    aggregate(list(Catch_by_Fleet   = Catch_by_Fleet,
+                                                   Catch_by_EEZ     = Catch_by_EEZ,
+                                                   Fleet_catch_in_own_national_waters        = Fleet_catch_in_own_national_waters,
+                                                   Fleet_catch_in_national_waters_of_FFA_members = Fleet_catch_in_national_waters_of_FFA_members,
+                                                   Fleet_catch_in_highseas_non_FFA_Member = Fleet_catch_in_highseas_non_FFA_Member,
+                                                   Other_Country_Catch_in_National_Waters = Other_Country_Catch_in_National_Waters),
+                                              list(Year = Year,
+                                                   Grouping = ifelse(PNA == "PNA Member", "PNA Member",
+                                                             ifelse(FFA == "FFA Member", "FFA Member", 
+                                                             ifelse(SPC == "SPC Member", "SPC Member",
+                                                             ifelse(SPC == "High Seas",  "High Seas", "DWFN"))))),
+                                              sum,
+                                              na.rm = TRUE))
+      Plot_Me <- reshape2::melt(Volume_Aggregates,
+                                id.vars = c("Year", "Grouping"))
                                 
+
+     
       ggplot(Plot_Me,
              aes(x = Year, 
                  y = value, 
-                 colour = Country))     +
+                 colour = Grouping))     +
              geom_smooth() +
              geom_point() +
              geom_vline(xintercept = 2007) + 
@@ -227,8 +248,8 @@
                    legend.position  = "bottom")                      
          ggsave("Graphical_Output/Decompose FFA Data.png", height =(1.5)*16.13, width = (1.75)*20.66, dpi = 165, units = c("cm"))
 
-                                      ifelse(Fisheries_Decomposition$Measure %in% c('H4','H5','I1','I2','I3','I4','I5','I6','I7','I8','I9','IW'), "High Seas","Non-SPC Member"))
-      
+ 
+ 
       Volume_Aggregates <-  with(Fisheries_Decomposition,
                                     aggregate(list(Catch_by_Fleet   = Catch_by_Fleet,
                                                    Catch_by_EEZ     = Catch_by_EEZ,
@@ -280,7 +301,9 @@
                    legend.margin = margin(10, 10, 10, 10),
                    legend.position  = "bottom")                      
          ggsave("Graphical_Output/Total Catch Volumes.png", height =(1.5)*16.13, width = (1.75)*20.66, dpi = 165, units = c("cm"))
-                                                  
+                        
+write.table(Plot_Me, file = "Data_Output/Total_Volumes_for_Stephen_Howes.csv", sep = ",", row.names = FALSE)
+                     
 ##
 ##    And we're done
 ##
