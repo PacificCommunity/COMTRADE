@@ -1,5 +1,5 @@
 ##
-##    Programme:  Canned_Tuna_International_Trade_Map.r
+##    Programme:  Raw_Tuna_International_Trade_Map.r
 ##
 ##    Objective:  I thought it would been mapped using from GVDR_Ports_Network.r developed by Guilio Dalla Riva in
 ##                American Samoa vessel analysis work, but on reflection, its actually a Sankey Chart.
@@ -21,13 +21,13 @@
       source("R/themes.r")
       
       load('Data_Spatial/Countries.rda')
-      load('Data_Output/Canned_Tuna_Imports_and_Exports.rda')
+      load('Data_Output/Raw_Tuna_Imports_and_Exports.rda')
       
    ##
    ##    Get rid of the minnows
    ##
 #      One_Year <- Canned_Tuna_Imports_and_Exports[Year == 2020]
-      One_Year <- Canned_Tuna_Imports_and_Exports
+      One_Year <- Raw_Tuna_Imports_and_Exports
 
       One_Year$reporter_desc <- ifelse(str_detect(One_Year$reporter_desc, "China"), "China", One_Year$reporter_desc)
 

@@ -136,7 +136,10 @@
                                                          # demand in the Indian fisheries.
 
          source("Programmes/Canned_Tuna_International_Trade_Map.r") # Canned_Tuna_Analysis generated a dataset of canned tuna trade across time and countries
-                                                                    # Now turn this into a map, like was done with American Samoa purse seiners
+                                                                    # Now turn this into a Sankey plot. For every tinned can exporter, they must have received raw stock...
+                                                                    
+         source("Programmes/Raw_Tuna_Analysis.r")                   # Similar to the above
+         source("Programmes/Raw_Tuna_International_Trade_Map.r")    # The counterparty picture to the above
 
       ##
       ##    Get the FFA data

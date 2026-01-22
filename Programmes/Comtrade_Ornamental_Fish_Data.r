@@ -41,6 +41,10 @@
 
       Contents$Fish_Code <- str_split_fixed(Contents$Dframe, "XX",3)[,2]
       Contents$Year      <- str_split_fixed(Contents$Dframe, "XX",3)[,3]
+      ##
+      ##    repeated load everything post 2019 - there's revisions
+      ##
+      Contents <- Contents[Contents$Year < 2020,]
  
    ##
    ## Step 3: Cycle through the codes and the months getting all data since 1962
