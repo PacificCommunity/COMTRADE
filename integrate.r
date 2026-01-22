@@ -127,19 +127,25 @@
 
          source("Programmes/Ornamental_Fish_Analysis_Version2.r") # does that price analysis on ornamental fish
 
-
-         source("Programmes/Canned_Tuna_Analysis.r")     # There's a bit of a theory that the opening of the pacific tuna fisheries had the effect of 
-                                                         # flooding the market with raw tuna, depressing both the raw tuna and tinned tuna markets.
-                                                         # This had the effect of decreased tuna catch and tinned price, making higher effort Atlantic 
-                                                         # fishing unprofitable, and stimulating consumer demand relative to other protein sources.
-                                                         # If that is true, than the pacific might have saved the Atlantic fisheries, and stimulated 
-                                                         # demand in the Indian fisheries.
-
-         source("Programmes/Canned_Tuna_International_Trade_Map.r") # Canned_Tuna_Analysis generated a dataset of canned tuna trade across time and countries
+         ##
+         ##    This bit has actually turned into something very interesting - I've been able to identify the international tuna value chain, from raw
+         ##       tuna which is exported by harvesting countries to processing countries, who receive it as imports, and then from there, as exports
+         ##       of tinned tuna from processing countries and imports of tinned tuna by consuming countries - see 
+         ##       "S:\FAME\NC_NOU\FAME COMMON\FAME Economics\Oceanic_Fisheries\COMTRADE\Adhoc_Queries\Estiamated Tinned Tuna Volumes.xlsx" (made by the version 1 programmes)
+         ##
+         ##    I was able to do this in the quantities in Canned_Tuna_Analysis, Canned_Tuna_International_Trade_Map, Raw_Tuna_Analysis and Raw_Tuna_International_Trade_Map in 
+         ##       version 1 of each of these programmes.
+         ##
+         ##    For my next trick, I'll try in version two of the above programmes to do the same tracing trick, but this time with nominal values as well as quantities.
+         ##       If I can, and it does work, then nominal value / quantity will give me average price. On the raw tuna into import into processing countries, this becomes their input 
+         ##       costs. And for tinned tuna, this becomes their output costs. The difference is their manuafacturing margin, and is a nice proxy for value added.
+         ##
+         source("Programmes/Canned_Tuna_Analysis_Version2.r")
+         source("Programmes/Canned_Tuna_International_Trade_MapVersion2.r") # Canned_Tuna_Analysis generated a dataset of canned tuna trade across time and countries
                                                                     # Now turn this into a Sankey plot. For every tinned can exporter, they must have received raw stock...
                                                                     
-         source("Programmes/Raw_Tuna_Analysis.r")                   # Similar to the above
-         source("Programmes/Raw_Tuna_International_Trade_Map.r")    # The counterparty picture to the above
+         source("Programmes/Raw_Tuna_Analysis_Version2.r")                   # Similar to the above
+         source("Programmes/Raw_Tuna_International_Trade_Map_Version2.r")    # The counterparty picture to the above
 
       ##
       ##    Get the FFA data
