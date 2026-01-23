@@ -140,12 +140,19 @@
          ##       If I can, and it does work, then nominal value / quantity will give me average price. On the raw tuna into import into processing countries, this becomes their input 
          ##       costs. And for tinned tuna, this becomes their output costs. The difference is their manuafacturing margin, and is a nice proxy for value added.
          ##
-         source("Programmes/Canned_Tuna_Analysis_Version2.r")
-         source("Programmes/Canned_Tuna_International_Trade_MapVersion2.r") # Canned_Tuna_Analysis generated a dataset of canned tuna trade across time and countries
-                                                                    # Now turn this into a Sankey plot. For every tinned can exporter, they must have received raw stock...
-                                                                    
-         source("Programmes/Raw_Tuna_Analysis_Version2.r")                   # Similar to the above
-         source("Programmes/Raw_Tuna_International_Trade_Map_Version2.r")    # The counterparty picture to the above
+            source("Programmes/Canned_Tuna_Analysis_Version2.r")
+            source("Programmes/Canned_Tuna_International_Trade_Map_Verison2.r") # Canned_Tuna_Analysis generated a dataset of canned tuna trade across time and countries
+                                                                                # Now turn this into a Sankey plot. For every tinned can exporter, they must have received raw stock...
+                                                                       
+            source("Programmes/Raw_Tuna_Analysis_Version2.r")                   # Similar to the above
+            source("Programmes/Raw_Tuna_International_Trade_Map_Verison2.r")    # The counterparty picture to the above
+            
+         ##
+         ##    The output from the above process are Export_Tinned_Tuna, Import_Tinned_Tuna, Export_Raw_Tuna, Import_Raw_Tuna which represent the international Tuna
+         ##       supply chain. Lets look at them in more detail
+         ##
+            source("Programmes/Tuna_Supply_Chains.r")
+         
 
       ##
       ##    Get the FFA data

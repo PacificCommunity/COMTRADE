@@ -60,7 +60,7 @@
                                        X_Weight$Cumulative_Total[i]      <- X_Weight$Import[i] + X_Weight$Cumulative_Total[(i-1)]
                                        X_Weight$Cumulative_Proportion[i] <- X_Weight$Cumulative_Total[i] /sum(X_Weight$Import, na.rm = TRUE)
                                     }
-                                 X_Weight$reporter_desc <- ifelse(X_Weight$Cumulative_Proportion < 0.99, X_Weight$reporter_desc, "Minnows")
+                                 X_Weight$reporter_desc <- ifelse(X_Weight$Cumulative_Proportion < 0.95, X_Weight$reporter_desc, "Minnows")
                                  
                                  ##
                                  ##    Map size mapping back to larger dataset
@@ -80,7 +80,7 @@
                                        Y_Weight$Cumulative_Total[i]      <- Y_Weight$Export[i] + Y_Weight$Cumulative_Total[(i-1)]
                                        Y_Weight$Cumulative_Proportion[i] <- Y_Weight$Cumulative_Total[i] /sum(Y_Weight$Export, na.rm = TRUE)
                                     }
-                                 Y_Weight$reporter_desc <- ifelse(Y_Weight$Cumulative_Proportion < 0.99, Y_Weight$reporter_desc, "Minnows")
+                                 Y_Weight$reporter_desc <- ifelse(Y_Weight$Cumulative_Proportion < 0.95, Y_Weight$reporter_desc, "Minnows")
 
                                  ##
                                  ##    Map size mapping back to larger dataset
@@ -189,7 +189,7 @@
    ##    Make the Sankey
    ##
 
-      p <- sankeyNetwork(Links = links[(Year == 2021) & (variable == "Total_Primary_Value")], 
+      p <- sankeyNetwork(Links = links[(Year == 2023) & (variable == "Total_Primary_Value")], 
                          Nodes = nodes,
                          Source = "IDsource", 
                          Target = "IDtarget",
@@ -209,11 +209,7 @@
       Export_Table$Average_Price <- Export_Table$Total_Primary_Value / Export_Table$Total_Net_Wgt 
       Export_Table <- data.table::melt(Export_Table,
                                        id.var = c("reporter_desc", "Year"))
-      Export_Table <- data.table::dcast(Export_Table,
-                                        reporter_desc + variable ~ Year,
-                                        value.var = "value")
-                                        
-                                        
+
                                         
       Import_Table <- data.table::dcast(Imports,
                                         reporter_desc + Year ~variable ,
@@ -221,17 +217,20 @@
       Import_Table$Average_Price <- Import_Table$Total_Primary_Value / Import_Table$Total_Net_Wgt 
       Import_Table <- data.table::melt(Import_Table,
                                        id.var = c("reporter_desc", "Year"))
-      Import_Table <- data.table::dcast(Import_Table,
-                                        reporter_desc + variable ~ Year,
-                                        value.var = "value")
-                                        
+      Export_Tinned_Tuna <- Export_Table                          
+      Import_Tinned_Tuna <- Import_Table                          
+      Import_Tinned_Tuna$Source <- "Tinned Imports"
+      Export_Tinned_Tuna$Source <- "Tinned Exports"
+
 ##
 ##    And Save
 ##
-   Export_Tinned_Tuna <- Export_Table                          
-   Import_Tinned_Tuna <- Import_Table                          
    
    save(Export_Tinned_Tuna, file = "Data_Output/Export_Tinned_Tuna.rda")
    save(Import_Tinned_Tuna, file = "Data_Output/Import_Tinned_Tuna.rda")
 
+   write.csv(Export_Tinned_Tuna, file= "Data_Output/Export_Tinned_Tuna.csv", row.names = FALSE)
+   write.csv(Import_Tinned_Tuna, file= "Data_Output/Import_Tinned_Tuna.csv", row.names = FALSE)
+   
+   
    

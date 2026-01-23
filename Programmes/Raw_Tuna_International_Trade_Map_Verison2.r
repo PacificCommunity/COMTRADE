@@ -187,7 +187,7 @@
    ##    Make the Sankey
    ##
 
-      p <- sankeyNetwork(Links = links[(Year == 2021) & (variable == "Total_Primary_Value")], 
+      p <- sankeyNetwork(Links = links[(Year == 2023) & (variable == "Total_Primary_Value")], 
                          Nodes = nodes,
                          Source = "IDsource", 
                          Target = "IDtarget",
@@ -207,10 +207,6 @@
       Export_Table$Average_Price <- Export_Table$Total_Primary_Value / Export_Table$Total_Net_Wgt 
       Export_Table <- data.table::melt(Export_Table,
                                        id.var = c("reporter_desc", "Year"))
-      Export_Table <- data.table::dcast(Export_Table,
-                                        reporter_desc + variable ~ Year,
-                                        value.var = "value")
-                                        
                                         
                                         
       Import_Table <- data.table::dcast(Imports,
@@ -219,17 +215,21 @@
       Import_Table$Average_Price <- Import_Table$Total_Primary_Value / Import_Table$Total_Net_Wgt 
       Import_Table <- data.table::melt(Import_Table,
                                        id.var = c("reporter_desc", "Year"))
-      Import_Table <- data.table::dcast(Import_Table,
-                                        reporter_desc + variable ~ Year,
-                                        value.var = "value")
+                                       
+      Export_Raw_Tuna <- Export_Table                          
+      Import_Raw_Tuna <- Import_Table                          
+
+      Import_Raw_Tuna$Source <- "Raw Imports"
+      Export_Raw_Tuna$Source <- "Raw Exports"
                                         
 ##
 ##    And Save
 ##
-   Export_Raw_Tuna <- Export_Table                          
-   Import_Raw_Tuna <- Import_Table                          
    
    save(Export_Raw_Tuna, file = "Data_Output/Export_Raw_Tuna.rda")
    save(Import_Raw_Tuna, file = "Data_Output/Import_Raw_Tuna.rda")
 
+   write.csv(Export_Raw_Tuna, file= "Data_Output/Export_Raw_Tuna.csv", row.names = FALSE)
+   write.csv(Import_Raw_Tuna, file= "Data_Output/Import_Raw_Tuna.csv", row.names = FALSE)
+   
    

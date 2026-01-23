@@ -53,24 +53,56 @@
       Comtrade_Fish_Data$Domestic_Currency_CIFValue     <- Comtrade_Fish_Data$cifvalue      / Comtrade_Fish_Data$Export_Conversion_Factor
       Comtrade_Fish_Data$Domestic_Currency_PrimaryValue <- Comtrade_Fish_Data$primary_value / Comtrade_Fish_Data$Export_Conversion_Factor
       
-      Comtrade_Fish_Data$Cleaned_Measure <- ifelse(str_detect(Comtrade_Fish_Data$flow_desc, "Export"), "Export", "Import")
+      ##
+      ##    Found some of the missing...
+      ##
+         X <- unique(Comtrade_Fish_Data$partner_desc)
+         X[order(X)]
+         X[order(X)][str_detect(X[order(X)], ', nes')]
 
+         X <- unique(Comtrade_Fish_Data$reporter_desc)
+         X[order(X)]
+         X[order(X)][str_detect(X[order(X)], ', nes')]
+
+      
+      ##
+      ##    Need to sort this out
+      ##
+      Comtrade_Fish_Data$Cleaned_Measure <- ifelse(Comtrade_Fish_Data$flow_desc %in% c("Export", "Re-export" ), "Export",
+                                            ifelse(Comtrade_Fish_Data$flow_desc %in% c("Import", "Re-import" ), "Import", "OTHER"))
+                                            
+      Comtrade_Fish_Data <- Comtrade_Fish_Data[Cleaned_Measure != "OTHER"]
       Comtrade_Fish_Data <- Comtrade_Fish_Data[!is.na(Comtrade_Fish_Data$Period),]
       
+#      data.frame(Comtrade_Fish_Data[(reporter_desc == "Thailand") & (year(Period) == 2023) & (Cleaned_Measure == "Import") & (partner_desc == "China")])
       
    ##
    ##    Lets just work on the volume exports and imports and see if we can reconcile trade flows
    ##
       Import_Export <- Comtrade_Fish_Data[,
-                                         list(Total_Gross_Wgt = sum(gross_wgt/1000,na.rm = TRUE),
-                                              Total_Net_Wgt   = sum(net_wgt/1000,na.rm = TRUE),
-                                              Total_Primary_Value = sum(primary_value/1000,na.rm = TRUE)
+                                         list(Total_Gross_Wgt = sum(gross_wgt,na.rm = TRUE),
+                                              Total_Net_Wgt   = sum(net_wgt,na.rm = TRUE),
+                                              Total_Primary_Value = sum(primary_value,na.rm = TRUE)
                                               ),
                                           by = .(cmd_code, 
                                                  Year = year(Period), 
                                                  reporter_desc, 
                                                  partner_desc,
                                                  Cleaned_Measure)]
+      ##
+      ##    if the partner_desc contains ", nes" then make another record which flips the 
+      ##
+         NES <- Import_Export[str_detect(partner_desc, ", nes")]
+         NES$Cleaned_Measure <- ifelse(NES$Cleaned_Measure == "Import", "Export", "Import")
+         NES$reporter_desc <- NES$partner_desc
+         
+      ##
+      ## add it back to Import/Export
+      ## 
+         Import_Export <- rbind(Import_Export, NES)
+                                                               
+#      data.frame(Import_Export[(reporter_desc == "Thailand") & (Year == 2023) & (Cleaned_Measure == "Import")])
+                                                 
       AggCheck <- Import_Export[,
                                 list(Total_Net_Wgt       = sum(Total_Net_Wgt,na.rm = TRUE),
                                      Total_Primary_Value = sum(Total_Primary_Value,na.rm = TRUE)),
@@ -143,7 +175,7 @@
                                                 by = c("Year", "reporter_desc", "variable"),
                                                 all = TRUE)
       
-      data.frame(Canned_Tuna_Imports_and_Exports[Year == 2020])
+      #data.frame(Canned_Tuna_Imports_and_Exports[(reporter_desc == "Thailand") & (Year == 2023)])
       ##
       ##    Ok, that's kind of interesting - save it and map it
       ##
