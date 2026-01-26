@@ -187,13 +187,13 @@
    ##    Make the Sankey
    ##
 
-      p <- sankeyNetwork(Links = links[(Year == 2023) & (variable == "Total_Primary_Value")], 
+      p <- sankeyNetwork(Links = links[(Year == 2025) & (variable == "Total_Primary_Value")], 
                          Nodes = nodes,
                          Source = "IDsource", 
                          Target = "IDtarget",
                          Value = "value", 
                          NodeID = "name",
-                         units = " $000",
+                         units = " $USD",
                          fontSize = 20)
       p
 
